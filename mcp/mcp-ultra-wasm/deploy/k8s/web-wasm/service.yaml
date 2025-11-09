@@ -1,0 +1,395 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-wasm-service
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    service-type: web
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: service.k8s.aws/nlb
+  externalTrafficPolicy: Local
+  sessionAffinity: None
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: web-wasm-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-wasm-headless
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    service-type: headless
+spec:
+  type: ClusterIP
+  clusterIP: None
+  sessionAffinity: None
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: web-wasm-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-wasm-internal
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    service-type: internal
+  annotations:
+    prometheus.io/scrape: "false"
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: web-wasm-server
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: web-wasm-external
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+subsets:
+- addresses:
+  - ip: 192.168.1.100
+    hostname: web-wasm-external-1
+  - ip: 192.168.1.101
+    hostname: web-wasm-external-2
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    protocol: TCP
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: web-wasm-monitor
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: web-wasm-server
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+    honorLabels: true
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_node_name]
+      targetLabel: node
+      replacement: ${1}
+      action: replace
+    - sourceLabels: [__meta_kubernetes_namespace]
+      targetLabel: namespace
+      replacement: ${1}
+      action: replace
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: web-wasm-sdk-monitor
+  namespace: web-wasm
+  labels:
+    app: ultra-wasm-sdk
+    component: mcp-ultra-wasm
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: ultra-wasm-sdk
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+    honorLabels: true
+---
+apiVersion: v1
+kind: ServiceMonitor
+metadata:
+  name: nats-monitor
+  namespace: web-wasm
+  labels:
+    app: nats
+    component: mcp-ultra-wasm
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      app: nats
+  endpoints:
+  - port: monitoring
+    path: /varz
+    interval: 30s
+    scrapeTimeout: 10s
+    honorLabels: true
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: web-wasm-network-policy
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+spec:
+  podSelector:
+    matchLabels:
+      app: web-wasm-server
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - namespaceSelector:
+        matchLabels:
+          name: istio-system
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 169.254.169.254/32
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 9090
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: web-wasm
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 53
+      targetPort: 53
+    - protocol: UDP
+      port: 53
+      targetPort: 53
+    - protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - protocol: TCP
+      port: 9091
+      targetPort: 9091
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+    to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-wasm-static-files
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MCP Ultra WASM Web Interface</title>
+        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+    <body>
+        <div id="app">
+            <header>
+                <h1>MCP Ultra WASM</h1>
+                <p>Interface Web para Componentes WASM</p>
+            </header>
+            <main>
+                <div id="loading">Carregando...</div>
+            </main>
+        </div>
+        <script src="/static/js/wasm-loader.js"></script>
+        <script src="/static/js/websocket-client.js"></script>
+        <script src="/static/js/main.js"></script>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-wasm-wasm-files
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+data:
+  main.wasm: ""
+  wasm_exec.js: |
+    // Copyright 2018 The Go Authors. All rights reserved.
+    // Use of this source code is governed by a BSD-style
+    // license that can be found in the LICENSE file.
+
+    (() => {
+    	// Map WebAssembly API to JavaScript objects
+    	const go = new Go();
+    	WebAssembly.instantiateStreaming(fetch("main.wasm"))
+    		.then(result => {
+    			go.run(result.instance);
+    		})
+    		.catch(err => {
+    			console.error(err);
+    		});
+    })();
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-wasm-config
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+data:
+  config.yaml: |
+    server:
+      port: "8080"
+      read_timeout: "15s"
+      write_timeout: "15s"
+      idle_timeout: "60s"
+
+    wasm:
+      cache_enabled: true
+      cache_size: 100
+      timeout: "30s"
+      max_memory: 134217728
+
+    sdk:
+      address: "ultra-wasm-sdk-service:9091"
+      timeout: "30s"
+      retries: 3
+      enable_cache: true
+
+    nats:
+      url: "nats://nats-service:4222"
+      max_reconnects: 5
+      reconnect_wait: "2s"
+      timeout: "30s"
+
+    websocket:
+      ping_interval: "30s"
+      pong_wait: "60s"
+      write_wait: "10s"
+      max_message_size: 1048576
+      enable_compression: true
+
+    security:
+      auth:
+        enabled: true
+        issuer: "web-wasm-server"
+        token_expiry: "1h"
+        skip_auth_paths:
+          - "/health"
+          - "/metrics"
+          - "/ws"
+      cors:
+        enabled: true
+        allowed_origins:
+          - "*"
+        allowed_methods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "OPTIONS"
+        allow_credentials: false
+      rate_limit:
+        enabled: true
+        rate: 10
+        burst: 20
+        headers: true
+
+    observability:
+      logger:
+        level: "info"
+        format: "json"
+      metrics:
+        enabled: true
+        port: "9090"
+        namespace: "web_wasm"
+        subsystem: "mcp"
+      tracing:
+        enabled: false
+        service_name: "web-wasm-server"
+        service_version: "1.0.0"

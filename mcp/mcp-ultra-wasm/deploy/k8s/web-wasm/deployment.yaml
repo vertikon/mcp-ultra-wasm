@@ -1,0 +1,377 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-wasm-server
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    version: v1.0.0
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: web-wasm-server
+  template:
+    metadata:
+      labels:
+        app: web-wasm-server
+        component: mcp-ultra-wasm
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: web-wasm-server
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - NET_BIND_SERVICE
+      containers:
+      - name: web-wasm-server
+        image: web-wasm-server:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        - name: GIN_MODE
+          value: "release"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: PORT
+          value: "8080"
+        - name: STATIC_PATH
+          value: "/app/static"
+        - name: WASM_PATH
+          value: "/app/wasm"
+        - name: NATS_URL
+          value: "nats://nats-service:4222"
+        - name: SDK_ADDRESS
+          value: "ultra-wasm-sdk-service:9091"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: web-wasm-secrets
+              key: jwt-secret
+        - name: ENV
+          value: "production"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - ALL
+          add:
+            - NET_BIND_SERVICE
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+          successThreshold: 1
+        volumeMounts:
+        - name: static-files
+          mountPath: /app/static
+          readOnly: true
+        - name: wasm-files
+          mountPath: /app/wasm
+          readOnly: true
+        - name: config-volume
+          mountPath: /app/config.yaml
+          subPath: config.yaml
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
+        - name: logs-volume
+          mountPath: /app/logs
+      - name: log-shipper
+        image: fluent/fluent-bit:latest
+        imagePullPolicy: Always
+        env:
+        - name: FLUENT_BIT_CONF
+          value: |
+            [SERVICE]
+                Flush         1
+                Log_Level     info
+                Daemon        off
+                Parsers_File  parsers.conf
+                Plugins_File  plugins.conf
+                HTTP_Server   On
+                HTTP_Listen   0.0.0.0
+                HTTP_Port     2020
+
+            [INPUT]
+                Name              tail
+                Path              /app/logs/*.log
+                Tag               webwasm.*
+                Exclude_Path      *.gz
+                Read_from_Head    On
+                Skip_Long_Lines   On
+                Buffer_Chunk_Size  512k
+                Buffer_Max_Size   1m
+                Rotate_Wait       30
+                DB                /app/logs/flb_log.db
+
+            [FILTER]
+                Name                kubernetes
+                Match               webwasm.*
+                Kube_URL            https://kubernetes.default.svc:443
+                Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+                Kube_Tag_Prefix     web-wasm.
+                Merge_Log           On
+                K8S-Logging.Parser  On
+                K8S-Logging.Exclude On
+                Labels              On
+                Annotations         On
+
+            [OUTPUT]
+                Name  stdout
+                Match *
+                Format json_lines
+
+            [OUTPUT]
+                Name  http
+                Match webwasm.*
+                Host  logstash-service
+                Port  8080
+                URI   /logs
+                Format json
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi
+        volumeMounts:
+        - name: logs-volume
+          mountPath: /app/logs
+          readOnly: true
+        - name: var-run-secrets-kubernetes
+          mountPath: /var/run/secrets/kubernetes.io
+          readOnly: true
+      volumes:
+      - name: static-files
+        configMap:
+          name: web-wasm-static-files
+      - name: wasm-files
+        configMap:
+          name: web-wasm-wasm-files
+      - name: config-volume
+        configMap:
+          name: web-wasm-config
+      - name: tmp-volume
+        emptyDir: {}
+      - name: logs-volume
+        emptyDir: {}
+      - name: var-run-secrets-kubernetes
+        secret:
+          secretName: web-wasm-server-token
+      nodeSelector:
+        kubernetes.io/os: linux
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - web-wasm-server
+              topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: In
+                values:
+                - "true"
+      tolerations:
+      - key: "web-wasm"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+      - name: web-wasm-registry-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-wasm-service
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app: web-wasm-server
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: web-wasm-server
+  namespace: web-wasm
+  annotations:
+    iam.amazonaws.com/role: web-wasm-server-role
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-wasm-secrets
+  namespace: web-wasm
+type: Opaque
+data:
+  jwt-secret: c3VwZXItc2VjcmV0LWp3dC1rZXktY2hhbmdlLWluLXByb2R1Y3Rpb24=  # base64 encoded "super-secret-jwt-key-change-in-production"
+  nats-password: ""
+  postgres-password: d2Vid2FzbTEyMw==  # base64 encoded "webwasm123"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-wasm-hpa
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-wasm-server
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "100"
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 4
+        periodSeconds: 15
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+      - type: Pods
+        value: 1
+        periodSeconds: 60
+      selectPolicy: Min
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: web-wasm-pdb
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: web-wasm-server

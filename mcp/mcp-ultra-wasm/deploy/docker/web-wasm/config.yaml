@@ -1,0 +1,194 @@
+# Configuração do MCP Ultra WASM Web Server
+
+# Configurações do servidor
+server:
+  port: "8080"
+  read_timeout: "15s"
+  write_timeout: "15s"
+  idle_timeout: "60s"
+
+# Configurações WASM
+wasm:
+  cache_enabled: true
+  cache_size: 100
+  timeout: "30s"
+  max_memory: 134217728  # 128MB
+
+# Configurações do SDK
+sdk:
+  address: "localhost:9090"
+  timeout: "30s"
+  retries: 3
+  enable_cache: true
+  default_plugin: "analyzer"
+  health_check_time: "30s"
+
+# Configurações NATS
+nats:
+  url: "nats://localhost:4222"
+  max_reconnects: 5
+  reconnect_wait: "2s"
+  timeout: "30s"
+
+# Configurações WebSocket
+websocket:
+  ping_interval: "30s"
+  pong_wait: "60s"
+  write_wait: "10s"
+  max_message_size: 1048576  # 1MB
+  enable_compression: true
+
+# Configurações de segurança
+security:
+  auth:
+    enabled: false
+    secret_key: "${JWT_SECRET}"
+    issuer: "web-wasm-server"
+    token_expiry: "1h"
+    refresh_expiry: "24h"
+    enable_refresh: false
+    skip_auth_paths:
+      - "/health"
+      - "/metrics"
+      - "/ws"
+    require_https: false
+    enable_blacklist: false
+    max_token_age: "24h"
+  
+  cors:
+    enabled: true
+    allowed_origins:
+      - "http://localhost:8080"
+      - "http://localhost:3000"
+      - "http://127.0.0.1:8080"
+      - "http://127.0.0.1:3000"
+    allowed_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "PATCH"
+      - "DELETE"
+      - "HEAD"
+      - "OPTIONS"
+    allowed_headers:
+      - "Origin"
+      - "Content-Type"
+      - "Accept"
+      - "Authorization"
+      - "X-Requested-With"
+      - "X-Trace-ID"
+      - "X-Span-ID"
+    exposed_headers:
+      - "X-Trace-ID"
+      - "X-Span-ID"
+      - "Content-Length"
+      - "Content-Type"
+    allow_credentials: false
+    max_age: "12h"
+    options_passthrough: false
+    unsafe_wildcard_origin: false
+    ignore_credential_options: false
+  
+  rate_limit:
+    enabled: true
+    rate: 10  # requisições por segundo
+    burst: 20
+    headers: true
+    skip_paths:
+      - "/health"
+      - "/metrics"
+    skip_success: false
+  
+  general:
+    enabled: true
+    request_timeout: "30s"
+    max_header_bytes: 1048576  # 1MB
+    max_request_body_bytes: 10485760  # 10MB
+    enable_hsts: true
+    sts_max_age: "8760h"  # 1 ano
+    enable_content_sniffing: true
+    enable_xss_protection: true
+    enable_frame_options: true
+    content_type_nosniff: true
+    frame_options: "DENY"
+    xss_protection: "1; mode=block"
+    custom_headers: {}
+
+# Configurações de observabilidade
+observability:
+  logger:
+    level: "info"
+    format: "json"
+    output_path: ""
+    enable_caller: true
+    enable_stack_trace: true
+    fields: []
+  
+  metrics:
+    enabled: true
+    port: "9090"
+    path: "/metrics"
+    namespace: "web_wasm"
+    subsystem: "mcp"
+    buckets:
+      - 0.1
+      - 0.5
+      - 1
+      - 2.5
+      - 5
+      - 10
+      - 30
+      - 60
+      - 120
+      - 300
+    objectives:
+      0.5: 0.05
+      0.9: 0.01
+      0.99: 0.001
+    prometheus_address: ""
+    scrape_interval: "15s"
+  
+  tracing:
+    enabled: false
+    service_name: "web-wasm-server"
+    service_version: "1.0.0"
+    environment: "production"
+    jaeger_endpoint: ""
+    otlp_endpoint: ""
+    sampling_ratio: 1.0
+    batch_timeout: "5s"
+    export_timeout: "30s"
+    max_export_batch_size: 512
+
+# Configurações de plugins
+plugins:
+  auto_load: true
+  registry:
+    max_plugins: 100
+    cleanup_interval: "5m"
+    idle_timeout: "30m"
+    enable_metrics: true
+    health_check_period: "1m"
+
+# Configurações de cache
+cache:
+  type: "memory"  # "memory" ou "redis"
+  ttl: "1h"
+  max_size: 1000
+  redis:
+    address: "localhost:6379"
+    password: ""
+    db: 0
+
+# Configurações de backup
+backup:
+  enabled: false
+  interval: "24h"
+  retention: "7d"
+  path: "/app/backups"
+
+# Configurações de desenvolvimento
+development:
+  debug_mode: false
+  profiling_enabled: false
+  pprof_endpoint: ""

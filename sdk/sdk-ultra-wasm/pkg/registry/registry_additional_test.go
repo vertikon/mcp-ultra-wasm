@@ -13,18 +13,18 @@ type mockJobPlugin struct {
 	schedule string
 }
 
-func (m *mockJobPlugin) Name() string                        { return m.name }
-func (m *mockJobPlugin) Schedule() string                    { return m.schedule }
-func (m *mockJobPlugin) Run(_ context.Context) error         { return nil }
+func (m *mockJobPlugin) Name() string                { return m.name }
+func (m *mockJobPlugin) Schedule() string            { return m.schedule }
+func (m *mockJobPlugin) Run(_ context.Context) error { return nil }
 
 type mockServicePlugin struct {
 	name string
 }
 
-func (m *mockServicePlugin) Name() string                         { return m.name }
-func (m *mockServicePlugin) Start(_ context.Context) error        { return nil }
-func (m *mockServicePlugin) Stop(_ context.Context) error         { return nil }
-func (m *mockServicePlugin) Health() error                        { return nil }
+func (m *mockServicePlugin) Name() string                  { return m.name }
+func (m *mockServicePlugin) Start(_ context.Context) error { return nil }
+func (m *mockServicePlugin) Stop(_ context.Context) error  { return nil }
+func (m *mockServicePlugin) Health() error                 { return nil }
 
 // Additional Registry Tests
 
@@ -151,7 +151,6 @@ type mockRoutePlugin struct {
 	version string
 }
 
-func (m *mockRoutePlugin) Name() string                    { return m.name }
-func (m *mockRoutePlugin) Version() string                 { return m.version }
-func (m *mockRoutePlugin) Routes() []contracts.Route       { return nil }
-
+func (m *mockRoutePlugin) Name() string              { return m.name }
+func (m *mockRoutePlugin) Version() string           { return m.version }
+func (m *mockRoutePlugin) Routes() []contracts.Route { return nil }

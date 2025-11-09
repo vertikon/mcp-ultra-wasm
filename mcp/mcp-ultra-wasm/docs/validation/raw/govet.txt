@@ -1,0 +1,13 @@
+cmd\web-wasm-server\main.go:14:2: no required module provides package github.com/gin-gonic/gin; to add it:
+	go get github.com/gin-gonic/gin
+internal\web-wasm\handlers\websocket_handler.go:11:2: no required module provides package github.com/gorilla/websocket; to add it:
+	go get github.com/gorilla/websocket
+internal\web-wasm\handlers\api_handler.go:11:2: no required module provides package github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/internal/web-wasm/nats; to add it:
+	go get github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/internal/web-wasm/nats
+internal\web-wasm\observability\tracing.go:11:2: no required module provides package go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc; to add it:
+	go get go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc
+internal\web-wasm\sdk\client.go:8:2: no required module provides package github.com/vertikon/mcp-ultra-wasm-wasm/sdk/sdk-ultra-wasm/pkg/client; to add it:
+	go get github.com/vertikon/mcp-ultra-wasm-wasm/sdk/sdk-ultra-wasm/pkg/client
+internal\web-wasm\sdk\client.go:9:2: no required module provides package github.com/vertikon/mcp-ultra-wasm-wasm/sdk/sdk-ultra-wasm/pkg/types; to add it:
+	go get github.com/vertikon/mcp-ultra-wasm-wasm/sdk/sdk-ultra-wasm/pkg/types
+found packages handlers (handlers_test.go) and nats (nats_test.go) in E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\test\web-wasm

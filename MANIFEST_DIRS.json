@@ -1,0 +1,935 @@
+﻿{
+    "schema_version":  "1.0.0-dirs",
+    "metadata":  {
+                     "generated_at_utc":  "2025-11-09T18:33:45.4801536Z",
+                     "root_path":  ".",
+                     "generator":  "quick-dir-manifest"
+                 },
+    "summary":  {
+                    "total_directories":  149,
+                    "directories_by_depth":  [
+                                                 {
+                                                     "0":  1
+                                                 },
+                                                 {
+                                                     "1":  2
+                                                 },
+                                                 {
+                                                     "2":  2
+                                                 },
+                                                 {
+                                                     "3":  30
+                                                 },
+                                                 {
+                                                     "4":  78
+                                                 },
+                                                 {
+                                                     "5":  25
+                                                 },
+                                                 {
+                                                     "6":  7
+                                                 },
+                                                 {
+                                                     "7":  4
+                                                 }
+                                             ]
+                },
+    "structure":  {
+                      "directories":  [
+                                          {
+                                              "path":  ".",
+                                              "name":  "mcp-ultra-wasm",
+                                              "depth":  0,
+                                              "last_write_time_utc":  "2025-11-09T18:19:12.6311717Z"
+                                          },
+                                          {
+                                              "path":  "mcp",
+                                              "name":  "mcp",
+                                              "depth":  1,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2459724Z"
+                                          },
+                                          {
+                                              "path":  "sdk",
+                                              "name":  "sdk",
+                                              "depth":  1,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4456896Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm",
+                                              "name":  "mcp-ultra-wasm",
+                                              "depth":  2,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4339036Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\-path",
+                                              "name":  "-path",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2500371Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\.claude",
+                                              "name":  ".claude",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2607410Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\.codeql",
+                                              "name":  ".codeql",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2640180Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\.github",
+                                              "name":  ".github",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2801554Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\.release",
+                                              "name":  ".release",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3349208Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api",
+                                              "name":  "api",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3877630Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\automation",
+                                              "name":  "automation",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3942647Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\ci",
+                                              "name":  "ci",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4096157Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\cmd",
+                                              "name":  "cmd",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4158563Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\config",
+                                              "name":  "config",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4289449Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\configs",
+                                              "name":  "configs",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4386818Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\deploy",
+                                              "name":  "deploy",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.5056016Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\docs",
+                                              "name":  "docs",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0181906Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\grafana",
+                                              "name":  "grafana",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0507660Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal",
+                                              "name":  "internal",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3131309Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\migrations",
+                                              "name":  "migrations",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3189509Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg",
+                                              "name":  "pkg",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3360122Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\policy",
+                                              "name":  "policy",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3415664Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\scripts",
+                                              "name":  "scripts",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3698734Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\templates",
+                                              "name":  "templates",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3807595Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test",
+                                              "name":  "test",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4273210Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\tests",
+                                              "name":  "tests",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4322683Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\tools",
+                                              "name":  "tools",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4433834Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\-path\\docs",
+                                              "name":  "docs",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2554899Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\-path\\docs\\gaps",
+                                              "name":  "gaps",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2533431Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\-path\\docs\\melhorias",
+                                              "name":  "melhorias",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.2577468Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\.github\\workflows",
+                                              "name":  "workflows",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3129493Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc",
+                                              "name":  "grpc",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3658517Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\schemas",
+                                              "name":  "schemas",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3897977Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto",
+                                              "name":  "proto",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3817844Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto\\compliance",
+                                              "name":  "compliance",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3678926Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto\\system",
+                                              "name":  "system",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3797438Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto\\task",
+                                              "name":  "task",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3817844Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto\\compliance\\v1",
+                                              "name":  "v1",
+                                              "depth":  7,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3701063Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto\\system\\v1",
+                                              "name":  "v1",
+                                              "depth":  7,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3802591Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\api\\grpc\\proto\\task\\v1",
+                                              "name":  "v1",
+                                              "depth":  7,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.3838076Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\cmd\\depguard-lite",
+                                              "name":  "depguard-lite",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4140301Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\cmd\\mcp-model-ultra",
+                                              "name":  "mcp-model-ultra",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4164817Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\configs\\secrets",
+                                              "name":  "secrets",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4359251Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\deploy\\docker",
+                                              "name":  "docker",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4661646Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\deploy\\flagger",
+                                              "name":  "flagger",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.4681433Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\deploy\\k8s",
+                                              "name":  "k8s",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.5028166Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\deploy\\monitoring",
+                                              "name":  "monitoring",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.5152469Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\docs\\documentacao-full",
+                                              "name":  "documentacao-full",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.6463731Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\docs\\gaps",
+                                              "name":  "gaps",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:10.8262529Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\docs\\melhorias",
+                                              "name":  "melhorias",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0181906Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\docs\\validation",
+                                              "name":  "validation",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0181906Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\docs\\validation\\raw",
+                                              "name":  "raw",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0354671Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\ai",
+                                              "name":  "ai",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0814085Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\analyzers",
+                                              "name":  "analyzers",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0922056Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\cache",
+                                              "name":  "cache",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1037403Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\compliance",
+                                              "name":  "compliance",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1171168Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\config",
+                                              "name":  "config",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1288569Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\constants",
+                                              "name":  "constants",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1328322Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\dashboard",
+                                              "name":  "dashboard",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1474925Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\domain",
+                                              "name":  "domain",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1534829Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\dr",
+                                              "name":  "dr",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1569403Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\events",
+                                              "name":  "events",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1619839Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\features",
+                                              "name":  "features",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1726617Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\grpc",
+                                              "name":  "grpc",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1726617Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\handlers",
+                                              "name":  "handlers",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1904520Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\http",
+                                              "name":  "http",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2044252Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\lifecycle",
+                                              "name":  "lifecycle",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2148181Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\metrics",
+                                              "name":  "metrics",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2191109Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\middleware",
+                                              "name":  "middleware",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2250897Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\nats",
+                                              "name":  "nats",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2272159Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\observability",
+                                              "name":  "observability",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2355369Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\ratelimit",
+                                              "name":  "ratelimit",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2371907Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\repository",
+                                              "name":  "repository",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2530662Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\schemas",
+                                              "name":  "schemas",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2680667Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\security",
+                                              "name":  "security",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2830699Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\services",
+                                              "name":  "services",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2904606Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\slo",
+                                              "name":  "slo",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2957409Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\telemetry",
+                                              "name":  "telemetry",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3011058Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\testdata",
+                                              "name":  "testdata",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3070950Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\testhelpers",
+                                              "name":  "testhelpers",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3098174Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\tools",
+                                              "name":  "tools",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3120886Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\tracing",
+                                              "name":  "tracing",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3141831Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\ai\\events",
+                                              "name":  "events",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0644196Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\ai\\router",
+                                              "name":  "router",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0665902Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\ai\\telemetry",
+                                              "name":  "telemetry",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0778075Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\ai\\wiring",
+                                              "name":  "wiring",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0864907Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\analyzers\\depguardlite",
+                                              "name":  "depguardlite",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.0932695Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\config\\secrets",
+                                              "name":  "secrets",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1251215Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\dashboard\\static",
+                                              "name":  "static",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1457324Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\dashboard\\templates",
+                                              "name":  "templates",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1480508Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\dashboard\\static\\css",
+                                              "name":  "css",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1441043Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\dashboard\\static\\js",
+                                              "name":  "js",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1463886Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\grpc\\server",
+                                              "name":  "server",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.1813393Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\handlers\\http",
+                                              "name":  "http",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2028124Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\repository\\postgres",
+                                              "name":  "postgres",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2502084Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\repository\\redis",
+                                              "name":  "redis",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2594882Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\repository\\postgres\\migrations",
+                                              "name":  "migrations",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2480585Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\internal\\security\\policies",
+                                              "name":  "policies",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.2780954Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg\\httpx",
+                                              "name":  "httpx",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3268167Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg\\logger",
+                                              "name":  "logger",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3289940Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg\\metrics",
+                                              "name":  "metrics",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3305532Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg\\observability",
+                                              "name":  "observability",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3321066Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg\\redisx",
+                                              "name":  "redisx",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3342557Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\pkg\\types",
+                                              "name":  "types",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3370796Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\templates\\ai",
+                                              "name":  "ai",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4067521Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\templates\\ai\\config",
+                                              "name":  "config",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3911665Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\templates\\ai\\examples",
+                                              "name":  "examples",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.3943278Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\templates\\ai\\nats-schemas",
+                                              "name":  "nats-schemas",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4041708Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\templates\\ai\\telemetry",
+                                              "name":  "telemetry",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4098335Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\compliance",
+                                              "name":  "compliance",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4131232Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\component",
+                                              "name":  "component",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4131232Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\integration",
+                                              "name":  "integration",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4178151Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\mocks",
+                                              "name":  "mocks",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4199639Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\observability",
+                                              "name":  "observability",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4235234Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\property",
+                                              "name":  "property",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4257175Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\test\\security",
+                                              "name":  "security",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4285324Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\tests\\integration",
+                                              "name":  "integration",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4311695Z"
+                                          },
+                                          {
+                                              "path":  "mcp\\mcp-ultra-wasm\\tests\\smoke",
+                                              "name":  "smoke",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4328159Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm",
+                                              "name":  "sdk-ultra-wasm",
+                                              "depth":  2,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9503445Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\.github",
+                                              "name":  ".github",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4506575Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\cmd",
+                                              "name":  "cmd",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4779874Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\docs",
+                                              "name":  "docs",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.6978664Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\internal",
+                                              "name":  "internal",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8356384Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg",
+                                              "name":  "pkg",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9043288Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\seed-examples",
+                                              "name":  "seed-examples",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9241609Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\tools",
+                                              "name":  "tools",
+                                              "depth":  3,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9773673Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\.github\\workflows",
+                                              "name":  "workflows",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4528379Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\cmd\\ultra-sdk-cli",
+                                              "name":  "ultra-sdk-cli",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.4779874Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\docs\\gaps",
+                                              "name":  "gaps",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.6592281Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\docs\\melhorias",
+                                              "name":  "melhorias",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.6956997Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\docs\\validation",
+                                              "name":  "validation",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.6978664Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\docs\\validation\\raw",
+                                              "name":  "raw",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8180929Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\internal\\handlers",
+                                              "name":  "handlers",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8339989Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\internal\\seeds",
+                                              "name":  "seeds",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8361835Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\bootstrap",
+                                              "name":  "bootstrap",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8449281Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\contracts",
+                                              "name":  "contracts",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8576323Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\fsx",
+                                              "name":  "fsx",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8607489Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\httpx",
+                                              "name":  "httpx",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8677384Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\logger",
+                                              "name":  "logger",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8763917Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\orchestrator",
+                                              "name":  "orchestrator",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8807205Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\policies",
+                                              "name":  "policies",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.8975227Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\registry",
+                                              "name":  "registry",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:22:22.2850450Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\router",
+                                              "name":  "router",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9196612Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\pkg\\router\\middleware",
+                                              "name":  "middleware",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9158772Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\seed-examples\\waba",
+                                              "name":  "waba",
+                                              "depth":  4,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9443666Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\seed-examples\\waba\\cmd",
+                                              "name":  "cmd",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9291287Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\seed-examples\\waba\\internal",
+                                              "name":  "internal",
+                                              "depth":  5,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9454789Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\seed-examples\\waba\\internal\\plugins",
+                                              "name":  "plugins",
+                                              "depth":  6,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9461489Z"
+                                          },
+                                          {
+                                              "path":  "sdk\\sdk-ultra-wasm\\seed-examples\\waba\\internal\\plugins\\waba",
+                                              "name":  "waba",
+                                              "depth":  7,
+                                              "last_write_time_utc":  "2025-11-09T18:19:11.9471974Z"
+                                          }
+                                      ]
+                  }
+}

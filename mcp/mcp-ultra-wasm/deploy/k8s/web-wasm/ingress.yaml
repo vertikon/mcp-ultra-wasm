@@ -1,0 +1,384 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-wasm-ingress
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    ingress-type: external
+  annotations:
+    # NGINX Ingress Controller annotations
+    kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/ingress.allow-http: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/cors-max-age: "86400"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "false"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    
+    # Large request support
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    
+    # WebSocket support
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.org/websocket-services: "web-wasm-service"
+    
+    # Custom error pages
+    nginx.ingress.kubernetes.io/custom-http-errors: "404,503"
+    
+    # Security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Permissions-Policy: geolocation=(), microphone=(), camera=()";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+    
+    # Load balancing
+    nginx.ingress.kubernetes.io/load-balance: "round_robin"
+    
+    # Connection limits
+    nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/limit-rps: "50"
+    
+    # Authentication annotations (if needed)
+    # nginx.ingress.kubernetes.io/auth-type: basic
+    # nginx.ingress.kubernetes.io/auth-secret: web-wasm-auth
+    # nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+    
+    # External monitoring
+    nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
+    nginx.ingress.kubernetes.io/opentelemetry-trust-insecure-ca: "true"
+    
+    # TLS settings
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    
+    # Custom snippets for specific paths
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location /ws {
+          proxy_pass http://web-wasm-service:8080;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection "upgrade";
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_cache_bypass $http_upgrade;
+          proxy_read_timeout 86400s;
+          proxy_send_timeout 86400s;
+      }
+      
+      location /static/ {
+          expires 1y;
+          add_header Cache-Control "public, immutable";
+      }
+      
+      location /wasm/ {
+          expires 1d;
+          add_header Cache-Control "public";
+          add_header Cross-Origin-Opener-Policy "same-origin";
+          add_header Cross-Origin-Embedder-Policy "require-corp";
+      }
+      
+      location = /health {
+          access_log off;
+          return 200 "healthy\n";
+          add_header Content-Type text/plain;
+      }
+      
+      location /metrics {
+          deny all;
+      }
+
+spec:
+  tls:
+  - hosts:
+    - web-wasm.example.com
+    - api.web-wasm.example.com
+    secretName: web-wasm-tls
+  rules:
+  - host: web-wasm.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-wasm-service
+            port:
+              number: 80
+      - path: /ws
+        pathType: Exact
+        backend:
+          service:
+            name: web-wasm-service
+            port:
+              number: 80
+      - path: /static
+        pathType: Prefix
+        backend:
+          service:
+            name: web-wasm-service
+            port:
+              number: 80
+      - path: /wasm
+        pathType: Prefix
+        backend:
+          service:
+            name: web-wasm-service
+            port:
+              number: 80
+  - host: api.web-wasm.example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: web-wasm-service
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-wasm-internal-ingress
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+    ingress-type: internal
+  annotations:
+    kubernetes.io/ingress.class: "nginx-internal"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Internal-Service: true";
+spec:
+  rules:
+  - host: web-wasm.internal
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-wasm-internal
+            port:
+              number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-wasm-grafana-ingress
+  namespace: web-wasm
+  labels:
+    app: grafana
+    component: monitoring
+    ingress-type: monitoring
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: grafana-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Grafana Authentication"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - grafana.web-wasm.example.com
+    secretName: grafana-tls
+  rules:
+  - host: grafana.web-wasm.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-service
+            port:
+              number: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-wasm-jaeger-ingress
+  namespace: web-wasm
+  labels:
+    app: jaeger
+    component: monitoring
+    ingress-type: monitoring
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - jaeger.web-wasm.example.com
+    secretName: jaeger-tls
+  rules:
+  - host: jaeger.web-wasm.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: jaeger-service
+            port:
+              number: 16686
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-wasm-prometheus-ingress
+  namespace: web-wasm
+  labels:
+    app: prometheus
+    component: monitoring
+    ingress-type: monitoring
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: prometheus-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Prometheus Authentication"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - prometheus.web-wasm.example.com
+    secretName: prometheus-tls
+  rules:
+  - host: prometheus.web-wasm.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-service
+            port:
+              number: 9093
+---
+# Certificate for external domains
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: web-wasm-tls
+  namespace: web-wasm
+  labels:
+    app: web-wasm-server
+    component: mcp-ultra-wasm
+spec:
+  secretName: web-wasm-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - web-wasm.example.com
+  - api.web-wasm.example.com
+---
+# Certificate for monitoring services
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-tls
+  namespace: web-wasm
+  labels:
+    app: grafana
+    component: monitoring
+spec:
+  secretName: grafana-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - grafana.web-wasm.example.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jaeger-tls
+  namespace: web-wasm
+  labels:
+    app: jaeger
+    component: monitoring
+spec:
+  secretName: jaeger-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - jaeger.web-wasm.example.com
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prometheus-tls
+  namespace: web-wasm
+  labels:
+    app: prometheus
+    component: monitoring
+spec:
+  secretName: prometheus-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - prometheus.web-wasm.example.com
+---
+# Basic Auth secrets for monitoring services
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-auth
+  namespace: web-wasm
+  labels:
+    app: grafana
+    component: monitoring
+type: Opaque
+data:
+  auth: YWRtaW46JW1hbjEyMw==  # base64 encoded "admin:admin123"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: prometheus-auth
+  namespace: web-wasm
+  labels:
+    app: prometheus
+    component: monitoring
+type: Opaque
+data:
+  auth: YWRtaW46cHJvbWV0aXVzMjM=  # base64 encoded "admin:prometheus123"
