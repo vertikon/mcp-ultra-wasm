@@ -1,0 +1,90 @@
+name: CI - Ultra Template
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-test-coverage:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go (from go.mod)
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Go env
+        run: |
+          go env
+          go version
+          go mod tidy
+
+      - name: Testes básicos (estáveis)
+        run: |
+          $pkgs = @()
+          if (Test-Path "internal/handlers") { $pkgs += "./internal/handlers" }
+          if (Test-Path "tests/integration") { $pkgs += "./tests/integration" }
+          if (Test-Path "tests/smoke")       { $pkgs += "./tests/smoke" }
+          if ($pkgs.Count -eq 0) { $pkgs = @("./...") }
+          go test $pkgs -count=1
+
+      - name: Coverage (profile)
+        run: |
+          if (Test-Path "internal/handlers") {
+            go test ./internal/handlers ./tests/integration ./tests/smoke -coverpkg=./... -coverprofile coverage.out -count=1
+          } else {
+            go test ./... -coverpkg=./... -coverprofile coverage.out -count=1
+          }
+          go tool cover -func coverage.out > coverage_func.txt
+          go tool cover -html coverage.out > coverage.html
+
+      - name: Update coverage history + badge (se scripts existirem)
+        run: |
+          if (Test-Path "tools/update-coverage-history.ps1") {
+            pwsh -NoProfile -File tools/update-coverage-history.ps1
+          }
+
+      - name: Commit docs (main only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          $changed = git status --porcelain
+          if ($changed -match 'docs/coverage_history\.csv' -or
+              $changed -match 'docs/coverage_history\.md'  -or
+              $changed -match 'docs/badges/coverage\.svg'  -or
+              $changed -match 'coverage\.html'             -or
+              $changed -match 'coverage_func\.txt'         -or
+              $changed -match 'coverage\.out') {
+            git add docs/coverage_history.csv docs/coverage_history.md docs/badges/coverage.svg `
+                    coverage.html coverage_func.txt coverage.out
+            git commit -m "docs(coverage): update history & artifacts [skip ci]" || echo "no changes"
+            git push
+          }
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-artifacts
+          path: |
+            coverage.out
+            coverage.html
+            coverage_func.txt
+            docs/coverage_history.csv
+            docs/coverage_history.md
+            docs/badges/coverage.svg

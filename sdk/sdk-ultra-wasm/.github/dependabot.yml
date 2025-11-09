@@ -1,0 +1,88 @@
+# Dependabot configuration for sdk-ultra-wasm
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+updates:
+  # Go modules
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+
+    # Automatically create PRs for updates
+    open-pull-requests-limit: 10
+
+    # Grouping strategy
+    groups:
+      # Group all patch updates together
+      patch-updates:
+        update-types:
+          - "patch"
+
+      # Group all minor updates together
+      minor-updates:
+        update-types:
+          - "minor"
+
+    # Reviewers (optional - uncomment and add your team)
+    # reviewers:
+    #   - "vertikon/backend-team"
+
+    # Assignees (optional)
+    # assignees:
+    #   - "your-username"
+
+    # Labels
+    labels:
+      - "dependencies"
+      - "go"
+      - "automated"
+
+    # Commit message prefix
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+    # Allow only direct dependencies (not transitive)
+    # ignore:
+    #   - dependency-name: "*"
+    #     update-types: ["version-update:semver-patch"]
+
+    # Versioning strategy
+    versioning-strategy: increase
+
+    # Target branch (default: main)
+    target-branch: "main"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+
+    open-pull-requests-limit: 5
+
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+
+    commit-message:
+      prefix: "chore(ci)"
+      include: "scope"
+
+  # Dockerfile (if you add one later)
+  # - package-ecosystem: "docker"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
+  #   labels:
+  #     - "dependencies"
+  #     - "docker"

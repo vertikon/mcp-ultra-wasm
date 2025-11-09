@@ -1,0 +1,375 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mcp-ultra-wasm-network-policy
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: mcp-ultra-wasm
+    app.kubernetes.io/component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: mcp-ultra-wasm
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Allow traffic from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 9655
+
+  # Allow metrics scraping from monitoring namespace
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 9090
+
+  # Allow health checks from load balancer
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 8080  # Health check port
+
+  # Allow inter-pod communication within namespace
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: mcp-ultra-wasm-platform
+    ports:
+    - protocol: TCP
+      port: 9655
+
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+  # Allow access to PostgreSQL
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: postgresql
+    ports:
+    - protocol: TCP
+      port: 5432
+
+  # Allow access to Redis
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+
+  # Allow access to NATS
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: nats
+    ports:
+    - protocol: TCP
+      port: 4222
+
+  # Allow access to OPA
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: opa
+    ports:
+    - protocol: TCP
+      port: 8181
+
+  # Allow access to Vault
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 8200
+    namespaceSelector:
+      matchLabels:
+        name: vault
+
+  # Allow access to external APIs (HTTPS)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+
+  # Allow access to Jaeger for tracing
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: observability
+    - podSelector:
+        matchLabels:
+          app: jaeger
+    ports:
+    - protocol: TCP
+      port: 14268
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgresql-network-policy
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Only allow connections from MCP Ultra application
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mcp-ultra-wasm
+    ports:
+    - protocol: TCP
+      port: 5432
+
+  # Allow monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9187  # postgres_exporter
+
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+  # Allow PostgreSQL replication (if using streaming replication)
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: postgresql
+    ports:
+    - protocol: TCP
+      port: 5432
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-network-policy
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Only allow connections from MCP Ultra application
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mcp-ultra-wasm
+    ports:
+    - protocol: TCP
+      port: 6379
+
+  # Allow monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 9121  # redis_exporter
+
+  # Allow Redis Sentinel communication (if using Redis Sentinel)
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: redis
+    ports:
+    - protocol: TCP
+      port: 26379
+
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+  # Allow Redis cluster communication
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+    - protocol: TCP
+      port: 16379  # Redis cluster bus
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nats-network-policy
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: nats
+    app.kubernetes.io/component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: nats
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Allow connections from MCP Ultra application
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mcp-ultra-wasm
+    ports:
+    - protocol: TCP
+      port: 4222
+
+  # Allow monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8222  # NATS monitoring
+
+  # Allow NATS cluster communication
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: nats
+    ports:
+    - protocol: TCP
+      port: 6222  # NATS cluster port
+
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+  # Allow NATS cluster communication
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: nats
+    ports:
+    - protocol: TCP
+      port: 6222
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: opa-network-policy
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: opa
+    app.kubernetes.io/component: network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: opa
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  ingress:
+  # Only allow connections from MCP Ultra application
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: mcp-ultra-wasm
+    ports:
+    - protocol: TCP
+      port: 8181
+
+  # Allow monitoring
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8181
+
+  egress:
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+
+  # Allow access to external policy bundles (HTTPS)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: default-deny
+    app.kubernetes.io/component: network-policy
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress

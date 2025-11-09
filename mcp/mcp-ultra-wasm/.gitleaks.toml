@@ -1,0 +1,55 @@
+title = "mcp-ultra-wasm gitleaks config"
+# MCP Ultra Security - Gitleaks configuration
+
+[allowlist]
+description = "Global allow patterns"
+files = [
+  '''(?i)(^|/)docs?/''',
+  '''(?i)(^|/)examples?/''',
+  '''(?i)(^|/)test(s)?/''',
+  '''\.md$''',
+  '''\.txt$''',
+  '''go\.sum$''',
+  '''\.lock$''',
+]
+
+regexes = [
+  '''(?i)example[_-]?(key|token|secret|password|api[_-]?key)''',
+  '''(?i)test[_-]?(key|token|secret|password|api[_-]?key)''',
+  '''(?i)fake[_-]?(key|token|secret|password|api[_-]?key)''',
+  '''(?i)dummy[_-]?(key|token|secret|password|api[_-]?key)''',
+  '''(?i)sample[_-]?(key|token|secret|password|api[_-]?key)''',
+  '''sk[_-]?test[_-]?\w+''',
+  '''pk[_-]?test[_-]?\w+''',
+  # MCP Ultra specific safe patterns
+  '''CHANGE_ME_[A-Z_]+''',              # CHANGE_ME placeholders
+  '''TEST_[A-Z_]+''',                   # Test constants
+  '''constants\.Test[A-Za-z]+''',       # Go constants package usage
+  '''\$\{[A-Z_]+[:\-]?[^}]*\}''',       # Environment variable patterns
+  '''test-kid''',                       # Specific test JWT key IDs
+  '''unknown-kid''',                    # Specific test JWT key IDs
+  '''test_secure_password''',           # Container test passwords
+  '''testuser''',                       # Container test usernames
+]
+
+[[rules]]
+description = "Ignore JWT examples in tests"
+id = "jwt-test-tokens"
+regex = '''eyJ[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*'''
+path = '''(?i)(test|spec|example)'''
+
+[[rules]]
+description = "Ignore localhost/127.0.0.1 URLs"
+id = "localhost-urls"
+regex = '''(localhost|127\.0\.0\.1):\d+'''
+
+[[rules]]
+description = "Ignore UUID patterns"
+id = "uuid-patterns"
+regex = '''[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
+
+[[rules]]
+description = "Ignore SHA hashes"
+id = "sha-hashes"
+regex = '''[a-f0-9]{40,64}'''
+path = '''(go\.sum|package-lock\.json|yarn\.lock)'''

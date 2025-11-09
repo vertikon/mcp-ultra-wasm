@@ -1,0 +1,156 @@
+name: Public Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version (ex: 1.0.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Dry run (não faz push)'
+        required: false
+        type: boolean
+        default: false
+
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  scrub-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y perl
+
+      - name: Setup Git config
+        run: |
+          git config --global user.name "Vertikon Release Bot"
+          git config --global user.email "release@vertikon.com"
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Release version: $VERSION"
+
+      - name: Run scrub and publish
+        env:
+          PUBLIC_REPO_URL: ${{ secrets.PUBLIC_REPO_URL }}
+          VERSION: ${{ steps.version.outputs.version }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          chmod +x ./tools/vertikon-release.sh
+
+          if [[ "$DRY_RUN" == "true" ]]; then
+            ./tools/vertikon-release.sh "$PUBLIC_REPO_URL" ./public "$VERSION" --dry-run
+          else
+            ./tools/vertikon-release.sh "$PUBLIC_REPO_URL" ./public "$VERSION"
+          fi
+
+      - name: Run compliance checks
+        run: |
+          echo "🔍 Executando verificações de compliance..."
+
+          # Verificar se existem diretórios proibidos
+          if [[ -d "./public/internal/enterprise" ]]; then
+            echo "❌ ERRO: Diretório internal/enterprise/ encontrado"
+            exit 1
+          fi
+
+          if [[ -d "./public/configs/prod" ]]; then
+            echo "❌ ERRO: Diretório configs/prod/ encontrado"
+            exit 1
+          fi
+
+          # Verificar se há arquivos .env
+          if find ./public -name ".env*" -type f | grep -q .; then
+            echo "❌ ERRO: Arquivos .env encontrados"
+            exit 1
+          fi
+
+          # Verificar padrões de segredos
+          if grep -r "VERTIKON_API_KEY" ./public/ || \
+             grep -r "VERTIKON_SECRET" ./public/ || \
+             grep -r "vertikon.internal" ./public/; then
+            echo "❌ ERRO: Segredos ou URLs internas encontradas"
+            exit 1
+          fi
+
+          echo "✅ Todas as verificações de compliance passaram"
+
+      - name: Validate Go code
+        run: |
+          cd ./public
+          go mod tidy
+          go vet ./...
+          go test -run=^$ ./... # Compile tests sem executar
+
+      - name: Upload changelog
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog-partial
+          path: public/CHANGELOG_PARTIAL.txt
+          retention-days: 90
+
+      - name: Upload scrubbed code (dry-run)
+        if: github.event.inputs.dry_run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-release-${{ steps.version.outputs.version }}
+          path: public/
+          retention-days: 30
+
+      - name: Create release summary
+        run: |
+          cat > $GITHUB_STEP_SUMMARY <<EOF
+          ## 🚀 Public Release Summary
+
+          **Version:** \`v${{ steps.version.outputs.version }}\`
+          **Mode:** ${{ github.event.inputs.dry_run == 'true' && '🔍 Dry Run' || '✅ Production' }}
+          **Repository:** ${{ secrets.PUBLIC_REPO_URL }}
+          **Trigger:** ${{ github.event_name }}
+
+          ### 📊 Statistics
+
+          - Files processed: $(find ./public -type f | wc -l)
+          - Go files: $(find ./public -name "*.go" | wc -l)
+          - Total size: $(du -sh ./public | cut -f1)
+
+          ### ✅ Compliance Checks
+
+          - [x] No enterprise code
+          - [x] No production configs
+          - [x] No secrets or credentials
+          - [x] Apache 2.0 headers added
+          - [x] Go code validates
+
+          EOF
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Release pipeline failed!"
+          echo "Check the logs above for details."
+          exit 1

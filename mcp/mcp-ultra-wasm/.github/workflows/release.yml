@@ -1,0 +1,401 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.2.3)'
+        required: true
+        type: string
+      pre_release:
+        description: 'Is this a pre-release?'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+permissions:
+  contents: write
+  packages: write
+  security-events: write
+  actions: read
+  id-token: write
+
+jobs:
+  # Create Release
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Determine version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION=${GITHUB_REF#refs/tags/}
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Generate changelog from commits since last tag
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        if [ -n "$PREVIOUS_TAG" ]; then
+          echo "## What's Changed" > changelog.md
+          git log --pretty=format:"* %s (%h)" $PREVIOUS_TAG..HEAD >> changelog.md
+        else
+          echo "## What's Changed" > changelog.md
+          echo "* Initial release" >> changelog.md
+        fi
+        
+        echo "## Docker Images" >> changelog.md
+        echo "* \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}\`" >> changelog.md
+        echo "* \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest\`" >> changelog.md
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: Release ${{ steps.version.outputs.version }}
+        body_path: changelog.md
+        draft: false
+        prerelease: ${{ github.event.inputs.pre_release || false }}
+
+  # Build and Release Artifacts
+  build-artifacts:
+    name: Build Release Artifacts
+    runs-on: ubuntu-latest
+    needs: create-release
+    timeout-minutes: 30
+    
+    strategy:
+      matrix:
+        os: [linux, windows, darwin]
+        arch: [amd64, arm64]
+        exclude:
+          - os: windows
+            arch: arm64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+        cache: true
+
+    - name: Build binary
+      run: |
+        BINARY_NAME="mcp-ultra-wasm"
+        if [ "${{ matrix.os }}" = "windows" ]; then
+          BINARY_NAME="${BINARY_NAME}.exe"
+        fi
+        
+        CGO_ENABLED=0 GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} \
+        go build -ldflags="-s -w -X github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/pkg/version.Version=${{ needs.create-release.outputs.version }}" \
+        -o ${BINARY_NAME} ./cmd/mcp-model-ultra
+
+    - name: Create artifact archive
+      run: |
+        BINARY_NAME="mcp-ultra-wasm"
+        if [ "${{ matrix.os }}" = "windows" ]; then
+          BINARY_NAME="${BINARY_NAME}.exe"
+        fi
+        
+        ARCHIVE_NAME="mcp-ultra-wasm-${{ needs.create-release.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}"
+        
+        if [ "${{ matrix.os }}" = "windows" ]; then
+          zip -r ${ARCHIVE_NAME}.zip ${BINARY_NAME} README.md LICENSE config/
+        else
+          tar -czf ${ARCHIVE_NAME}.tar.gz ${BINARY_NAME} README.md LICENSE config/
+        fi
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./mcp-ultra-wasm-${{ needs.create-release.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.${{ matrix.os == 'windows' && 'zip' || 'tar.gz' }}
+        asset_name: mcp-ultra-wasm-${{ needs.create-release.outputs.version }}-${{ matrix.os }}-${{ matrix.arch }}.${{ matrix.os == 'windows' && 'zip' || 'tar.gz' }}
+        asset_content_type: application/octet-stream
+
+  # Build and Push Docker Images
+  build-docker:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    needs: create-release
+    timeout-minutes: 45
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=tag
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
+          type=raw,value=latest
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          VERSION=${{ needs.create-release.outputs.version }}
+
+    - name: Generate SBOM
+      uses: anchore/sbom-action@v0
+      with:
+        image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.create-release.outputs.version }}
+        format: spdx-json
+        output-file: sbom.spdx.json
+
+    - name: Sign image with Cosign
+      uses: sigstore/cosign-installer@v3
+
+    - name: Sign Docker image
+      run: |
+        cosign sign --yes ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.create-release.outputs.version }}
+      env:
+        COSIGN_EXPERIMENTAL: 1
+
+    - name: Upload SBOM as release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./sbom.spdx.json
+        asset_name: sbom-${{ needs.create-release.outputs.version }}.spdx.json
+        asset_content_type: application/json
+
+  # Generate Helm Chart
+  helm-chart:
+    name: Generate Helm Chart
+    runs-on: ubuntu-latest
+    needs: create-release
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: '3.13.0'
+
+    - name: Create Helm chart
+      run: |
+        VERSION=${{ needs.create-release.outputs.version }}
+        
+        # Create Helm chart directory
+        mkdir -p helm-chart/mcp-ultra-wasm
+        
+        # Generate Chart.yaml
+        cat > helm-chart/mcp-ultra-wasm/Chart.yaml << EOF
+        apiVersion: v2
+        name: mcp-ultra-wasm
+        description: A comprehensive task management system with gRPC, compliance, and observability
+        version: ${VERSION#v}
+        appVersion: ${VERSION}
+        type: application
+        keywords:
+          - task-management
+          - grpc
+          - compliance
+          - observability
+        maintainers:
+          - name: MCP Ultra Team
+            email: team@mcp-ultra-wasm.example.com
+        EOF
+        
+        # Copy Kubernetes manifests as templates
+        mkdir -p helm-chart/mcp-ultra-wasm/templates
+        cp deploy/k8s/*.yaml helm-chart/mcp-ultra-wasm/templates/
+        
+        # Create values.yaml
+        cat > helm-chart/mcp-ultra-wasm/values.yaml << EOF
+        image:
+          repository: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tag: ${VERSION}
+          pullPolicy: IfNotPresent
+        
+        service:
+          type: LoadBalancer
+          port: 80
+          targetPort: 9655
+        
+        ingress:
+          enabled: true
+          className: "nginx"
+          annotations: {}
+          hosts:
+            - host: mcp-ultra-wasm.example.com
+              paths:
+                - path: /
+                  pathType: Prefix
+        
+        autoscaling:
+          enabled: true
+          minReplicas: 3
+          maxReplicas: 10
+          targetCPUUtilizationPercentage: 70
+        
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        EOF
+
+    - name: Package Helm chart
+      run: |
+        cd helm-chart
+        helm package mcp-ultra-wasm
+        
+    - name: Upload Helm chart as release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./helm-chart/mcp-ultra-wasm-${{ needs.create-release.outputs.version }}.tgz
+        asset_name: mcp-ultra-wasm-helm-${{ needs.create-release.outputs.version }}.tgz
+        asset_content_type: application/gzip
+
+  # Security Validation for Release
+  security-validation:
+    name: Security Validation
+    runs-on: ubuntu-latest
+    needs: [create-release, build-docker]
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run comprehensive security scan on release image
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.create-release.outputs.version }}
+        format: 'sarif'
+        output: 'release-trivy-results.sarif'
+
+    - name: Upload security scan results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: release-trivy-results.sarif
+
+    - name: Validate image signature
+      run: |
+        cosign verify --certificate-identity-regexp=".*" --certificate-oidc-issuer-regexp=".*" \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.create-release.outputs.version }}
+      env:
+        COSIGN_EXPERIMENTAL: 1
+
+  # Post-release actions
+  post-release:
+    name: Post Release Actions
+    runs-on: ubuntu-latest
+    needs: [create-release, build-artifacts, build-docker, helm-chart, security-validation]
+    timeout-minutes: 10
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Update documentation
+      run: |
+        # Update version in documentation
+        sed -i 's/version: .*/version: ${{ needs.create-release.outputs.version }}/' README.md
+        
+        # Update changelog
+        echo "## [${{ needs.create-release.outputs.version }}] - $(date +%Y-%m-%d)" >> CHANGELOG.md
+        echo "" >> CHANGELOG.md
+        git log --pretty=format:"### %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD >> CHANGELOG.md
+        echo "" >> CHANGELOG.md
+
+    - name: Create PR for documentation updates
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "docs: update version to ${{ needs.create-release.outputs.version }}"
+        title: "Update documentation for release ${{ needs.create-release.outputs.version }}"
+        body: |
+          Automated documentation updates for release ${{ needs.create-release.outputs.version }}
+          
+          - Updated version in README.md
+          - Updated CHANGELOG.md with release notes
+        branch: docs/release-${{ needs.create-release.outputs.version }}
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: success
+        channel: '#releases'
+        text: |
+          🎉 MCP Ultra ${{ needs.create-release.outputs.version }} has been released!
+          
+          📦 Release: https://github.com/${{ github.repository }}/releases/tag/${{ needs.create-release.outputs.version }}
+          🐳 Docker: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.create-release.outputs.version }}`
+          ⛵ Helm: Available in release assets
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Update deployment tracking
+      run: |
+        echo "Release ${{ needs.create-release.outputs.version }} completed at $(date)" >> deployment-log.txt
+        echo "Docker images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.create-release.outputs.version }}" >> deployment-log.txt
+        echo "Security validation: Passed" >> deployment-log.txt
+        echo "Artifacts: Binaries, Helm chart, SBOM generated" >> deployment-log.txt
+        echo "---" >> deployment-log.txt

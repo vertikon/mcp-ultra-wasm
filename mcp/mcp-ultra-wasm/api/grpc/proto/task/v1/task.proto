@@ -1,0 +1,390 @@
+syntax = "proto3";
+
+package task.v1;
+
+option go_package = "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen/task/v1;taskv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "buf/validate/validate.proto";
+
+// TaskService provides task management operations
+service TaskService {
+  // Creates a new task
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse) {
+    option (google.api.http) = {
+      post: "/v1/tasks"
+      body: "*"
+    };
+  }
+
+  // Gets a task by ID
+  rpc GetTask(GetTaskRequest) returns (GetTaskResponse) {
+    option (google.api.http) = {
+      get: "/v1/tasks/{id}"
+    };
+  }
+
+  // Updates a task
+  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse) {
+    option (google.api.http) = {
+      put: "/v1/tasks/{task.id}"
+      body: "*"
+    };
+  }
+
+  // Deletes a task
+  rpc DeleteTask(DeleteTaskRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/tasks/{id}"
+    };
+  }
+
+  // Lists tasks with pagination and filtering
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse) {
+    option (google.api.http) = {
+      get: "/v1/tasks"
+    };
+  }
+
+  // Batch operations for multiple tasks
+  rpc BatchCreateTasks(BatchCreateTasksRequest) returns (BatchCreateTasksResponse) {
+    option (google.api.http) = {
+      post: "/v1/tasks:batchCreate"
+      body: "*"
+    };
+  }
+
+  rpc BatchUpdateTasks(BatchUpdateTasksRequest) returns (BatchUpdateTasksResponse) {
+    option (google.api.http) = {
+      put: "/v1/tasks:batchUpdate"
+      body: "*"
+    };
+  }
+
+  rpc BatchDeleteTasks(BatchDeleteTasksRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/tasks:batchDelete"
+      body: "*"
+    };
+  }
+
+  // Real-time task updates via streaming
+  rpc StreamTasks(StreamTasksRequest) returns (stream StreamTasksResponse);
+
+  // Task analytics and reporting
+  rpc GetTaskAnalytics(GetTaskAnalyticsRequest) returns (GetTaskAnalyticsResponse) {
+    option (google.api.http) = {
+      get: "/v1/tasks/analytics"
+    };
+  }
+}
+
+// Task represents a task in the system
+message Task {
+  // Unique task identifier
+  string id = 1 [(validate.rules).string.pattern = "^[a-zA-Z0-9_-]+$"];
+  
+  // Task title
+  string title = 2 [(validate.rules).string = {min_len: 1, max_len: 200}];
+  
+  // Task description
+  string description = 3 [(validate.rules).string.max_len = 2000];
+  
+  // Task status
+  TaskStatus status = 4 [(validate.rules).enum.defined_only = true];
+  
+  // Task priority
+  TaskPriority priority = 5 [(validate.rules).enum.defined_only = true];
+  
+  // Task category
+  string category = 6 [(validate.rules).string.max_len = 100];
+  
+  // Task tags for organization
+  repeated string tags = 7 [(validate.rules).repeated.items.string.max_len = 50];
+  
+  // Task assignee information
+  TaskAssignee assignee = 8;
+  
+  // Due date
+  google.protobuf.Timestamp due_date = 9;
+  
+  // Task metadata
+  map<string, string> metadata = 10;
+  
+  // Timestamps
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+  google.protobuf.Timestamp completed_at = 13;
+  
+  // Task relationships
+  repeated string parent_task_ids = 14;
+  repeated string dependency_task_ids = 15;
+  
+  // Estimated effort in minutes
+  int32 estimated_minutes = 16 [(validate.rules).int32.gte = 0];
+  
+  // Actual effort in minutes
+  int32 actual_minutes = 17 [(validate.rules).int32.gte = 0];
+  
+  // Task attachments
+  repeated TaskAttachment attachments = 18;
+  
+  // Task comments/history
+  repeated TaskComment comments = 19;
+  
+  // Compliance and privacy fields
+  TaskCompliance compliance = 20;
+}
+
+// TaskStatus represents the current status of a task
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_DRAFT = 1;
+  TASK_STATUS_PENDING = 2;
+  TASK_STATUS_IN_PROGRESS = 3;
+  TASK_STATUS_ON_HOLD = 4;
+  TASK_STATUS_COMPLETED = 5;
+  TASK_STATUS_CANCELLED = 6;
+  TASK_STATUS_ARCHIVED = 7;
+}
+
+// TaskPriority represents the priority level of a task
+enum TaskPriority {
+  TASK_PRIORITY_UNSPECIFIED = 0;
+  TASK_PRIORITY_LOW = 1;
+  TASK_PRIORITY_MEDIUM = 2;
+  TASK_PRIORITY_HIGH = 3;
+  TASK_PRIORITY_URGENT = 4;
+  TASK_PRIORITY_CRITICAL = 5;
+}
+
+// TaskAssignee represents who is assigned to the task
+message TaskAssignee {
+  string user_id = 1 [(validate.rules).string.min_len = 1];
+  string user_email = 2 [(validate.rules).string.email = true];
+  string user_name = 3 [(validate.rules).string.max_len = 100];
+  google.protobuf.Timestamp assigned_at = 4;
+  string assigned_by = 5;
+}
+
+// TaskAttachment represents a file attachment
+message TaskAttachment {
+  string id = 1;
+  string filename = 2 [(validate.rules).string.min_len = 1];
+  string content_type = 3;
+  int64 size_bytes = 4 [(validate.rules).int64.gte = 0];
+  string url = 5;
+  google.protobuf.Timestamp uploaded_at = 6;
+  string uploaded_by = 7;
+}
+
+// TaskComment represents a comment or note on a task
+message TaskComment {
+  string id = 1;
+  string content = 2 [(validate.rules).string = {min_len: 1, max_len: 1000}];
+  string author_id = 3;
+  string author_name = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  CommentType type = 7;
+}
+
+// CommentType represents the type of comment
+enum CommentType {
+  COMMENT_TYPE_UNSPECIFIED = 0;
+  COMMENT_TYPE_COMMENT = 1;
+  COMMENT_TYPE_STATUS_CHANGE = 2;
+  COMMENT_TYPE_ASSIGNMENT = 3;
+  COMMENT_TYPE_SYSTEM = 4;
+}
+
+// TaskCompliance represents compliance-related information
+message TaskCompliance {
+  bool contains_pii = 1;
+  repeated string pii_types = 2;
+  string legal_basis = 3;
+  repeated string consent_purposes = 4;
+  google.protobuf.Timestamp retention_until = 5;
+  string data_classification = 6;
+}
+
+// Request/Response messages
+
+message CreateTaskRequest {
+  Task task = 1 [(validate.rules).message.required = true];
+  string idempotency_key = 2 [(validate.rules).string.max_len = 255];
+}
+
+message CreateTaskResponse {
+  Task task = 1;
+}
+
+message GetTaskRequest {
+  string id = 1 [(validate.rules).string.min_len = 1];
+  google.protobuf.FieldMask field_mask = 2;
+}
+
+message GetTaskResponse {
+  Task task = 1;
+}
+
+message UpdateTaskRequest {
+  Task task = 1 [(validate.rules).message.required = true];
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message UpdateTaskResponse {
+  Task task = 1;
+}
+
+message DeleteTaskRequest {
+  string id = 1 [(validate.rules).string.min_len = 1];
+  bool force = 2; // Force delete even if task has dependencies
+}
+
+message ListTasksRequest {
+  // Pagination
+  int32 page_size = 1 [(validate.rules).int32 = {gte: 1, lte: 100}];
+  string page_token = 2;
+  
+  // Filtering
+  TaskFilter filter = 3;
+  
+  // Sorting
+  repeated TaskSortField sort_by = 4;
+  
+  // Field mask for response
+  google.protobuf.FieldMask field_mask = 5;
+}
+
+message ListTasksResponse {
+  repeated Task tasks = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+
+message TaskFilter {
+  repeated TaskStatus status = 1;
+  repeated TaskPriority priority = 2;
+  repeated string categories = 3;
+  repeated string tags = 4;
+  repeated string assignee_ids = 5;
+  DateRange created_at_range = 6;
+  DateRange due_date_range = 7;
+  DateRange updated_at_range = 8;
+  string search_query = 9;
+  bool include_archived = 10;
+}
+
+message DateRange {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+}
+
+message TaskSortField {
+  string field = 1 [(validate.rules).string.min_len = 1];
+  SortOrder order = 2;
+}
+
+enum SortOrder {
+  SORT_ORDER_UNSPECIFIED = 0;
+  SORT_ORDER_ASC = 1;
+  SORT_ORDER_DESC = 2;
+}
+
+// Batch operations
+message BatchCreateTasksRequest {
+  repeated CreateTaskRequest requests = 1 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+}
+
+message BatchCreateTasksResponse {
+  repeated CreateTaskResponse responses = 1;
+  repeated BatchError errors = 2;
+}
+
+message BatchUpdateTasksRequest {
+  repeated UpdateTaskRequest requests = 1 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+}
+
+message BatchUpdateTasksResponse {
+  repeated UpdateTaskResponse responses = 1;
+  repeated BatchError errors = 2;
+}
+
+message BatchDeleteTasksRequest {
+  repeated string ids = 1 [(validate.rules).repeated = {min_items: 1, max_items: 100}];
+  bool force = 2;
+}
+
+message BatchError {
+  int32 index = 1;
+  string code = 2;
+  string message = 3;
+  map<string, string> details = 4;
+}
+
+// Streaming
+message StreamTasksRequest {
+  TaskFilter filter = 1;
+  repeated TaskEventType event_types = 2;
+}
+
+message StreamTasksResponse {
+  TaskEvent event = 1;
+}
+
+message TaskEvent {
+  TaskEventType type = 1;
+  Task task = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  string user_id = 4;
+  map<string, string> metadata = 5;
+}
+
+enum TaskEventType {
+  TASK_EVENT_TYPE_UNSPECIFIED = 0;
+  TASK_EVENT_TYPE_CREATED = 1;
+  TASK_EVENT_TYPE_UPDATED = 2;
+  TASK_EVENT_TYPE_DELETED = 3;
+  TASK_EVENT_TYPE_STATUS_CHANGED = 4;
+  TASK_EVENT_TYPE_ASSIGNED = 5;
+  TASK_EVENT_TYPE_COMMENT_ADDED = 6;
+}
+
+// Analytics
+message GetTaskAnalyticsRequest {
+  DateRange date_range = 1;
+  TaskFilter filter = 2;
+  repeated AnalyticsMetric metrics = 3;
+}
+
+message GetTaskAnalyticsResponse {
+  repeated AnalyticsResult results = 1;
+}
+
+message AnalyticsResult {
+  AnalyticsMetric metric = 1;
+  map<string, double> values = 2;
+  repeated AnalyticsDataPoint data_points = 3;
+}
+
+message AnalyticsDataPoint {
+  google.protobuf.Timestamp timestamp = 1;
+  double value = 2;
+  map<string, string> dimensions = 3;
+}
+
+enum AnalyticsMetric {
+  ANALYTICS_METRIC_UNSPECIFIED = 0;
+  ANALYTICS_METRIC_TASK_COUNT = 1;
+  ANALYTICS_METRIC_COMPLETION_RATE = 2;
+  ANALYTICS_METRIC_AVERAGE_COMPLETION_TIME = 3;
+  ANALYTICS_METRIC_OVERDUE_TASKS = 4;
+  ANALYTICS_METRIC_TASKS_BY_STATUS = 5;
+  ANALYTICS_METRIC_TASKS_BY_PRIORITY = 6;
+  ANALYTICS_METRIC_WORKLOAD_BY_ASSIGNEE = 7;
+}

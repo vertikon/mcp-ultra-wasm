@@ -1,0 +1,195 @@
+{
+  "severity": "medium",
+  "confidence": "medium",
+  "rules": {
+    "G101": {
+      "description": "Look for hard coded credentials",
+      "severity": "HIGH",
+      "confidence": "LOW"
+    },
+    "G102": {
+      "description": "Bind to all interfaces",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G103": {
+      "description": "Audit the use of unsafe block",
+      "severity": "LOW",
+      "confidence": "HIGH"
+    },
+    "G104": {
+      "description": "Audit errors not checked",
+      "severity": "LOW",
+      "confidence": "HIGH"
+    },
+    "G106": {
+      "description": "Audit the use of ssh.InsecureIgnoreHostKey",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G107": {
+      "description": "Url provided to HTTP request as taint input",
+      "severity": "MEDIUM",
+      "confidence": "LOW"
+    },
+    "G108": {
+      "description": "Profiling endpoint automatically exposed on /debug/pprof",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G109": {
+      "description": "Potential Integer overflow made by strconv.Atoi result conversion to int16/32",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G110": {
+      "description": "Potential DoS vulnerability via decompression bomb",
+      "severity": "MEDIUM",
+      "confidence": "MEDIUM"
+    },
+    "G201": {
+      "description": "SQL query construction using format string",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G202": {
+      "description": "SQL query construction using string concatenation",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G203": {
+      "description": "Use of unescaped data in HTML templates",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G204": {
+      "description": "Audit use of command execution",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G301": {
+      "description": "Poor file permissions used when creating a directory",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G302": {
+      "description": "Poor file permissions used with chmod",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G303": {
+      "description": "Creating tempfile using a predictable path",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G304": {
+      "description": "File path provided as taint input",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G305": {
+      "description": "File traversal when extracting zip/tar archive",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G306": {
+      "description": "Poor file permissions used when writing to a new file",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G307": {
+      "description": "Deferring a method which returns an error",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G401": {
+      "description": "Detect the usage of DES, RC4, MD5 or SHA1",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G402": {
+      "description": "Look for bad TLS connection settings",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G403": {
+      "description": "Ensure minimum RSA key length of 2048 bits",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G404": {
+      "description": "Insecure random number source (rand)",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G501": {
+      "description": "Import blacklist: crypto/md5",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G502": {
+      "description": "Import blacklist: crypto/des",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G503": {
+      "description": "Import blacklist: crypto/rc4",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G504": {
+      "description": "Import blacklist: net/http/cgi",
+      "severity": "HIGH",
+      "confidence": "HIGH"
+    },
+    "G505": {
+      "description": "Import blacklist: crypto/sha1",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    },
+    "G601": {
+      "description": "Implicit memory aliasing in RangeStmt",
+      "severity": "MEDIUM",
+      "confidence": "HIGH"
+    }
+  },
+  "exclude": [
+    "G104"
+  ],
+  "include": [
+    "G101",
+    "G102",
+    "G103",
+    "G106",
+    "G107",
+    "G108",
+    "G109",
+    "G110",
+    "G201",
+    "G202",
+    "G203",
+    "G204",
+    "G301",
+    "G302",
+    "G303",
+    "G304",
+    "G305",
+    "G306",
+    "G307",
+    "G401",
+    "G402",
+    "G403",
+    "G404",
+    "G501",
+    "G502",
+    "G503",
+    "G504",
+    "G505",
+    "G601"
+  ],
+  "exclude-generated": true,
+  "exclude-dirs": [
+    "vendor",
+    "test"
+  ]
+}

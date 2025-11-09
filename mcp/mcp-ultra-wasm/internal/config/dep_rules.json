@@ -1,0 +1,41 @@
+{
+  "deny": {
+    "github.com/go-chi/chi/v5": "Use o facade pkg/httpx",
+    "github.com/go-chi/chi/v5/middleware": "Use o facade pkg/httpx",
+    "github.com/go-chi/cors": "Use o facade pkg/httpx",
+    "github.com/redis/go-redis/v9": "Use o facade pkg/redisx",
+    "github.com/prometheus/client_golang/prometheus": "Use o facade pkg/metrics",
+    "github.com/prometheus/client_golang/prometheus/promauto": "Use o facade pkg/metrics",
+    "github.com/prometheus/client_golang/prometheus/promhttp": "Use o facade pkg/metrics",
+    "go.opentelemetry.io/otel": "Use o facade pkg/observability",
+    "go.opentelemetry.io/otel/trace": "Use o facade pkg/observability",
+    "go.opentelemetry.io/otel/attribute": "Use o facade pkg/observability",
+    "go.opentelemetry.io/otel/codes": "Use o facade pkg/observability",
+    "github.com/nats-io/nats.go": "Use o facade pkg/natsx",
+    "github.com/google/uuid": "Use pkg/types (uuid re-exports)"
+  },
+  "excludePaths": [
+    "pkg/httpx",
+    "pkg/redisx",
+    "pkg/metrics",
+    "pkg/observability",
+    "pkg/types",
+    "pkg/natsx"
+  ],
+  "internalLayerRules": [
+    {
+      "name": "handlers->(usecase|domain) only",
+      "from": "internal/handlers/",
+      "allowTo": ["internal/usecase/", "internal/domain/", "internal/services/"],
+      "denyTo": ["internal/infra/", "internal/repository/"],
+      "message": "handlers não pode importar infra/repository diretamente; use services/domain"
+    },
+    {
+      "name": "service no infra direto",
+      "from": "internal/service/",
+      "allowTo": ["internal/domain/", "internal/repository/", "internal/usecase/"],
+      "denyTo": ["internal/infra/"],
+      "message": "service não deve acessar infra diretamente"
+    }
+  ]
+}

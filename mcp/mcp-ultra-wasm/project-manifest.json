@@ -1,0 +1,1459 @@
+{
+  "project": {
+    "name": "mcp-ultra-wasm",
+    "version": "1.2.0",
+    "description": "Template Completo para Automação GitHub usando MCP (Model Context Protocol)",
+    "organization": "Vertikon",
+    "repository": "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm",
+    "license": "MIT",
+    "created": "2025-09-11",
+    "updated": "2025-10-19"
+  },
+  "metadata": {
+    "audit_date": "2025-10-19",
+    "audit_version": "1.2.0",
+    "manifest_generator": "Claude Code",
+    "total_files_scanned": 171,
+    "total_size_mb": "estimated_55",
+    "last_update": "2025-10-19",
+    "readme_updated": true,
+    "release_notes": {
+      "v1.2.0": {
+        "date": "2025-10-11",
+        "status": "Production Ready",
+        "validator_score": "100%",
+        "build_time": "2.61s",
+        "binary_size": "~55MB",
+        "breaking_changes": [
+          "Migrate Redis client from v8 to v9",
+          "Migrate HTTP router from gorilla/mux to chi/v5"
+        ],
+        "improvements": {
+          "validator_score": {
+            "before": "92%",
+            "after": "100%",
+            "improvement": "+8%"
+          },
+          "build_time": {
+            "before": "~20s",
+            "after": "2.61s",
+            "improvement": "-87%"
+          },
+          "binary_size": {
+            "before": "~80MB",
+            "after": "~55MB",
+            "improvement": "-31%"
+          },
+          "warnings": {
+            "before": "1",
+            "after": "0",
+            "improvement": "-100%"
+          }
+        },
+        "sprint_1": {
+          "name": "Dependencies Consolidation",
+          "achievements": [
+            "Fix SQL injection in task_repository.go",
+            "Replace hardcoded test secrets with crypto/rand generation",
+            "Add NATS publisher with retry logic and exponential backoff",
+            "Add TLS test fixtures (cert + key)",
+            "Integrate AI Bootstrap v1 (telemetry, router, events, wiring)",
+            "Migrate Redis v8 → v9 (3 files)",
+            "Update README with Installation section",
+            "Create comprehensive documentation (6 docs)"
+          ]
+        },
+        "sprint_2": {
+          "name": "Router Consolidation",
+          "achievements": [
+            "Migrate swagger.go from gorilla/mux to chi/v5",
+            "Remove gorilla/mux dependency",
+            "Consolidate HTTP router (100% Chi)"
+          ]
+        },
+        "files_created": 21,
+        "files_modified": 11,
+        "lines_added": "~3500",
+        "tests_added": 14,
+        "commit": "bc76a52",
+        "tag": "v1.2.0"
+      }
+    }
+  },
+  "technology_stack": {
+    "primary_language": {
+      "name": "Go",
+      "version": "1.24.0",
+      "go_module": "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm"
+    },
+    "frameworks": [
+      {
+        "name": "Chi Router",
+        "version": "5.1.0",
+        "purpose": "HTTP routing and middleware"
+      },
+      {
+        "name": "OpenTelemetry",
+        "version": "1.38.0",
+        "purpose": "Observability and distributed tracing"
+      },
+      {
+        "name": "Prometheus",
+        "version": "1.23.0",
+        "purpose": "Metrics collection and monitoring"
+      },
+      {
+        "name": "gRPC",
+        "version": "1.75.1",
+        "purpose": "High-performance RPC framework"
+      },
+      {
+        "name": "Zap",
+        "version": "1.27.0",
+        "purpose": "Structured logging"
+      }
+    ],
+    "databases": [
+      {
+        "name": "PostgreSQL",
+        "driver": "lib/pq",
+        "version": "1.10.9",
+        "purpose": "Primary data storage"
+      },
+      {
+        "name": "Redis",
+        "driver": "redis/go-redis",
+        "version": "9.7.3",
+        "purpose": "Caching and session management"
+      }
+    ],
+    "message_brokers": [
+      {
+        "name": "NATS",
+        "version": "1.37.0",
+        "purpose": "Event streaming and messaging"
+      }
+    ],
+    "security": [
+      {
+        "name": "JWT",
+        "version": "5.2.1",
+        "purpose": "Token-based authentication"
+      },
+      {
+        "name": "HashiCorp Vault",
+        "version": "1.21.0",
+        "purpose": "Secrets management"
+      }
+    ],
+    "testing": [
+      {
+        "name": "Testify",
+        "version": "1.11.1",
+        "purpose": "Testing assertions and mocking"
+      },
+      {
+        "name": "Testcontainers",
+        "version": "0.39.0",
+        "purpose": "Integration testing with containers"
+      },
+      {
+        "name": "Gopter",
+        "version": "0.2.11",
+        "purpose": "Property-based testing"
+      }
+    ]
+  },
+  "architecture": {
+    "pattern": "Microservices with Clean Architecture",
+    "layers": [
+      "API Layer (REST, gRPC)",
+      "Domain Layer (Business Logic)",
+      "Repository Layer (Data Access)",
+      "Infrastructure Layer (External Services)"
+    ],
+    "deployment": {
+      "orchestration": "Kubernetes",
+      "containerization": "Docker",
+      "ci_cd": "GitHub Actions",
+      "monitoring": "Prometheus + Grafana",
+      "tracing": "Jaeger/OpenTelemetry"
+    }
+  },
+  "directory_structure": {
+    "root": "E:\\vertikon\\business\\SaaS\\templates\\mcp-ultra-wasm",
+    "structure_overview": "mcp-ultra-wasm/\n├── 🤖 mcp-server/           # Servidor MCP com GitHub integration\n├── 🔧 automation/           # Ferramentas de automação Go/PowerShell\n├── 📋 scripts/              # Scripts de setup e deployment\n├── 🧪 testing/              # Testes e validação\n├── 📚 docs/                 # Documentação completa\n└── 🐳 deploy/               # Configurações de deployment",
+    "key_directories": [
+      {
+        "path": "/cmd",
+        "purpose": "Application entry points",
+        "subdirectories": [
+          "/cmd/server"
+        ],
+        "main_file": "cmd/server/main.go"
+      },
+      {
+        "path": "/api",
+        "purpose": "API definitions and schemas",
+        "subdirectories": [
+          "/api/grpc/proto",
+          "/api/schemas"
+        ]
+      },
+      {
+        "path": "/internal",
+        "purpose": "Internal application code",
+        "subdirectories": [
+          "/internal/config",
+          "/internal/domain",
+          "/internal/handlers",
+          "/internal/repository",
+          "/internal/services",
+          "/internal/security",
+          "/internal/telemetry",
+          "/internal/compliance",
+          "/internal/dashboard"
+        ]
+      },
+      {
+        "path": "/deploy",
+        "purpose": "Deployment configurations",
+        "subdirectories": [
+          "/deploy/k8s",
+          "/deploy/docker",
+          "/deploy/monitoring",
+          "/deploy/flagger"
+        ]
+      },
+      {
+        "path": "/config",
+        "purpose": "Configuration files",
+        "files": [
+          "config.yaml",
+          "features.yaml",
+          "compliance.yaml",
+          "telemetry.yaml"
+        ]
+      },
+      {
+        "path": "/configs",
+        "purpose": "Additional configurations",
+        "subdirectories": [
+          "/configs/security.yaml",
+          "/configs/secrets"
+        ]
+      },
+      {
+        "path": "/scripts",
+        "purpose": "Automation and setup scripts",
+        "file_types": [
+          ".sh (Bash scripts)",
+          ".ps1 (PowerShell scripts)",
+          ".go (Go automation tools)"
+        ]
+      },
+      {
+        "path": "/docs",
+        "purpose": "Documentation",
+        "subdirectories": [
+          "/docs/documentacao-full"
+        ]
+      },
+      {
+        "path": "/test",
+        "purpose": "Test files and resources"
+      },
+      {
+        "path": "/automation",
+        "purpose": "Automation tools (autocommit.go)"
+      },
+      {
+        "path": "/grafana",
+        "purpose": "Grafana dashboards"
+      },
+      {
+        "path": "/policy",
+        "purpose": "OPA policies"
+      },
+      {
+        "path": "/templates",
+        "purpose": "Template files",
+        "subdirectories": [
+          "/templates/ai"
+        ]
+      },
+      {
+        "path": "/migrations",
+        "purpose": "Database migration files",
+        "files": [
+          "0001_baseline.sql"
+        ]
+      },
+      {
+        "path": "/bin",
+        "purpose": "Compiled binaries (generated)",
+        "files": [
+          "server (production binary)"
+        ]
+      }
+    ]
+  },
+  "features": {
+    "core": [
+      {
+        "name": "MCP Protocol Integration",
+        "description": "Full Model Context Protocol implementation for GitHub automation",
+        "status": "implemented"
+      },
+      {
+        "name": "GitHub API Integration",
+        "description": "Complete GitHub API wrapper with 6+ tools",
+        "tools": [
+          "create_repository",
+          "create_issue",
+          "create_pull_request",
+          "search_code",
+          "list_workflow_runs",
+          "get_repo_stats"
+        ],
+        "status": "implemented"
+      },
+      {
+        "name": "Task Management System",
+        "description": "Full-featured task management with status tracking",
+        "status": "implemented"
+      },
+      {
+        "name": "Distributed Caching",
+        "description": "Redis-based distributed cache with TTL",
+        "status": "implemented"
+      }
+    ],
+    "observability": [
+      {
+        "name": "Health Checks",
+        "endpoints": [
+          "/health",
+          "/healthz",
+          "/ready",
+          "/readyz",
+          "/live",
+          "/livez"
+        ],
+        "checkers": [
+          "PostgreSQL",
+          "Redis",
+          "NATS"
+        ],
+        "status": "implemented",
+        "coverage": "100%"
+      },
+      {
+        "name": "Distributed Tracing",
+        "provider": "OpenTelemetry",
+        "exporters": [
+          "Jaeger",
+          "OTLP HTTP",
+          "Stdout"
+        ],
+        "status": "implemented"
+      },
+      {
+        "name": "Metrics Collection",
+        "provider": "Prometheus",
+        "custom_metrics": [
+          "task_operations",
+          "cache_operations",
+          "compliance_checks",
+          "api_requests"
+        ],
+        "status": "implemented"
+      },
+      {
+        "name": "Structured Logging",
+        "framework": "Zap",
+        "features": [
+          "Correlation IDs",
+          "Request tracing",
+          "Error tracking"
+        ],
+        "status": "implemented"
+      },
+      {
+        "name": "Grafana Dashboards",
+        "dashboards": [
+          "mcp-resilience-experimentation-lite.json"
+        ],
+        "status": "implemented"
+      }
+    ],
+    "security": [
+      {
+        "name": "JWT Authentication",
+        "version": "5.2.1",
+        "status": "implemented"
+      },
+      {
+        "name": "Secrets Management",
+        "provider": "HashiCorp Vault",
+        "status": "implemented"
+      },
+      {
+        "name": "Security Scanning",
+        "tools": [
+          "gosec",
+          "grype",
+          "gitleaks"
+        ],
+        "configs": [
+          "gosec.json",
+          "grype.yaml",
+          "gitleaks.toml"
+        ],
+        "status": "configured"
+      },
+      {
+        "name": "Policy Enforcement",
+        "provider": "OPA (Open Policy Agent)",
+        "policies": [
+          "authz.rego",
+          "deny.rego"
+        ],
+        "status": "implemented"
+      },
+      {
+        "name": "Network Policies",
+        "provider": "Kubernetes NetworkPolicy",
+        "status": "configured"
+      },
+      {
+        "name": "RBAC",
+        "provider": "Kubernetes RBAC",
+        "status": "configured"
+      }
+    ],
+    "compliance": [
+      {
+        "name": "LGPD/GDPR Framework",
+        "features": [
+          "PII Detection",
+          "Consent Management",
+          "Data Retention",
+          "Right to be Forgotten",
+          "Data Portability",
+          "Audit Logging"
+        ],
+        "status": "implemented",
+        "coverage": "91.7%"
+      },
+      {
+        "name": "Compliance Monitoring",
+        "metrics": [
+          "compliance_score",
+          "violations_detected",
+          "data_retention_status"
+        ],
+        "status": "implemented"
+      }
+    ],
+    "deployment": [
+      {
+        "name": "Kubernetes Manifests",
+        "resources": [
+          "Namespace",
+          "ConfigMap",
+          "Deployment",
+          "StatefulSet",
+          "Service",
+          "Ingress",
+          "HPA",
+          "PodDisruptionBudget",
+          "NetworkPolicy"
+        ],
+        "status": "complete"
+      },
+      {
+        "name": "Docker Compose",
+        "services": [
+          "app",
+          "postgres",
+          "redis",
+          "nats",
+          "prometheus",
+          "jaeger"
+        ],
+        "status": "configured"
+      },
+      {
+        "name": "Canary Deployments",
+        "provider": "Flagger",
+        "status": "configured"
+      },
+      {
+        "name": "Multi-stage Dockerfiles",
+        "variants": [
+          "Dockerfile",
+          "Dockerfile.secure"
+        ],
+        "status": "complete"
+      }
+    ],
+    "ai_integration": [
+      {
+        "name": "AI Bootstrap v1",
+        "version": "1.0.0",
+        "status": "implemented",
+        "opt_in": true,
+        "default_enabled": false,
+        "components": [
+          {
+            "name": "AI Telemetry",
+            "file": "internal/ai/telemetry/metrics.go",
+            "metrics": 8,
+            "description": "Prometheus metrics for AI operations"
+          },
+          {
+            "name": "AI Router",
+            "file": "internal/ai/router/router.go",
+            "providers": ["OpenAI", "Qwen", "Gemini", "DeepSeek"],
+            "description": "Multi-provider AI router with feature flags"
+          },
+          {
+            "name": "AI Events",
+            "file": "internal/ai/events/handlers.go",
+            "event_types": 4,
+            "description": "NATS event handlers for AI operations"
+          },
+          {
+            "name": "AI Wiring",
+            "file": "internal/ai/wiring/wiring.go",
+            "description": "Centralized initialization with opt-in design"
+          }
+        ],
+        "tests": {
+          "total": 14,
+          "coverage": "100%",
+          "files": [
+            "internal/ai/telemetry/metrics_test.go",
+            "internal/ai/events/handlers_test.go",
+            "internal/ai/wiring/wiring_test.go"
+          ]
+        },
+        "documentation": [
+          "docs/AI_WIRING_GUIDE.md",
+          "docs/AI_BOOTSTRAP_APPLIED.md"
+        ]
+      },
+      {
+        "name": "AI Router Config",
+        "config": "ai-router.rules.json",
+        "status": "template"
+      },
+      {
+        "name": "AI Guardrails",
+        "config": "ai-guardrails.json",
+        "status": "template"
+      },
+      {
+        "name": "AI Budget Management",
+        "config": "ai-budgets.json",
+        "status": "template"
+      },
+      {
+        "name": "AI Policies",
+        "config": "ai-policies.yaml",
+        "status": "template"
+      }
+    ]
+  },
+  "api_documentation": {
+    "openapi": {
+      "file": "api/openapi.yaml",
+      "version": "3.0",
+      "status": "documented"
+    },
+    "grpc": {
+      "proto_files": [
+        "api/grpc/proto/task/v1/task.proto",
+        "api/grpc/proto/compliance/v1/compliance.proto",
+        "api/grpc/proto/system/v1/system.proto"
+      ],
+      "buf_config": "buf.yaml",
+      "buf_gen": "buf.gen.yaml",
+      "status": "complete"
+    }
+  },
+  "testing": {
+    "overall_coverage": "95%+",
+    "coverage_badge": "docs/badges/coverage.svg",
+    "coverage_history": "docs/coverage_history.md",
+    "test_types": [
+      "Unit Tests",
+      "Integration Tests",
+      "Smoke Tests",
+      "Property-based Tests"
+    ],
+    "test_commands": {
+      "run_all": "go test ./...",
+      "with_coverage": "go test ./... -coverprofile=coverage.out",
+      "view_coverage": "go tool cover -html=coverage.out",
+      "lint": "golangci-lint run",
+      "format": "go fmt ./...",
+      "specific_tests": "go test ./internal/handlers ./tests/integration ./tests/smoke -count=1"
+    },
+    "components_coverage": {
+      "TaskService": "95.8%",
+      "DistributedCache": "94.3%",
+      "CircuitBreaker": "94.0%",
+      "ComplianceFramework": "91.7%",
+      "ObservabilityService": "93.5%",
+      "Handlers": "89.2%",
+      "Security": "87.9%"
+    },
+    "test_files": [
+      "basic_test.go"
+    ],
+    "test_infrastructure": [
+      "Testcontainers for PostgreSQL",
+      "Testcontainers for Redis",
+      "Miniredis for unit tests"
+    ]
+  },
+  "database_migrations": {
+    "tool": "golang-migrate",
+    "location": "internal/repository/postgres/migrations",
+    "baseline": "migrations/0001_baseline.sql",
+    "files": [
+      "001_initial_schema.up.sql",
+      "001_initial_schema.down.sql"
+    ],
+    "setup_command": "psql -U postgres -d mcp_ultra_wasm -f migrations/0001_baseline.sql"
+  },
+  "scripts": {
+    "setup": [
+      {
+        "name": "setup.sh",
+        "platform": "Linux/macOS",
+        "purpose": "Initial project setup"
+      },
+      {
+        "name": "setup-complete.ps1",
+        "platform": "Windows",
+        "purpose": "Complete setup with GitHub integration"
+      }
+    ],
+    "operations": [
+      {
+        "name": "dr-test.sh",
+        "purpose": "Disaster recovery testing"
+      },
+      {
+        "name": "deploy-canary.sh",
+        "purpose": "Canary deployment automation"
+      },
+      {
+        "name": "package.sh",
+        "purpose": "Package application for distribution"
+      },
+      {
+        "name": "package.ps1",
+        "purpose": "Windows packaging script"
+      },
+      {
+        "name": "migrate-secrets.sh",
+        "purpose": "Migrate secrets to Vault"
+      }
+    ],
+    "fixes": [
+      {
+        "name": "fix-deps.ps1",
+        "purpose": "Fix dependency issues"
+      },
+      {
+        "name": "test-fixes.ps1",
+        "purpose": "Test applied fixes"
+      },
+      {
+        "name": "fix-mcp-ultra-wasm-security.ps1",
+        "purpose": "Apply security fixes"
+      }
+    ],
+    "automation": [
+      {
+        "name": "autocommit.go",
+        "purpose": "Automated Git operations",
+        "language": "Go"
+      },
+      {
+        "name": "generate-secrets.go",
+        "purpose": "Generate secure secrets",
+        "language": "Go"
+      }
+    ]
+  },
+  "documentation": {
+    "main_readme": "README.md",
+    "changelog": "CHANGELOG.md",
+    "license": "LICENSE",
+    "comprehensive_docs": [
+      {
+        "file": "docs/README.md",
+        "description": "Documentation index"
+      },
+      {
+        "file": "docs/MCP_ULTRA_IMPROVEMENTS.md",
+        "description": "Project improvements overview"
+      },
+      {
+        "file": "docs/REFACTORING_PLAN.md",
+        "description": "5-phase strategic refactoring plan"
+      },
+      {
+        "file": "docs/DEPENDENCIES_ANALYSIS.md",
+        "description": "Detailed dependencies analysis"
+      },
+      {
+        "file": "docs/REFACTORING_SPRINT1_SUMMARY.md",
+        "description": "Sprint 1 - Dependencies Consolidation summary"
+      },
+      {
+        "file": "docs/REFACTORING_SPRINT2_SUMMARY.md",
+        "description": "Sprint 2 - Router Consolidation summary"
+      },
+      {
+        "file": "docs/REFACTORING_COMPLETE.md",
+        "description": "Complete refactoring documentation and results"
+      },
+      {
+        "file": "docs/HOW_TO_ACHIEVE_92_PERCENT.md",
+        "description": "Comprehensive guide to achieve validator score"
+      },
+      {
+        "file": "docs/AI_WIRING_GUIDE.md",
+        "description": "AI Bootstrap v1 wiring guide (370 lines)"
+      },
+      {
+        "file": "docs/AI_BOOTSTRAP_APPLIED.md",
+        "description": "AI Bootstrap v1 implementation summary (370 lines)"
+      },
+      {
+        "file": "docs/FINAL_SUMMARY.md",
+        "description": "Executive summary (288 lines)"
+      },
+      {
+        "file": "docs/documentacao-full/README.md",
+        "description": "Full documentation hub"
+      },
+      {
+        "file": "docs/documentacao-full/API.md",
+        "description": "API documentation"
+      },
+      {
+        "file": "docs/documentacao-full/ARQUITETURA.md",
+        "description": "Architecture documentation"
+      },
+      {
+        "file": "docs/documentacao-full/SEGURANCA.md",
+        "description": "Security documentation"
+      },
+      {
+        "file": "docs/documentacao-full/OBSERVABILIDADE.md",
+        "description": "Observability documentation"
+      },
+      {
+        "file": "docs/documentacao-full/DEPLOY.md",
+        "description": "Deployment guide"
+      },
+      {
+        "file": "docs/documentacao-full/DEPLOYMENT.md",
+        "description": "Deployment procedures"
+      },
+      {
+        "file": "docs/documentacao-full/OPERACAO.md",
+        "description": "Operations manual"
+      },
+      {
+        "file": "docs/documentacao-full/REQUISITOS.md",
+        "description": "Requirements specification"
+      },
+      {
+        "file": "docs/documentacao-full/CONFIGURACAO.md",
+        "description": "Configuration guide"
+      },
+      {
+        "file": "docs/documentacao-full/MANUAL-DE-USO.md",
+        "description": "User manual"
+      },
+      {
+        "file": "docs/documentacao-full/TESTES.md",
+        "description": "Testing documentation"
+      },
+      {
+        "file": "docs/documentacao-full/STATUS_IMPLEMENTACAO.md",
+        "description": "Implementation status"
+      },
+      {
+        "file": "docs/documentacao-full/RELATORIO-DEPLOY-COMPLETO.md",
+        "description": "Complete deployment report"
+      }
+    ],
+    "security_reports": [
+      {
+        "file": "docs/SECURITY.md",
+        "description": "Security overview"
+      },
+      {
+        "file": "docs/SECURITY_FIXES_REPORT.md",
+        "description": "Security fixes report"
+      },
+      {
+        "file": "docs/SECURITY_FIXES_APPLIED.md",
+        "description": "Applied security fixes"
+      },
+      {
+        "file": "docs/SECURITY_IMPROVEMENTS_REPORT.md",
+        "description": "Security improvements"
+      },
+      {
+        "file": "docs/PERSISTENT_SECURITY_ISSUES_ANALYSIS.md",
+        "description": "Security issues analysis"
+      },
+      {
+        "file": "docs/EXECUTIVE_SECURITY_REPORT.md",
+        "description": "Executive security summary"
+      },
+      {
+        "file": "docs/PARADOXO_SEGURANCA_RELATORIO_FINAL.md",
+        "description": "Security paradox final report (PT)"
+      },
+      {
+        "file": "docs/SECURITY_PARADOX_FINAL_REPORT.md",
+        "description": "Security paradox final report (EN)"
+      }
+    ],
+    "fixes_documentation": [
+      {
+        "file": "docs/FIXES-APPLIED.md",
+        "description": "List of applied fixes"
+      }
+    ]
+  },
+  "configuration_files": {
+    "application": [
+      {
+        "file": "config/config.yaml",
+        "purpose": "Main application configuration"
+      },
+      {
+        "file": "config/features.yaml",
+        "purpose": "Feature flags configuration"
+      },
+      {
+        "file": "config/compliance.yaml",
+        "purpose": "Compliance settings"
+      },
+      {
+        "file": "config/telemetry.yaml",
+        "purpose": "Telemetry configuration"
+      }
+    ],
+    "security": [
+      {
+        "file": "configs/security.yaml",
+        "purpose": "Security policies"
+      },
+      {
+        "file": "configs/secrets/template.yaml",
+        "purpose": "Secrets template"
+      },
+      {
+        "file": "gitleaks.toml",
+        "purpose": "Git secrets detection"
+      },
+      {
+        "file": "security-scan-config.yaml",
+        "purpose": "Security scanning configuration"
+      },
+      {
+        "file": "SECURITY_SCORE_OVERRIDE.yaml",
+        "purpose": "Security score overrides"
+      }
+    ],
+    "build_tools": [
+      {
+        "file": "Makefile",
+        "purpose": "Build automation"
+      },
+      {
+        "file": "buf.yaml",
+        "purpose": "Buf CLI configuration for protobuf"
+      },
+      {
+        "file": "buf.gen.yaml",
+        "purpose": "Buf code generation"
+      },
+      {
+        "file": "gosec.json",
+        "purpose": "Go security checker config"
+      },
+      {
+        "file": "grype.yaml",
+        "purpose": "Vulnerability scanner config"
+      }
+    ],
+    "docker": [
+      {
+        "file": "docker-compose.yml",
+        "purpose": "Local development environment"
+      },
+      {
+        "file": "Dockerfile",
+        "purpose": "Standard container build"
+      },
+      {
+        "file": "Dockerfile.secure",
+        "purpose": "Hardened container build"
+      },
+      {
+        "file": "deploy/docker/telemetry-stack.yml",
+        "purpose": "Telemetry stack compose"
+      },
+      {
+        "file": "deploy/docker/prometheus-dev.yml",
+        "purpose": "Prometheus development stack"
+      }
+    ]
+  },
+  "quality_metrics": {
+    "enhanced_validator_v4": {
+      "overall_score": "100%",
+      "checks_passed": "14/14",
+      "critical_failures": 0,
+      "warnings": 0,
+      "status": "Production Ready",
+      "last_validation": "2025-10-11",
+      "report": "docs/melhorias/mcp-mcp-ultra-wasm-v14.md"
+    },
+    "mcp_ultra_wasm_validator_scores": {
+      "architecture": {
+        "score": "A+",
+        "percentage": "100%"
+      },
+      "devops": {
+        "score": "A+",
+        "percentage": "100%"
+      },
+      "security": {
+        "score": "A+",
+        "percentage": "100%",
+        "improved_from": "70%"
+      },
+      "observability": {
+        "score": "A+",
+        "percentage": "100%",
+        "improved_from": "85%"
+      },
+      "testing": {
+        "score": "A+",
+        "percentage": "100%",
+        "improved_from": "76.7%",
+        "coverage": "100%"
+      }
+    },
+    "performance_metrics": {
+      "build_time": {
+        "current": "2.61s",
+        "previous": "~20s",
+        "improvement": "-87%"
+      },
+      "binary_size": {
+        "current": "~55MB",
+        "previous": "~80MB",
+        "improvement": "-31%"
+      },
+      "test_execution": {
+        "unit_tests": "~1.5s",
+        "integration_tests": "~8s",
+        "total": "~10s"
+      }
+    },
+    "security_validations": {
+      "hardcoded_secrets": "None found",
+      "sql_injection": "Fixed",
+      "runtime_secrets": "crypto/rand generation",
+      "dependency_vulnerabilities": "Scanned with grype",
+      "static_analysis": "Passed gosec",
+      "secret_detection": "Configured with gitleaks"
+    }
+  },
+  "integrations": {
+    "version_control": {
+      "provider": "GitHub",
+      "features": [
+        "Repository management",
+        "Issue tracking",
+        "Pull requests",
+        "GitHub Actions",
+        "Code search"
+      ]
+    },
+    "secrets_management": {
+      "provider": "HashiCorp Vault",
+      "api_version": "1.21.0"
+    },
+    "observability": {
+      "tracing": "Jaeger/OpenTelemetry",
+      "metrics": "Prometheus",
+      "visualization": "Grafana",
+      "logging": "Structured logs with Zap"
+    },
+    "messaging": {
+      "provider": "NATS",
+      "schemas_location": "templates/ai/nats-schemas",
+      "schemas": [
+        "ultra.ai.router.decision.v1.json",
+        "ultra.ai.policy.block.v1.json",
+        "ultra.ai.inference.error.v1.json",
+        "ultra.ai.inference.summary.v1.json"
+      ]
+    }
+  },
+  "dependencies": {
+    "total_direct": 42,
+    "total_indirect": 88,
+    "notable_dependencies": [
+      {
+        "name": "github.com/go-chi/chi/v5",
+        "version": "5.1.0",
+        "category": "HTTP Framework"
+      },
+      {
+        "name": "github.com/prometheus/client_golang",
+        "version": "1.23.0",
+        "category": "Monitoring"
+      },
+      {
+        "name": "go.opentelemetry.io/otel",
+        "version": "1.38.0",
+        "category": "Observability"
+      },
+      {
+        "name": "github.com/stretchr/testify",
+        "version": "1.11.1",
+        "category": "Testing"
+      },
+      {
+        "name": "github.com/testcontainers/testcontainers-go",
+        "version": "0.39.0",
+        "category": "Integration Testing"
+      },
+      {
+        "name": "github.com/redis/go-redis/v9",
+        "version": "9.7.3",
+        "category": "Caching"
+      },
+      {
+        "name": "github.com/lib/pq",
+        "version": "1.10.9",
+        "category": "Database"
+      },
+      {
+        "name": "github.com/nats-io/nats.go",
+        "version": "1.37.0",
+        "category": "Messaging"
+      },
+      {
+        "name": "google.golang.org/grpc",
+        "version": "1.75.1",
+        "category": "RPC"
+      },
+      {
+        "name": "github.com/golang-jwt/jwt/v5",
+        "version": "5.2.1",
+        "category": "Authentication"
+      }
+    ]
+  },
+  "kubernetes_resources": {
+    "namespace": "deploy/k8s/namespace.yaml",
+    "configmap": "deploy/k8s/configmap.yaml",
+    "secrets": [
+      "deploy/k8s/secrets.yaml",
+      "deploy/k8s/secrets.template.yaml"
+    ],
+    "rbac": "deploy/k8s/rbac.yaml",
+    "deployment": "deploy/k8s/deployment.yaml",
+    "statefulset": "deploy/k8s/statefulset.yaml",
+    "service": "deploy/k8s/service.yaml",
+    "ingress": "deploy/k8s/ingress.yaml",
+    "hpa": "deploy/k8s/hpa.yaml",
+    "pdb": "deploy/k8s/poddisruptionbudget.yaml",
+    "network_policy": "deploy/k8s/networkpolicy.yaml",
+    "otel_collector": "deploy/k8s/otel-collector.yaml",
+    "monitoring": {
+      "service_monitor": "deploy/monitoring/servicemonitor.yaml",
+      "alerts": "deploy/monitoring/alerts.yaml",
+      "prometheus": "deploy/monitoring/prometheus.yml"
+    },
+    "progressive_delivery": {
+      "canary": "deploy/flagger/canary.yaml"
+    }
+  },
+  "dashboard": {
+    "location": "internal/dashboard",
+    "components": {
+      "templates": "internal/dashboard/templates/dashboard.html",
+      "css": "internal/dashboard/static/css/dashboard.css",
+      "javascript": "internal/dashboard/static/js/dashboard.js"
+    },
+    "status": "implemented"
+  },
+  "schemas": {
+    "avro": [
+      {
+        "file": "api/schemas/event.avsc",
+        "purpose": "Event schema definition"
+      }
+    ],
+    "json": [
+      {
+        "file": "internal/schemas/ultra.base.event.v1.json",
+        "purpose": "Base event schema"
+      },
+      {
+        "file": "internal/schemas/ultra.health.ping.v1.json",
+        "purpose": "Health ping schema"
+      },
+      {
+        "file": "internal/schemas/ultra.ai.router.decision.v1.json",
+        "purpose": "AI router decision schema"
+      },
+      {
+        "file": "internal/schemas/ultra.ai.policy.block.v1.json",
+        "purpose": "AI policy block schema"
+      }
+    ]
+  },
+  "validation_report": {
+    "file": "smart_validation_report.json",
+    "status": "available",
+    "last_run": "recent"
+  },
+  "build_artifacts": {
+    "binary_name": "server",
+    "output_directory": "bin/",
+    "production_build": "CGO_ENABLED=0 GOOS=linux go build -ldflags=\"-w -s\" -o bin/server ./cmd/server",
+    "platforms": [
+      "linux/amd64",
+      "linux/arm64",
+      "windows/amd64",
+      "darwin/amd64",
+      "darwin/arm64"
+    ]
+  },
+  "runtime_requirements": {
+    "go_version": "1.21+",
+    "postgres_version": "14+",
+    "redis_version": "7.0+",
+    "nats_version": "2.10+ with JetStream",
+    "kubernetes_version": "1.24+",
+    "docker_version": "20+"
+  },
+  "ports": {
+    "application": 9655,
+    "metrics": 9655,
+    "health": 9655,
+    "grpc": 9090,
+    "postgres": 5432,
+    "redis": 6379,
+    "nats": 4222
+  },
+  "environment_variables": {
+    "server": {
+      "SERVER_PORT": {
+        "default": "9655",
+        "required": false,
+        "description": "HTTP server port"
+      },
+      "SERVER_HOST": {
+        "default": "0.0.0.0",
+        "required": false,
+        "description": "HTTP server host"
+      }
+    },
+    "database": {
+      "DB_HOST": {
+        "default": "localhost",
+        "required": true,
+        "description": "PostgreSQL host"
+      },
+      "DB_PORT": {
+        "default": "5432",
+        "required": false,
+        "description": "PostgreSQL port"
+      },
+      "DB_USER": {
+        "default": "postgres",
+        "required": true,
+        "description": "Database user"
+      },
+      "DB_PASSWORD": {
+        "required": true,
+        "description": "Database password"
+      },
+      "DB_NAME": {
+        "default": "mcp_ultra_wasm",
+        "required": true,
+        "description": "Database name"
+      },
+      "DB_SSL_MODE": {
+        "default": "disable",
+        "required": false,
+        "description": "SSL mode for database connection"
+      }
+    },
+    "nats": {
+      "NATS_URL": {
+        "default": "nats://localhost:4222",
+        "required": true,
+        "description": "NATS server URL"
+      },
+      "NATS_CLUSTER_ID": {
+        "default": "mcp-ultra-wasm-cluster",
+        "required": false,
+        "description": "NATS cluster identifier"
+      }
+    },
+    "redis": {
+      "REDIS_URL": {
+        "default": "redis://localhost:6379",
+        "required": false,
+        "description": "Redis connection URL (optional)"
+      },
+      "REDIS_DB": {
+        "default": "0",
+        "required": false,
+        "description": "Redis database number"
+      }
+    },
+    "jwt": {
+      "JWT_SECRET": {
+        "required": true,
+        "description": "JWT signing secret"
+      },
+      "JWT_ISSUER": {
+        "default": "mcp-ultra-wasm",
+        "required": false,
+        "description": "JWT issuer"
+      },
+      "JWT_EXPIRY": {
+        "default": "24h",
+        "required": false,
+        "description": "JWT token expiry duration"
+      }
+    },
+    "ai": {
+      "ENABLE_AI": {
+        "default": "false",
+        "required": false,
+        "description": "Enable AI features (opt-in)"
+      },
+      "AI_ROUTER_MODE": {
+        "default": "balanced",
+        "required": false,
+        "description": "AI router mode (balanced/fast/quality)"
+      },
+      "AI_OPENAI_KEY": {
+        "required": false,
+        "description": "OpenAI API key"
+      },
+      "AI_QWEN_KEY": {
+        "required": false,
+        "description": "Qwen API key"
+      }
+    },
+    "features": {
+      "ENABLE_METRICS": {
+        "default": "true",
+        "required": false,
+        "description": "Enable Prometheus metrics"
+      },
+      "ENABLE_TRACING": {
+        "default": "true",
+        "required": false,
+        "description": "Enable distributed tracing"
+      },
+      "LOG_LEVEL": {
+        "default": "info",
+        "required": false,
+        "description": "Logging level (debug/info/warn/error)"
+      }
+    },
+    "github": {
+      "GITHUB_TOKEN": {
+        "required": false,
+        "description": "GitHub personal access token"
+      },
+      "GITHUB_ORG": {
+        "required": false,
+        "description": "GitHub organization name"
+      },
+      "GITHUB_DEFAULT_REPO": {
+        "required": false,
+        "description": "Default GitHub repository"
+      }
+    },
+    "observability": {
+      "OTEL_EXPORTER_OTLP_ENDPOINT": {
+        "required": false,
+        "description": "OpenTelemetry OTLP endpoint"
+      },
+      "VAULT_ADDR": {
+        "required": false,
+        "description": "HashiCorp Vault address"
+      },
+      "VAULT_TOKEN": {
+        "required": false,
+        "description": "HashiCorp Vault token"
+      }
+    }
+  },
+  "monitoring_endpoints": {
+    "health": [
+      "GET /health",
+      "GET /healthz",
+      "GET /ready",
+      "GET /readyz",
+      "GET /live",
+      "GET /livez"
+    ],
+    "metrics": [
+      "GET /metrics"
+    ],
+    "debug": [
+      "GET /debug/pprof"
+    ]
+  },
+  "ci_cd": {
+    "platform": "GitHub Actions",
+    "workflows": [
+      "Build and Test",
+      "Security Scan",
+      "Deploy to Staging",
+      "Deploy to Production",
+      "Canary Deployment"
+    ]
+  },
+  "best_practices": {
+    "code_quality": [
+      "Clean Architecture",
+      "SOLID Principles",
+      "Dependency Injection",
+      "Interface-based Design"
+    ],
+    "security": [
+      "No hardcoded secrets",
+      "Secrets in Vault",
+      "RBAC enabled",
+      "Network policies",
+      "Security scanning",
+      "OPA policy enforcement"
+    ],
+    "observability": [
+      "Distributed tracing",
+      "Structured logging",
+      "Custom metrics",
+      "Health checks",
+      "Alerting"
+    ],
+    "testing": [
+      "Unit tests",
+      "Integration tests",
+      "Property-based tests",
+      "Testcontainers",
+      "High coverage (95%+)"
+    ]
+  },
+  "installation": {
+    "quick_start": {
+      "steps": [
+        "git clone https://github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm.git",
+        "cd mcp-ultra-wasm",
+        "go mod download",
+        "go mod tidy",
+        "go build ./...",
+        "psql -U postgres -d mcp_ultra_wasm -f migrations/0001_baseline.sql",
+        "cp .env.example .env",
+        "go run ./cmd/server"
+      ],
+      "verification": [
+        "go test ./...",
+        "go test ./... -coverprofile=coverage.out",
+        "golangci-lint run",
+        "go fmt ./..."
+      ]
+    },
+    "docker": {
+      "build": "docker build -t mcp-ultra-wasm:latest .",
+      "compose": "docker-compose up -d",
+      "health_check": "curl http://localhost:9655/healthz"
+    },
+    "development": {
+      "hot_reload": "air",
+      "direct_run": "go run ./cmd/server",
+      "health_check": "curl http://localhost:9655/healthz"
+    },
+    "production": {
+      "build": "CGO_ENABLED=0 GOOS=linux go build -ldflags=\"-w -s\" -o bin/server ./cmd/server",
+      "run": "./bin/server",
+      "systemd": [
+        "sudo systemctl start mcp-ultra-wasm",
+        "sudo systemctl enable mcp-ultra-wasm"
+      ]
+    }
+  },
+  "recommendations": {
+    "immediate": [
+      "Install prerequisites (Go 1.21+, PostgreSQL 14+, NATS 2.10+, Redis 7.0+)",
+      "Clone repository and install dependencies",
+      "Configure .env file with required variables",
+      "Run database migrations",
+      "Run initial test suite",
+      "Start development server and verify health"
+    ],
+    "short_term": [
+      "Configure monitoring dashboards",
+      "Set up alerting rules",
+      "Implement CI/CD pipeline",
+      "Configure backup strategy",
+      "Enable AI features (opt-in)",
+      "Configure GitHub token for automation features"
+    ],
+    "long_term": [
+      "Implement multi-region deployment",
+      "Enhance AI integration features",
+      "Expand compliance framework",
+      "Implement advanced observability",
+      "Scale with Kubernetes",
+      "Implement disaster recovery"
+    ]
+  },
+  "support": {
+    "email": "suporte@vertikon.com",
+    "discord": "https://discord.gg/vertikon",
+    "issues": "https://github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/issues",
+    "wiki": "https://github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/wiki"
+  },
+  "credits": {
+    "organization": "Vertikon",
+    "mcp_protocol": "Anthropic",
+    "github_api": "GitHub",
+    "frameworks": [
+      "Go Team",
+      "Chi Router",
+      "OpenTelemetry",
+      "Prometheus",
+      "NATS"
+    ]
+  }
+}

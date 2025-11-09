@@ -1,0 +1,10 @@
+.PHONY: errcheck-list lint-fix
+
+errcheck-list:
+	golangci-lint run --enable=errcheck --out-format=tab > errcheck.txt || true
+	@echo "→ Revise errcheck.txt (handlers: log+WriteError; services: wrap/return; testes: t.Fatalf)."
+
+lint-fix:
+	gofmt -s -w .
+	goimports -w .
+	$(MAKE) errcheck-list

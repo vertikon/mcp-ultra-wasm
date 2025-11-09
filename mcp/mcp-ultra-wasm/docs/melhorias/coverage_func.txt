@@ -1,0 +1,8 @@
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:10:	NewHealthHandler	100.0%
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:14:	Live			100.0%
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:20:	Ready			100.0%
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:26:	Health			100.0%
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:32:	Livez			100.0%
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:36:	Readyz			100.0%
+github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/health.go:40:	Metrics			100.0%
+total:								(statements)		100.0%

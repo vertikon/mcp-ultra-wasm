@@ -1,0 +1,168 @@
+# GoReleaser configuration for sdk-ultra-wasm
+# Documentation: https://goreleaser.com
+
+version: 2
+
+before:
+  hooks:
+    # Run tests before building
+    - go test ./...
+    # Run linter before building
+    - golangci-lint run ./...
+    # Ensure go.mod is tidy
+    - go mod tidy
+
+builds:
+  # Main HTTP server
+  - id: mcp-ultra-wasm-sdk-server
+    main: ./cmd
+    binary: mcp-ultra-wasm-sdk-server
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+    flags:
+      - -trimpath
+    mod_timestamp: '{{ .CommitTimestamp }}'
+
+  # CLI scaffolding tool
+  - id: ultra-sdk-cli
+    main: ./cmd/ultra-sdk-cli
+    binary: ultra-sdk-cli
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+    flags:
+      - -trimpath
+    mod_timestamp: '{{ .CommitTimestamp }}'
+
+archives:
+  - id: ultra-sdk-cli-archive
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+      - docs/**/*
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - 'merge conflict'
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Bug Fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: 'Performance Improvements'
+      regexp: "^.*perf[(\\w)]*:+.*$"
+      order: 2
+    - title: 'Refactors'
+      regexp: "^.*refactor[(\\w)]*:+.*$"
+      order: 3
+    - title: 'Documentation'
+      regexp: "^.*docs[(\\w)]*:+.*$"
+      order: 4
+    - title: 'Build & CI'
+      regexp: "^.*build[(\\w)]*:+.*$"
+      order: 5
+    - title: 'Other Changes'
+      order: 999
+
+release:
+  github:
+    owner: vertikon
+    name: sdk-ultra-wasm
+  draft: false
+  prerelease: auto
+  mode: replace
+  header: |
+    ## MCP Ultra SDK Custom - Release {{ .Tag }}
+
+    **Version:** {{ .Version }}
+    **Date:** {{ .Date }}
+
+    ### 📦 Installation
+
+    ```bash
+    # Download binary for your platform from assets below
+    # Or install via Go:
+    go install github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm-wasm/sdk/sdk-ultra-wasm/cmd/ultra-sdk-cli@{{ .Tag }}
+    ```
+
+    ### ✨ What's Changed
+  footer: |
+    ---
+
+    **Full Changelog**: https://github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm-wasm/sdk/sdk-ultra-wasm/compare/{{ .PreviousTag }}...{{ .Tag }}
+
+    ### 📊 Verification
+
+    - ✅ All tests passing
+    - ✅ Linter clean
+    - ✅ Coverage >= 70%
+    - ✅ Ultra Verified Certified
+
+    **Developed with ❤️ by Vertikon**
+
+# Disable features we don't need
+dockers:
+  - skip_push: true
+
+brews:
+  - skip_upload: true
+
+nfpms:
+  - skip_upload: true
+
+publishers:
+  - name: skip
+    disable: true

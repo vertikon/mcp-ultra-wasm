@@ -1,0 +1,129 @@
+# MCP Ultra - Telemetry Configuration
+# Complete OpenTelemetry configuration for production environments
+
+telemetry:
+  enabled: true
+  service_name: "mcp-ultra-wasm"
+  service_version: "1.0.0"
+  environment: "production"  # production, staging, development
+  debug: false
+  
+  # Distributed Tracing Configuration
+  tracing:
+    enabled: true
+    sample_rate: 0.1  # Sample 10% of traces (adjust based on traffic)
+    max_spans: 2000   # Maximum spans per trace
+    batch_size: 512   # Batch size for exporting spans
+    timeout: 5s       # Export timeout
+  
+  # Metrics Configuration  
+  metrics:
+    enabled: true
+    port: 9090
+    path: "/metrics"
+    collect_interval: 15s
+    histogram_buckets:
+      - 0.005   # 5ms
+      - 0.01    # 10ms
+      - 0.025   # 25ms
+      - 0.05    # 50ms
+      - 0.1     # 100ms
+      - 0.25    # 250ms
+      - 0.5     # 500ms
+      - 1.0     # 1s
+      - 2.5     # 2.5s
+      - 5.0     # 5s
+      - 10.0    # 10s
+  
+  # Exporters Configuration
+  exporters:
+    # OTLP Exporter (Recommended - OpenTelemetry standard)
+    otlp:
+      enabled: true
+      endpoint: "${OTLP_ENDPOINT}"
+      insecure: true
+      headers:
+        authorization: "${OTLP_AUTH_TOKEN}"
+
+    # Jaeger Exporter (Legacy - for backward compatibility)
+    jaeger:
+      enabled: false
+      endpoint: "http://jaeger:14268/api/traces"
+      user: ""
+      password: ""
+    
+    # Console Exporter (Development/Debugging)
+    console:
+      enabled: false
+
+---
+# Environment-specific overrides
+
+# Development configuration
+development:
+  telemetry:
+    debug: true
+    environment: "development"
+    tracing:
+      sample_rate: 1.0  # Trace everything in development
+    exporters:
+      console:
+        enabled: true
+      otlp:
+        endpoint: "http://localhost:4317"
+
+# Staging configuration
+staging:
+  telemetry:
+    environment: "staging"
+    tracing:
+      sample_rate: 0.5  # Higher sampling in staging
+    exporters:
+      otlp:
+        endpoint: "http://otel-collector-staging:4317"
+
+# Production configuration
+production:
+  telemetry:
+    environment: "production"
+    debug: false
+    tracing:
+      sample_rate: 0.05  # Lower sampling in production (5%)
+      max_spans: 1000    # Reduce memory usage
+    exporters:
+      otlp:
+        endpoint: "https://otel-collector.prod.vertikon.com:4317"
+        insecure: false
+        headers:
+          authorization: "Bearer ${OTEL_API_TOKEN}"
+
+---
+# Advanced Configuration Examples
+
+# High-throughput configuration
+high_throughput:
+  telemetry:
+    tracing:
+      sample_rate: 0.01  # 1% sampling for high-traffic systems
+      batch_size: 2048   # Larger batches
+      timeout: 10s
+    metrics:
+      collect_interval: 30s
+
+# Debug configuration
+debug:
+  telemetry:
+    debug: true
+    tracing:
+      sample_rate: 1.0
+    exporters:
+      console:
+        enabled: true
+      jaeger:
+        enabled: true
+        endpoint: "http://localhost:14268/api/traces"
+
+# Minimal configuration (observability disabled)
+minimal:
+  telemetry:
+    enabled: false

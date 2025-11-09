@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "default": {
+    "classification": {
+      "provider": "openai",
+      "model": "gpt-4o-mini"
+    },
+    "generation": {
+      "provider": "openai",
+      "model": "gpt-4o"
+    },
+    "rerank": {
+      "provider": "openai",
+      "model": "text-embedding-3-large"
+    }
+  },
+  "overrides": [
+    {
+      "when": {
+        "mcp_id": "mcp-wa-autenticacao"
+      },
+      "use": {
+        "generation": {
+          "provider": "local",
+          "model": "gguf-phi4"
+        },
+        "mode": "strict"
+      }
+    }
+  ],
+  "fallbacks": [
+    {
+      "from": {
+        "provider": "openai"
+      },
+      "to": {
+        "provider": "qwen"
+      }
+    },
+    {
+      "from": {
+        "provider": "qwen"
+      },
+      "to": {
+        "provider": "local"
+      }
+    }
+  ]
+}

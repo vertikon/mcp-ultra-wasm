@@ -1,0 +1,643 @@
+syntax = "proto3";
+
+package compliance.v1;
+
+option go_package = "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen/compliance/v1;compliancev1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// ComplianceService provides data protection compliance operations
+service ComplianceService {
+  // Consent Management
+  rpc GrantConsent(GrantConsentRequest) returns (GrantConsentResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/consent"
+      body: "*"
+    };
+  }
+
+  rpc GetConsent(GetConsentRequest) returns (GetConsentResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/consent/{subject_id}/{purpose}"
+    };
+  }
+
+  rpc ListConsents(ListConsentsRequest) returns (ListConsentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/consent/{subject_id}"
+    };
+  }
+
+  rpc WithdrawConsent(WithdrawConsentRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/compliance/consent/{subject_id}/{purpose}"
+    };
+  }
+
+  // Data Rights Management
+  rpc CreateDataRightRequest(CreateDataRightRequestRequest) returns (CreateDataRightRequestResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/data-rights"
+      body: "*"
+    };
+  }
+
+  rpc GetDataRightRequest(GetDataRightRequestRequest) returns (GetDataRightRequestResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/data-rights/{request_id}"
+    };
+  }
+
+  rpc ListDataRightRequests(ListDataRightRequestsRequest) returns (ListDataRightRequestsResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/data-rights"
+    };
+  }
+
+  rpc UpdateDataRightRequest(UpdateDataRightRequestRequest) returns (UpdateDataRightRequestResponse) {
+    option (google.api.http) = {
+      put: "/v1/compliance/data-rights/{request.id}"
+      body: "*"
+    };
+  }
+
+  // Data Processing
+  rpc ProcessData(ProcessDataRequest) returns (ProcessDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/process-data"
+      body: "*"
+    };
+  }
+
+  rpc ValidateProcessing(ValidateProcessingRequest) returns (ValidateProcessingResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/validate-processing"
+      body: "*"
+    };
+  }
+
+  // PII Detection and Classification
+  rpc DetectPII(DetectPIIRequest) returns (DetectPIIResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/detect-pii"
+      body: "*"
+    };
+  }
+
+  rpc ClassifyData(ClassifyDataRequest) returns (ClassifyDataResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/classify-data"
+      body: "*"
+    };
+  }
+
+  // Audit and Reporting
+  rpc GetAuditLog(GetAuditLogRequest) returns (GetAuditLogResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/audit-log"
+    };
+  }
+
+  rpc GetComplianceStatus(GetComplianceStatusRequest) returns (GetComplianceStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/status"
+    };
+  }
+
+  rpc GenerateComplianceReport(GenerateComplianceReportRequest) returns (GenerateComplianceReportResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance/reports"
+      body: "*"
+    };
+  }
+
+  // Data Retention
+  rpc GetRetentionStatus(GetRetentionStatusRequest) returns (GetRetentionStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance/retention/{subject_id}"
+    };
+  }
+
+  rpc ExtendRetention(ExtendRetentionRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/compliance/retention/{subject_id}:extend"
+      body: "*"
+    };
+  }
+
+  rpc PlaceLegalHold(PlaceLegalHoldRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/compliance/retention/{subject_id}:legal-hold"
+      body: "*"
+    };
+  }
+}
+
+// Consent Management Messages
+
+message ConsentRecord {
+  string id = 1;
+  string subject_id = 2 [(validate.rules).string.min_len = 1];
+  string purpose = 3 [(validate.rules).string.min_len = 1];
+  bool granted = 4;
+  string legal_basis = 5 [(validate.rules).string.min_len = 1];
+  ConsentSource consent_source = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  google.protobuf.Timestamp expires_at = 8;
+  google.protobuf.Timestamp withdrawn_at = 9;
+  string ip_address = 10;
+  string user_agent = 11;
+  string consent_string = 12;
+  map<string, string> metadata = 13;
+  int32 version = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
+}
+
+enum ConsentSource {
+  CONSENT_SOURCE_UNSPECIFIED = 0;
+  CONSENT_SOURCE_WEB = 1;
+  CONSENT_SOURCE_MOBILE = 2;
+  CONSENT_SOURCE_API = 3;
+  CONSENT_SOURCE_PHONE = 4;
+  CONSENT_SOURCE_EMAIL = 5;
+  CONSENT_SOURCE_PAPER = 6;
+  CONSENT_SOURCE_IMPORT = 7;
+}
+
+message GrantConsentRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  string purpose = 2 [(validate.rules).string.min_len = 1];
+  bool granted = 3;
+  string legal_basis = 4 [(validate.rules).string.min_len = 1];
+  ConsentSource consent_source = 5;
+  int32 expiration_days = 6;
+  string ip_address = 7;
+  string user_agent = 8;
+  string consent_string = 9;
+  map<string, string> metadata = 10;
+}
+
+message GrantConsentResponse {
+  ConsentRecord consent = 1;
+}
+
+message GetConsentRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  string purpose = 2 [(validate.rules).string.min_len = 1];
+}
+
+message GetConsentResponse {
+  ConsentRecord consent = 1;
+}
+
+message ListConsentsRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+}
+
+message ListConsentsResponse {
+  repeated ConsentRecord consents = 1;
+}
+
+message WithdrawConsentRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  string purpose = 2 [(validate.rules).string.min_len = 1];
+}
+
+// Data Rights Management Messages
+
+message DataRightRequest {
+  string id = 1;
+  DataRightType type = 2;
+  DataRightStatus status = 3;
+  string subject_id = 4 [(validate.rules).string.min_len = 1];
+  google.protobuf.Timestamp requested_at = 5;
+  google.protobuf.Timestamp completed_at = 6;
+  google.protobuf.Struct data = 7;
+  string reason = 8;
+  string verification_code = 9;
+  repeated DataRightRequestUpdate updates = 10;
+}
+
+enum DataRightType {
+  DATA_RIGHT_TYPE_UNSPECIFIED = 0;
+  DATA_RIGHT_TYPE_ACCESS = 1;          // Right to access (Art. 15 GDPR / Art. 18 LGPD)
+  DATA_RIGHT_TYPE_RECTIFICATION = 2;   // Right to rectification
+  DATA_RIGHT_TYPE_ERASURE = 3;         // Right to erasure (right to be forgotten)
+  DATA_RIGHT_TYPE_PORTABILITY = 4;     // Right to data portability
+  DATA_RIGHT_TYPE_RESTRICTION = 5;     // Right to restriction of processing
+  DATA_RIGHT_TYPE_OBJECTION = 6;       // Right to object to processing
+  DATA_RIGHT_TYPE_WITHDRAW_CONSENT = 7; // Right to withdraw consent
+}
+
+enum DataRightStatus {
+  DATA_RIGHT_STATUS_UNSPECIFIED = 0;
+  DATA_RIGHT_STATUS_PENDING = 1;
+  DATA_RIGHT_STATUS_IN_PROGRESS = 2;
+  DATA_RIGHT_STATUS_COMPLETED = 3;
+  DATA_RIGHT_STATUS_REJECTED = 4;
+  DATA_RIGHT_STATUS_PARTIAL = 5;
+}
+
+message DataRightRequestUpdate {
+  google.protobuf.Timestamp timestamp = 1;
+  DataRightStatus status = 2;
+  string message = 3;
+  string updated_by = 4;
+}
+
+message CreateDataRightRequestRequest {
+  DataRightType type = 1 [(validate.rules).enum.defined_only = true];
+  string subject_id = 2 [(validate.rules).string.min_len = 1];
+  string reason = 3;
+  google.protobuf.Struct data = 4;
+  string verification_code = 5;
+}
+
+message CreateDataRightRequestResponse {
+  DataRightRequest request = 1;
+}
+
+message GetDataRightRequestRequest {
+  string request_id = 1 [(validate.rules).string.min_len = 1];
+}
+
+message GetDataRightRequestResponse {
+  DataRightRequest request = 1;
+}
+
+message ListDataRightRequestsRequest {
+  string subject_id = 1;
+  DataRightType type = 2;
+  DataRightStatus status = 3;
+  int32 page_size = 4 [(validate.rules).int32 = {gte: 1, lte: 100}];
+  string page_token = 5;
+}
+
+message ListDataRightRequestsResponse {
+  repeated DataRightRequest requests = 1;
+  string next_page_token = 2;
+}
+
+message UpdateDataRightRequestRequest {
+  DataRightRequest request = 1 [(validate.rules).message.required = true];
+}
+
+message UpdateDataRightRequestResponse {
+  DataRightRequest request = 1;
+}
+
+// Data Processing Messages
+
+message ProcessDataRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  google.protobuf.Struct data = 2 [(validate.rules).message.required = true];
+  string purpose = 3 [(validate.rules).string.min_len = 1];
+  ProcessingOptions options = 4;
+}
+
+message ProcessDataResponse {
+  google.protobuf.Struct processed_data = 1;
+  repeated PIIClassification pii_classifications = 2;
+  ProcessingResult result = 3;
+}
+
+message ProcessingOptions {
+  bool detect_pii = 1;
+  bool anonymize_pii = 2;
+  bool validate_consent = 3;
+  bool log_processing = 4;
+  AnonymizationConfig anonymization = 5;
+}
+
+message ProcessingResult {
+  bool success = 1;
+  string message = 2;
+  repeated string warnings = 3;
+  map<string, string> metadata = 4;
+}
+
+message ValidateProcessingRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  string purpose = 2 [(validate.rules).string.min_len = 1];
+  google.protobuf.Struct data = 3;
+}
+
+message ValidateProcessingResponse {
+  bool valid = 1;
+  string reason = 2;
+  repeated string required_actions = 3;
+  ConsentValidationResult consent_result = 4;
+}
+
+message ConsentValidationResult {
+  bool valid = 1;
+  ConsentRecord consent = 2;
+  string reason = 3;
+  repeated string required_actions = 4;
+  int64 expires_in_seconds = 5;
+}
+
+// PII Detection Messages
+
+message PIIClassification {
+  string field_name = 1;
+  PIIType pii_type = 2;
+  PIISensitivity sensitivity = 3;
+  double confidence = 4;
+  google.protobuf.Struct processed_value = 5;
+  AnonymizationMethod method = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  map<string, string> context = 8;
+}
+
+enum PIIType {
+  PII_TYPE_UNSPECIFIED = 0;
+  PII_TYPE_EMAIL = 1;
+  PII_TYPE_CPF = 2;           // Brazilian CPF
+  PII_TYPE_CNPJ = 3;          // Brazilian CNPJ
+  PII_TYPE_PHONE = 4;
+  PII_TYPE_CREDIT_CARD = 5;
+  PII_TYPE_IP_ADDRESS = 6;
+  PII_TYPE_SSN = 7;           // Social Security Number
+  PII_TYPE_PASSPORT = 8;
+  PII_TYPE_DATE_OF_BIRTH = 9;
+  PII_TYPE_ADDRESS = 10;
+  PII_TYPE_NAME = 11;
+  PII_TYPE_USERNAME = 12;
+  PII_TYPE_CUSTOM = 13;
+}
+
+enum PIISensitivity {
+  PII_SENSITIVITY_UNSPECIFIED = 0;
+  PII_SENSITIVITY_PUBLIC = 1;
+  PII_SENSITIVITY_INTERNAL = 2;
+  PII_SENSITIVITY_CONFIDENTIAL = 3;
+  PII_SENSITIVITY_RESTRICTED = 4;
+}
+
+enum AnonymizationMethod {
+  ANONYMIZATION_METHOD_UNSPECIFIED = 0;
+  ANONYMIZATION_METHOD_HASH = 1;
+  ANONYMIZATION_METHOD_ENCRYPT = 2;
+  ANONYMIZATION_METHOD_TOKENIZE = 3;
+  ANONYMIZATION_METHOD_REDACT = 4;
+  ANONYMIZATION_METHOD_GENERALIZE = 5;
+  ANONYMIZATION_METHOD_SHUFFLE = 6;
+  ANONYMIZATION_METHOD_NOISE = 7;
+}
+
+message AnonymizationConfig {
+  bool enabled = 1;
+  repeated string methods = 2;
+  string hash_salt = 3;
+  bool reversible = 4;
+  int32 k_anonymity = 5;
+  map<string, string> algorithms = 6;
+}
+
+message DetectPIIRequest {
+  google.protobuf.Struct data = 1 [(validate.rules).message.required = true];
+  DetectionOptions options = 2;
+}
+
+message DetectPIIResponse {
+  repeated PIIClassification classifications = 1;
+}
+
+message DetectionOptions {
+  double confidence_threshold = 1;
+  repeated string scan_fields = 2;
+  bool include_context = 3;
+}
+
+message ClassifyDataRequest {
+  google.protobuf.Struct data = 1 [(validate.rules).message.required = true];
+  ClassificationOptions options = 2;
+}
+
+message ClassifyDataResponse {
+  DataClassification classification = 1;
+  repeated PIIClassification pii_classifications = 2;
+}
+
+message DataClassification {
+  string classification_level = 1;  // public, internal, confidential, restricted
+  repeated string data_categories = 2;
+  repeated string applicable_regulations = 3;
+  map<string, string> metadata = 4;
+}
+
+message ClassificationOptions {
+  bool detect_pii = 1;
+  bool apply_regulations = 2;
+  repeated string target_regulations = 3; // lgpd, gdpr, ccpa, etc.
+}
+
+// Audit and Reporting Messages
+
+message AuditEvent {
+  string id = 1;
+  google.protobuf.Timestamp timestamp = 2;
+  AuditEventType event_type = 3;
+  string subject_id = 4;
+  string user_id = 5;
+  string session_id = 6;
+  string ip_address = 7;
+  string user_agent = 8;
+  string purpose = 9;
+  string legal_basis = 10;
+  repeated string data_categories = 11;
+  string processing_type = 12;
+  AuditResult result = 13;
+  map<string, string> details = 14;
+  string data_hash = 15;
+  repeated string compliance_flags = 16;
+  bool encrypted = 17;
+  string version = 18;
+  string service = 19;
+}
+
+enum AuditEventType {
+  AUDIT_EVENT_TYPE_UNSPECIFIED = 0;
+  AUDIT_EVENT_TYPE_DATA_PROCESSING = 1;
+  AUDIT_EVENT_TYPE_CONSENT_GRANT = 2;
+  AUDIT_EVENT_TYPE_CONSENT_WITHDRAW = 3;
+  AUDIT_EVENT_TYPE_DATA_ACCESS = 4;
+  AUDIT_EVENT_TYPE_DATA_EXPORT = 5;
+  AUDIT_EVENT_TYPE_DATA_DELETE = 6;
+  AUDIT_EVENT_TYPE_DATA_RECTIFY = 7;
+  AUDIT_EVENT_TYPE_RIGHTS_REQUEST = 8;
+  AUDIT_EVENT_TYPE_PII_DETECTION = 9;
+  AUDIT_EVENT_TYPE_ANONYMIZATION = 10;
+  AUDIT_EVENT_TYPE_RETENTION_POLICY = 11;
+  AUDIT_EVENT_TYPE_SECURITY_INCIDENT = 12;
+  AUDIT_EVENT_TYPE_COMPLIANCE_CHECK = 13;
+}
+
+enum AuditResult {
+  AUDIT_RESULT_UNSPECIFIED = 0;
+  AUDIT_RESULT_SUCCESS = 1;
+  AUDIT_RESULT_FAILURE = 2;
+  AUDIT_RESULT_PARTIAL_SUCCESS = 3;
+  AUDIT_RESULT_BLOCKED = 4;
+  AUDIT_RESULT_SKIPPED = 5;
+}
+
+message GetAuditLogRequest {
+  string subject_id = 1;
+  AuditEventType event_type = 2;
+  TimeRange time_range = 3;
+  int32 page_size = 4 [(validate.rules).int32 = {gte: 1, lte: 1000}];
+  string page_token = 5;
+}
+
+message GetAuditLogResponse {
+  repeated AuditEvent events = 1;
+  string next_page_token = 2;
+}
+
+message TimeRange {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+}
+
+message GetComplianceStatusRequest {
+  string subject_id = 1;
+}
+
+message GetComplianceStatusResponse {
+  bool enabled = 1;
+  string default_region = 2;
+  bool lgpd_enabled = 3;
+  bool gdpr_enabled = 4;
+  ComplianceComponents components = 5;
+  map<string, google.protobuf.Struct> health_status = 6;
+}
+
+message ComplianceComponents {
+  bool pii_detection = 1;
+  bool consent_mgmt = 2;
+  bool audit_logging = 3;
+  bool data_retention = 4;
+  bool anonymization = 5;
+}
+
+message GenerateComplianceReportRequest {
+  ReportType report_type = 1;
+  TimeRange time_range = 2;
+  ReportFilter filter = 3;
+  ReportFormat format = 4;
+}
+
+message GenerateComplianceReportResponse {
+  string report_id = 1;
+  string download_url = 2;
+  google.protobuf.Timestamp generated_at = 3;
+  ReportMetadata metadata = 4;
+}
+
+enum ReportType {
+  REPORT_TYPE_UNSPECIFIED = 0;
+  REPORT_TYPE_CONSENT_SUMMARY = 1;
+  REPORT_TYPE_DATA_RIGHTS_REQUESTS = 2;
+  REPORT_TYPE_AUDIT_LOG = 3;
+  REPORT_TYPE_PII_INVENTORY = 4;
+  REPORT_TYPE_RETENTION_STATUS = 5;
+  REPORT_TYPE_COMPLIANCE_VIOLATIONS = 6;
+}
+
+enum ReportFormat {
+  REPORT_FORMAT_UNSPECIFIED = 0;
+  REPORT_FORMAT_JSON = 1;
+  REPORT_FORMAT_CSV = 2;
+  REPORT_FORMAT_PDF = 3;
+  REPORT_FORMAT_XLSX = 4;
+}
+
+message ReportFilter {
+  repeated string subject_ids = 1;
+  repeated string purposes = 2;
+  repeated string data_categories = 3;
+}
+
+message ReportMetadata {
+  int32 total_records = 1;
+  string checksum = 2;
+  map<string, string> attributes = 3;
+}
+
+// Data Retention Messages
+
+message RetentionRecord {
+  string id = 1;
+  string subject_id = 2;
+  string data_type = 3;
+  string policy_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp retention_start = 6;
+  google.protobuf.Timestamp retention_end = 7;
+  google.protobuf.Timestamp grace_end = 8;
+  RetentionStatus status = 9;
+  RetentionAction action = 10;
+  bool action_taken = 11;
+  google.protobuf.Timestamp action_taken_at = 12;
+  bool legal_hold = 13;
+  string legal_hold_reason = 14;
+  repeated RetentionExtension extensions = 15;
+  map<string, string> metadata = 16;
+  google.protobuf.Timestamp updated_at = 17;
+}
+
+enum RetentionStatus {
+  RETENTION_STATUS_UNSPECIFIED = 0;
+  RETENTION_STATUS_ACTIVE = 1;
+  RETENTION_STATUS_EXPIRED = 2;
+  RETENTION_STATUS_PROCESSING = 3;
+  RETENTION_STATUS_COMPLETED = 4;
+  RETENTION_STATUS_ON_HOLD = 5;
+  RETENTION_STATUS_EXTENDED = 6;
+}
+
+enum RetentionAction {
+  RETENTION_ACTION_UNSPECIFIED = 0;
+  RETENTION_ACTION_DELETE = 1;
+  RETENTION_ACTION_ARCHIVE = 2;
+  RETENTION_ACTION_ANONYMIZE = 3;
+  RETENTION_ACTION_NOTIFY = 4;
+  RETENTION_ACTION_REVIEW = 5;
+  RETENTION_ACTION_PURGE = 6;
+}
+
+message RetentionExtension {
+  string reason = 1;
+  int64 extend_by_seconds = 2;
+  string extended_by = 3;
+  google.protobuf.Timestamp extended_at = 4;
+  google.protobuf.Timestamp expires_at = 5;
+  bool approved = 6;
+}
+
+message GetRetentionStatusRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+}
+
+message GetRetentionStatusResponse {
+  repeated RetentionRecord records = 1;
+}
+
+message ExtendRetentionRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  string reason = 2 [(validate.rules).string.min_len = 1];
+  int64 extend_by_seconds = 3 [(validate.rules).int64.gt = 0];
+  string approved_by = 4 [(validate.rules).string.min_len = 1];
+}
+
+message PlaceLegalHoldRequest {
+  string subject_id = 1 [(validate.rules).string.min_len = 1];
+  string reason = 2 [(validate.rules).string.min_len = 1];
+}

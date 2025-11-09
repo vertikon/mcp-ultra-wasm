@@ -1,0 +1,77 @@
+{
+  "ProjectName": "sdk-ultra-wasm",
+  "Timestamp": "2025-10-13 02:49:07",
+  "Critical": [],
+  "Medium": [],
+  "Low": [
+    {
+      "Type": "Coverage \u003e= 70%",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "Coverage: 26.6% (meta: 70%)",
+      "Suggestion": "Aumente cobertura de testes para pelo menos 70%",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "Adicione mais testes unitários e de integração",
+        "NonFixableReason": "BUSINESS_LOGIC"
+      },
+      "Examples": null,
+      "NonFixableReason": "BUSINESS_LOGIC"
+    },
+    {
+      "Type": "Linter limpo",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "Linter encontrou problemas",
+      "Suggestion": "Corrija os problemas manualmente (NÃO use --fix)",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": false,
+        "AffectsBehavior": true,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "1. Analise cada issue do linter\n2. Corrija manualmente, entendendo o contexto\n3. NÃO use golangci-lint run --fix (pode quebrar código)\n4. Execute testes após cada correção",
+        "NonFixableReason": "BUSINESS_LOGIC"
+      },
+      "Examples": [
+        "internal\\seeds\\manager.go:18:17: fieldalignment: struct with 32 pointer bytes could be 24 (govet)",
+        "type StatusInfo struct {",
+        "                ^",
+        "internal\\seeds\\manager.go:31:10: do not define dynamic errors, use wrapped static errors instead: \"fmt.Errorf(\\\"template não encontrado: %s\\\", templatePath)\" (err113)",
+        "\t\treturn fmt.Errorf(\"template não encontrado: %s\", templatePath)",
+        "\t\t       ^",
+        "internal\\seeds\\manager.go:123:6: `Calcular` is a misspelling of `Calculator` (misspell)",
+        "\t\t// Calcular caminho relativo",
+        "\t\t   ^",
+        "internal\\seeds\\manager.go:205:12: G306: Expect WriteFile permissions to be 0600 or less (gosec)"
+      ],
+      "NonFixableReason": "BUSINESS_LOGIC"
+    },
+    {
+      "Type": "Logs estruturados",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "Logs estruturados não encontrados",
+      "Suggestion": "Use zap, zerolog, logrus ou slog",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "1. Escolha biblioteca (recomendado: zap ou slog)\n2. go get \u003cbiblioteca\u003e\n3. Substitua fmt.Println por logger",
+        "NonFixableReason": "ARCHITECTURAL"
+      },
+      "Examples": null,
+      "NonFixableReason": "ARCHITECTURAL"
+    }
+  ],
+  "TotalGAPs": 3,
+  "Score": 85,
+  "AutoFixable": 0,
+  "Manual": 3
+}

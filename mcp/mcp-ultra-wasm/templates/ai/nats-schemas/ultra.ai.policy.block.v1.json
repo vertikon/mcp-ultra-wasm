@@ -1,0 +1,41 @@
+{
+  "$id": "ultra.ai.policy.block.v1",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "mcp_id": {
+      "type": "string"
+    },
+    "sdk_name": {
+      "type": "string"
+    },
+    "rule": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "sample": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "timestamp",
+    "tenant_id",
+    "mcp_id",
+    "sdk_name",
+    "rule",
+    "severity"
+  ]
+}

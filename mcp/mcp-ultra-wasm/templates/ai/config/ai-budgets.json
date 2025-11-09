@@ -1,0 +1,21 @@
+{
+  "version": "1.0",
+  "global": {
+    "daily_brl_cap": 120.0,
+    "on_breach": "degrade"
+  },
+  "per_tenant": [
+    {
+      "tenant_id": "default",
+      "daily_brl_cap": 60.0,
+      "on_breach": "degrade"
+    }
+  ],
+  "per_mcp": [
+    {
+      "mcp_id": "mcp-wa-autenticacao",
+      "daily_brl_cap": 30.0,
+      "on_breach": "block"
+    }
+  ]
+}

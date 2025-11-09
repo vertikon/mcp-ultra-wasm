@@ -1,0 +1,425 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main, develop, 'feature/*', 'hotfix/*' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  GO_VERSION: '1.22'
+  GOLANGCI_LINT_VERSION: v1.55.2
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+  actions: read
+  checks: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  # Static Code Analysis
+  static-analysis:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ env.GO_VERSION }}
+        cache: true
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    # Go static analysis
+    - name: Run go vet
+      run: go vet ./...
+
+    - name: Run staticcheck
+      uses: dominikh/staticcheck-action@v1.3.0
+      with:
+        version: "2023.1.6"
+        install-go: false
+
+    - name: Run ineffassign
+      run: |
+        go install github.com/gordonklaus/ineffassign@latest
+        ineffassign ./...
+
+    - name: Run misspell
+      run: |
+        go install github.com/client9/misspell/cmd/misspell@latest
+        find . -type f -name '*.go' | xargs misspell -error
+
+    # License compliance check
+    - name: FOSSA License Scan
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: fossas/fossa-action@v1
+      with:
+        api-key: ${{ secrets.FOSSA_API_KEY }}
+
+  # Security Scanning
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ env.GO_VERSION }}
+        cache: true
+
+    # GoSec - Go security checker
+    - name: Run GoSec Security Scanner
+      uses: securecodewarrior/github-action-gosec@master
+      with:
+        args: '-fmt sarif -out gosec-results.sarif ./...'
+      continue-on-error: true
+
+    - name: Upload GoSec results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: gosec-results.sarif
+
+    # Nancy - Check for vulnerabilities in Go dependencies
+    - name: Check for known vulnerabilities with Nancy
+      run: |
+        go install github.com/sonatypecommunity/nancy@latest
+        go list -json -deps ./... | nancy sleuth
+
+    # Trivy - Comprehensive vulnerability scanner
+    - name: Run Trivy vulnerability scanner in repo mode
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH,MEDIUM'
+
+    - name: Upload Trivy results to GitHub Security
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+    # SAST with CodeQL
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: go
+        queries: +security-and-quality
+
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:go"
+
+  # Go Module and Dependency Check
+  dependency-check:
+    name: Dependency Security Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ env.GO_VERSION }}
+        cache: true
+
+    # Check for outdated dependencies
+    - name: Check for outdated dependencies
+      run: |
+        go install github.com/psampaz/go-mod-outdated@latest
+        go list -u -m -json all | go-mod-outdated -update -direct
+
+    # Vulnerability scanning with govulncheck
+    - name: Check for Go vulnerabilities
+      run: |
+        go install golang.org/x/vuln/cmd/govulncheck@latest
+        govulncheck ./...
+
+    # Check go.mod and go.sum consistency
+    - name: Verify go.mod and go.sum
+      run: |
+        go mod tidy
+        git diff --exit-code go.mod go.sum
+
+  # Unit and Integration Tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_PASSWORD: test_secure_password
+          POSTGRES_USER: testuser
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+      nats:
+        image: nats:2.10-alpine
+        ports:
+          - 4222:4222
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: ${{ env.GO_VERSION }}
+        cache: true
+
+    # Install test dependencies
+    - name: Install test dependencies
+      run: |
+        go install github.com/onsi/ginkgo/v2/ginkgo@latest
+        go install github.com/axw/gocov/gocov@latest
+        go install github.com/AlekSi/gocov-xml@latest
+
+    # Wait for services to be ready
+    - name: Wait for services
+      run: |
+        timeout 60s bash -c 'until nc -z localhost 5432; do sleep 1; done'
+        timeout 60s bash -c 'until nc -z localhost 6379; do sleep 1; done'
+        timeout 60s bash -c 'until nc -z localhost 4222; do sleep 1; done'
+
+    # Unit tests with coverage
+    - name: Run unit tests
+      run: |
+        go test -v -race -covermode=atomic -coverprofile=coverage.out ./...
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: testuser
+        POSTGRES_PASSWORD: test_secure_password
+        POSTGRES_DB: testdb
+        REDIS_ADDR: localhost:6379
+        NATS_URL: nats://localhost:4222
+
+    # Integration tests
+    - name: Run integration tests
+      run: |
+        go test -v -tags=integration ./test/integration/...
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+        POSTGRES_USER: testuser
+        POSTGRES_PASSWORD: test_secure_password
+        POSTGRES_DB: testdb
+        REDIS_ADDR: localhost:6379
+        NATS_URL: nats://localhost:4222
+
+    # Generate coverage report
+    - name: Generate coverage report
+      run: |
+        COVERAGE=$(go tool cover -func=coverage.out | tail -1 | awk '{print $3}' | sed 's/%//')
+        echo "Coverage: $COVERAGE%"
+        echo "COVERAGE=$COVERAGE" >> $GITHUB_ENV
+        
+        # Enforce minimum coverage
+        if (( $(echo "$COVERAGE < 95" | bc -l) )); then
+          echo "❌ Coverage below target (95%): $COVERAGE%"
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "❌ Coverage below minimum (80%): $COVERAGE%"
+            exit 1
+          fi
+          echo "⚠️  Coverage below target but acceptable"
+        else
+          echo "✅ Coverage meets target: $COVERAGE%"
+        fi
+
+    # Upload coverage to Codecov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.out
+        flags: unittests
+        name: codecov-umbrella
+        token: ${{ env.CODECOV_TOKEN }}
+        fail_ci_if_error: false
+        verbose: true
+
+    # Coverage badge
+    - name: Create coverage badge
+      if: github.ref == 'refs/heads/main'
+      run: |
+        curl -X POST "https://img.shields.io/badge/coverage-${COVERAGE}%25-$([ $(echo "$COVERAGE >= 95" | bc -l) -eq 1 ] && echo 'brightgreen' || [ $(echo "$COVERAGE >= 80" | bc -l) -eq 1 ] && echo 'yellow' || echo 'red')" > coverage-badge.svg
+
+  # Protocol Buffer Validation
+  protobuf-check:
+    name: Protocol Buffer Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Buf CLI
+      uses: bufbuild/buf-setup-action@v1
+      with:
+        version: '1.28.1'
+
+    # Lint protobuf files
+    - name: Lint Protocol Buffers
+      run: |
+        buf lint api/grpc/proto/
+
+    # Breaking change detection
+    - name: Breaking change detection
+      run: |
+        buf breaking api/grpc/proto/ --against 'https://github.com/${{ github.repository }}.git#branch=main,subdir=api/grpc/proto/'
+      if: github.ref != 'refs/heads/main'
+
+  # Docker Build and Security Scan
+  docker-build:
+    name: Docker Build & Security Scan
+    runs-on: ubuntu-latest
+    needs: [static-analysis, security-scan, test]
+    timeout-minutes: 30
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    # Build metadata
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    # Build Docker image
+    - name: Build Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: false
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        load: true
+        target: production
+
+    # Docker image security scanning
+    - name: Run Trivy vulnerability scanner on Docker image
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        format: 'sarif'
+        output: 'docker-trivy-results.sarif'
+
+    - name: Upload Docker Trivy results
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'docker-trivy-results.sarif'
+
+    # Push image on main branch
+    - name: Push Docker image
+      if: github.ref == 'refs/heads/main'
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # Deployment readiness check
+  deployment-readiness:
+    name: Deployment Readiness Check
+    runs-on: ubuntu-latest
+    needs: [static-analysis, security-scan, test, protobuf-check, docker-build]
+    timeout-minutes: 10
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deployment Ready ✅
+      run: |
+        echo "🚀 All checks passed! Ready for deployment."
+        echo "✅ Static analysis completed"
+        echo "✅ Security scans completed"
+        echo "✅ Tests passed"
+        echo "✅ Protocol buffers validated"
+        echo "✅ Docker image built and scanned"

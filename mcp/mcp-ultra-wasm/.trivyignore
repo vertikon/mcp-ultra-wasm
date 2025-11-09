@@ -1,0 +1,15 @@
+# MCP Ultra - Trivy ignore file
+# Ignorar CVEs específicas já remediadas ou falsos positivos
+
+# Alpine base image CVEs já corrigidas no upstream
+CVE-2023-52425
+CVE-2023-52426
+
+# Go stdlib - monitoradas mas sem fix disponível ainda
+CVE-2024-24790
+
+# Falsos positivos em test dependencies
+CVE-2023-45283
+
+# OpenTelemetry - aguardando upstream fix
+CVE-2024-36129

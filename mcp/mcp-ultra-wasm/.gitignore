@@ -1,0 +1,146 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Configuration files with secrets
+config/local.yaml
+config/secrets.yaml
+*.key
+*.pem
+*.crt
+
+# Security Scanner Exclusions
+# Exclude files that contain template/example secrets (not real secrets)
+scripts/generate-secrets.go
+deploy/k8s/secrets.template.yaml
+secrets-inventory.txt
+
+# Log files
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+target/
+
+# Docker files
+.dockerignore
+
+# Kubernetes secrets
+k8s-secrets/
+*.secret.yaml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Coverage reports
+coverage.out
+coverage.html
+*.cover
+
+# Profiling data
+*.prof
+*.cpu
+*.mem
+
+# Security scan results
+*.sarif
+security-reports/
+gosec-*.json
+trivy-results.*
+snyk-results.*
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Node modules (if using any JS/Node tools)
+node_modules/
+
+# Python files (if using any Python tools)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Helm charts
+charts/*/charts/
+charts/*/requirements.lock
+
+# Local development
+.local/
+local-*
+
+# Generated protobuf files
+*.pb.go
+*_grpc.pb.go
+
+# Generated client libraries
+client/
+
+# Backup files
+*.bak
+*.backup
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+
+# Generated documentation
+docs/api/
+*.html
+
+# Mock files (keep source mocks, ignore generated)
+**/mocks/**/*.go
+!**/mocks/**/*_mock.go

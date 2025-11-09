@@ -1,0 +1,90 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - govet
+    - gofmt
+    - goimports
+    - gocyclo
+    - errcheck
+    - ineffassign
+    - staticcheck
+    - revive
+    - goconst
+    - dupl
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - $all
+        deny:
+          - pkg: "github.com/go-chi/chi/v5"
+            desc: "Use pkg/httpx facade instead of direct chi import"
+          - pkg: "github.com/go-chi/chi/v5/middleware"
+            desc: "Use pkg/httpx facade instead of direct chi import"
+          - pkg: "github.com/go-chi/cors"
+            desc: "Use pkg/httpx.CORS facade"
+          - pkg: "github.com/redis/go-redis/v9"
+            desc: "Use pkg/redisx facade"
+          - pkg: "github.com/prometheus/client_golang/prometheus"
+            desc: "Use pkg/metrics facade"
+          - pkg: "github.com/prometheus/client_golang/prometheus/promauto"
+            desc: "Use pkg/metrics facade"
+          - pkg: "github.com/prometheus/client_golang/prometheus/promhttp"
+            desc: "Use pkg/metrics facade"
+          - pkg: "go.opentelemetry.io/otel"
+            desc: "Use pkg/observability facade"
+          - pkg: "go.opentelemetry.io/otel/trace"
+            desc: "Use pkg/observability facade"
+          - pkg: "go.opentelemetry.io/otel/attribute"
+            desc: "Use pkg/observability facade"
+          - pkg: "go.opentelemetry.io/otel/codes"
+            desc: "Use pkg/observability facade"
+          - pkg: "github.com/nats-io/nats.go"
+            desc: "Use pkg/natsx facade"
+          - pkg: "github.com/google/uuid"
+            desc: "Use pkg/types (uuid re-exports)"
+  gocyclo:
+    min-complexity: 18
+  revive:
+    rules:
+      - name: exported
+      # unused-parameter rule disabled - too strict for interface consistency
+      # - name: unused-parameter
+      - name: var-naming
+      - name: increment-decrement
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - dupl
+    # Complex business logic - alerting silencing rules
+    - path: internal/slo/alerting.go
+      linters:
+        - gocyclo
+      text: "shouldSilence"
+    # Facades podem importar as bibliotecas externas que eles encapsulam
+    - path: pkg/types/
+      linters:
+        - depguard
+    - path: pkg/httpx/
+      linters:
+        - depguard
+    - path: pkg/redisx/
+      linters:
+        - depguard
+    - path: pkg/metrics/
+      linters:
+        - depguard
+    - path: pkg/observability/
+      linters:
+        - depguard
+    - path: pkg/natsx/
+      linters:
+        - depguard

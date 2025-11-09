@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "results": [
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 11,
+                  "startLine": 203
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.ReadFile` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 13,
+                  "startLine": 215
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.MkdirAll` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 13,
+                  "startLine": 216
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.MkdirAll` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 14,
+                  "startLine": 217
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.WriteFile` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 14,
+                  "startLine": 218
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.WriteFile` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 14,
+                  "startLine": 219
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.WriteFile` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 14,
+                  "startLine": 255
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.ReadFile` is not checked"
+          },
+          "ruleId": "errcheck"
+        },
+        {
+          "level": "error",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "internal/seeds/manager_test.go"
+                },
+                "region": {
+                  "startColumn": 14,
+                  "startLine": 276
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Error return value of `os.ReadFile` is not checked"
+          },
+          "ruleId": "errcheck"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "informationUri": "https://github.com/vertikon/mcp-validator",
+          "name": "MCP Validator V9.1",
+          "version": "9.3"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

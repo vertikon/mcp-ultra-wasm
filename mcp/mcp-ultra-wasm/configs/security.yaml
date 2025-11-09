@@ -1,0 +1,137 @@
+# Security Configuration for MCP Ultra v21
+security:
+  # Authentication configuration
+  auth:
+    mode: "jwt"  # jwt, oauth2, api-key
+    jwks_url: "${JWT_JWKS_URL:http://localhost:8080/.well-known/jwks.json}"
+    issuer: "${JWT_ISSUER:mcp-ultra-wasm}"
+    audience: "${JWT_AUDIENCE:mcp-ultra-wasm-api}"
+    token_expiry: "${JWT_TOKEN_EXPIRY:24h}"
+    refresh_expiry: "${JWT_REFRESH_EXPIRY:168h}" # 7 days
+
+  # Open Policy Agent configuration
+  opa:
+    url: "${OPA_URL:http://localhost:8181}"
+    timeout: "${OPA_TIMEOUT:5s}"
+
+  # HashiCorp Vault configuration
+  vault:
+    address: "${VAULT_ADDR:http://localhost:8200}"
+    token: "${VAULT_TOKEN:}"
+    namespace: "${VAULT_NAMESPACE:}"
+    timeout: "${VAULT_TIMEOUT:10s}"
+    auth_method: "${VAULT_AUTH_METHOD:token}"
+    role: "${VAULT_ROLE:mcp-ultra-wasm}"
+
+  # TLS/mTLS configuration
+  tls:
+    cert_file: "${TLS_CERT_FILE:./certs/server.crt}"
+    key_file: "${TLS_KEY_FILE:./certs/server.key}"
+    ca_file: "${TLS_CA_FILE:./certs/ca.crt}"
+    client_auth: ${TLS_CLIENT_AUTH:false}
+    min_version: "${TLS_MIN_VERSION:1.2}"
+
+  # Rate limiting configuration
+  rate_limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    requests_per_minute: ${RATE_LIMIT_RPM:100}
+    burst: ${RATE_LIMIT_BURST:20}
+    cleanup_interval: "${RATE_LIMIT_CLEANUP:1m}"
+
+  # CORS configuration
+  cors:
+    enabled: ${CORS_ENABLED:true}
+    allowed_origins: 
+      - "${CORS_ORIGIN_1:http://localhost:3000}"
+      - "${CORS_ORIGIN_2:https://app.example.com}"
+    allowed_methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+    allowed_headers:
+      - Authorization
+      - Content-Type
+      - X-Requested-With
+      - X-Tenant-ID
+    allow_credentials: ${CORS_ALLOW_CREDENTIALS:true}
+    max_age: ${CORS_MAX_AGE:3600}
+
+  # Security headers configuration
+  headers:
+    hsts_enabled: ${HSTS_ENABLED:true}
+    hsts_max_age: ${HSTS_MAX_AGE:31536000} # 1 year
+    content_type_nosniff: ${CONTENT_TYPE_NOSNIFF:true}
+    frame_deny: ${FRAME_DENY:true}
+    xss_protection: ${XSS_PROTECTION:true}
+    referrer_policy: "${REFERRER_POLICY:strict-origin-when-cross-origin}"
+
+  # Content Security Policy
+  csp:
+    enabled: ${CSP_ENABLED:true}
+    policy: "${CSP_POLICY:default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' wss: https:; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;}"
+
+  # Input validation configuration
+  validation:
+    max_request_size: ${MAX_REQUEST_SIZE:10485760} # 10MB
+    max_header_size: ${MAX_HEADER_SIZE:8192} # 8KB
+    timeout: "${REQUEST_TIMEOUT:30s}"
+
+  # Audit logging configuration
+  audit:
+    enabled: ${AUDIT_ENABLED:true}
+    log_requests: ${AUDIT_LOG_REQUESTS:true}
+    log_responses: ${AUDIT_LOG_RESPONSES:false}
+    sensitive_headers:
+      - authorization
+      - cookie
+      - x-api-key
+    sensitive_fields:
+      - password
+      - token
+      - secret
+      - key
+
+# Compliance configuration
+compliance:
+  # GDPR/LGPD configuration
+  privacy:
+    enabled: ${PRIVACY_ENABLED:true}
+    anonymize_logs: ${PRIVACY_ANONYMIZE_LOGS:true}
+    data_retention_days: ${DATA_RETENTION_DAYS:90}
+    pii_detection: ${PII_DETECTION_ENABLED:true}
+    pii_patterns:
+      - "email"
+      - "phone"
+      - "ssn"
+      - "credit_card"
+      - "ip_address"
+
+  # Data classification
+  data_classification:
+    enabled: ${DATA_CLASSIFICATION_ENABLED:true}
+    levels:
+      - public
+      - internal
+      - confidential
+      - restricted
+    default_level: "internal"
+
+# Monitoring and alerting
+monitoring:
+  security_events:
+    enabled: ${SECURITY_EVENTS_ENABLED:true}
+    webhook_url: "${SECURITY_WEBHOOK_URL:}"
+    alert_on:
+      - auth_failures
+      - rate_limit_exceeded  
+      - invalid_tokens
+      - unauthorized_access
+      - tls_errors
+
+  # Metrics configuration
+  metrics:
+    auth_metrics: ${AUTH_METRICS_ENABLED:true}
+    security_metrics: ${SECURITY_METRICS_ENABLED:true}
+    performance_metrics: ${PERFORMANCE_METRICS_ENABLED:true}

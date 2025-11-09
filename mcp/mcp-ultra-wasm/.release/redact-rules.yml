@@ -1,0 +1,20 @@
+redact_strings:
+  - regex: "(?i)api[_-]?key\\s*[:=]\\s*['\"][A-Za-z0-9_\\-]{16,}['\"]"
+  - regex: "(?i)secret\\s*[:=]\\s*['\"][A-Za-z0-9_\\-]{12,}['\"]"
+  - regex: "(?i)password\\s*[:=]\\s*['\"][^'\"]{6,}['\"]"
+  - regex: "(?i)token\\s*[:=]\\s*['\"][A-Za-z0-9_\\-]{20,}['\"]"
+  - regex: "(?i)wss?:\\/\\/[a-zA-Z0-9.-]*vertikon[a-zA-Z0-9.-]*\\.[a-z]{2,}"
+  - regex: "(?i)https?:\\/\\/[a-zA-Z0-9.-]*vertikon[a-zA-Z0-9.-]*\\.[a-z]{2,}"
+  - regex: "postgresql:\\/\\/[^\\s@]+@[^\\s\\/]+\\/[^\\s?]+"
+  - regex: "redis:\\/\\/[^\\s@]+@[^\\s\\/]+"
+  - regex: "nats:\\/\\/[^\\s@]+@[^\\s\\/]+"
+  - regex: "Bearer [A-Za-z0-9_\\-\\.]{20,}"
+
+replacement: "REDACTED"
+
+# Padrões de aviso (não redige, mas alerta no log)
+warning_patterns:
+  - regex: "TODO.*HACK"
+    message: "Comentário HACK encontrado - revisar antes de publicar"
+  - regex: "FIXME.*urgent"
+    message: "FIXME urgente encontrado - considerar resolver antes do release"

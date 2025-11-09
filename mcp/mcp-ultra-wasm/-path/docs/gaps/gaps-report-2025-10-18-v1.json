@@ -1,0 +1,240 @@
+{
+  "ProjectName": "-path",
+  "Timestamp": "2025-10-18 01:42:57",
+  "Critical": [
+    {
+      "Type": "Clean Architecture Structure",
+      "Severity": "crítico",
+      "Location": "múltiplos arquivos",
+      "Description": "Estrutura Clean Architecture incompleta",
+      "Suggestion": "Crie os diretórios faltantes: cmd, internal, pkg",
+      "Fixability": {
+        "Safe": true,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "mkdir -p cmd internal pkg",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": [
+        "cmd",
+        "internal",
+        "pkg"
+      ],
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "go.mod válido",
+      "Severity": "crítico",
+      "Location": "múltiplos arquivos",
+      "Description": "go.mod não encontrado",
+      "Suggestion": "Execute: go mod init \u003cmodule-name\u003e",
+      "Fixability": {
+        "Safe": true,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "go mod init \u003cmodule-name\u003e",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": null,
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "Dependências resolvidas",
+      "Severity": "crítico",
+      "Location": "múltiplos arquivos",
+      "Description": "Erro ao baixar dependências",
+      "Suggestion": "Execute: go mod tidy",
+      "Fixability": {
+        "Safe": true,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "go mod tidy",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": [
+        ""
+      ],
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "Código compila",
+      "Severity": "crítico",
+      "Location": "múltiplos arquivos",
+      "Description": "Não compila: ",
+      "Suggestion": "Corrija os erros de compilação listados",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": false,
+        "AffectsBehavior": true,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "Corrija os erros de compilação manualmente, um por um",
+        "NonFixableReason": "BUSINESS_LOGIC"
+      },
+      "Examples": [
+        ""
+      ],
+      "NonFixableReason": "BUSINESS_LOGIC"
+    },
+    {
+      "Type": "Testes PASSAM",
+      "Severity": "crítico",
+      "Location": "múltiplos arquivos",
+      "Description": "Testes falharam: ",
+      "Suggestion": "Corrija os testes que estão falhando. Use 'go test -v ./...' para detalhes",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": false,
+        "AffectsBehavior": true,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "Corrija os testes falhando, verificando a lógica de negócio",
+        "NonFixableReason": "BUSINESS_LOGIC"
+      },
+      "Examples": [
+        ""
+      ],
+      "NonFixableReason": "BUSINESS_LOGIC"
+    },
+    {
+      "Type": "Health check",
+      "Severity": "crítico",
+      "Location": "múltiplos arquivos",
+      "Description": "Health check não encontrado",
+      "Suggestion": "Adicione endpoint GET /health",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "Adicione handler HTTP para /health retornando status 200",
+        "NonFixableReason": "ARCHITECTURAL"
+      },
+      "Examples": null,
+      "NonFixableReason": "ARCHITECTURAL"
+    }
+  ],
+  "Medium": [
+    {
+      "Type": "Testes existem",
+      "Severity": "médio",
+      "Location": "múltiplos arquivos",
+      "Description": "Nenhum arquivo de teste encontrado",
+      "Suggestion": "Crie arquivos *_test.go com testes",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "Crie testes manualmente para validar a lógica de negócio",
+        "NonFixableReason": "BUSINESS_LOGIC"
+      },
+      "Examples": null,
+      "NonFixableReason": "BUSINESS_LOGIC"
+    }
+  ],
+  "Low": [
+    {
+      "Type": "Coverage \u003e= 70%",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "Erro ao calcular coverage",
+      "Suggestion": "Verifique se os testes passam primeiro: go test ./...",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": false,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": null,
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "Formatação (gofmt)",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "Erro ao verificar formatação",
+      "Suggestion": "",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": false,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": null,
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "Logs estruturados",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "go.mod não encontrado",
+      "Suggestion": "",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": false,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": null,
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "NATS subjects documentados",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "NATS subjects não documentados",
+      "Suggestion": "Crie docs/NATS_SUBJECTS.md",
+      "Fixability": {
+        "Safe": true,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": false,
+        "AutoFixCommand": "mkdir -p docs \u0026\u0026 touch docs/NATS_SUBJECTS.md",
+        "ManualSteps": "",
+        "NonFixableReason": ""
+      },
+      "Examples": null,
+      "NonFixableReason": ""
+    },
+    {
+      "Type": "README completo",
+      "Severity": "baixo",
+      "Location": "múltiplos arquivos",
+      "Description": "README.md não encontrado",
+      "Suggestion": "Crie README.md com documentação do projeto",
+      "Fixability": {
+        "Safe": false,
+        "RollbackEasy": true,
+        "AffectsBehavior": false,
+        "RequiresReview": true,
+        "AutoFixCommand": "",
+        "ManualSteps": "Crie README.md documentando: descrição, instalação, uso, exemplos",
+        "NonFixableReason": "BUSINESS_LOGIC"
+      },
+      "Examples": null,
+      "NonFixableReason": "BUSINESS_LOGIC"
+    }
+  ],
+  "TotalGAPs": 12,
+  "Score": 40,
+  "AutoFixable": 4,
+  "Manual": 8
+}

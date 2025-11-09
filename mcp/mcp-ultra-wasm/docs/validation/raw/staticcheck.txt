@@ -1,0 +1,4 @@
+internal\security\vault.go:132:15: error strings should not be capitalized (ST1005)
+internal\security\vault.go:212:10: error strings should not be capitalized (ST1005)
+internal\security\vault.go:310:10: error strings should not be capitalized (ST1005)
+internal\security\vault.go:320:10: error strings should not be capitalized (ST1005)

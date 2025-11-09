@@ -1,0 +1,249 @@
+# MCP Ultra - Comprehensive Compliance Configuration
+# LGPD/GDPR compliance settings for production environments
+
+compliance:
+  enabled: true
+  default_region: "BR"  # Brazil - LGPD by default
+  
+  # PII Detection and Classification
+  pii_detection:
+    enabled: true
+    auto_mask: true
+    confidence: 0.8  # 80% confidence threshold
+    scan_fields:
+      - "email"
+      - "phone"
+      - "cpf"
+      - "cnpj"
+      - "name"
+      - "address"
+      - "credit_card"
+      - "ip_address"
+      - "user_agent"
+    classification_api: ""  # Optional external classification service
+  
+  # Consent Management
+  consent:
+    enabled: true
+    ttl: "730h"  # 2 years (730 days * 24 hours)
+    granular_level: "purpose"  # purpose, field, operation
+    default_purposes:
+      - "service_provision"
+      - "analytics"
+      - "marketing"
+      - "communication"
+      - "legal_compliance"
+  
+  # Data Retention Policies
+  data_retention:
+    enabled: true
+    default_period: "17520h"  # 2 years (2 * 365 * 24 hours)
+    auto_delete: true
+    backup_retention: "61320h"  # 7 years (7 * 365 * 24 hours)
+    category_periods:
+      user_data: "17520h"        # 2 years
+      operational_data: "8760h"   # 1 year
+      audit_data: "61320h"       # 7 years
+      marketing_data: "8760h"    # 1 year
+      analytics_data: "4380h"    # 6 months
+      cache_data: "720h"         # 30 days
+      session_data: "168h"       # 7 days
+      temporary_data: "24h"      # 1 day
+  
+  # Audit Logging
+  audit_logging:
+    enabled: true
+    detail_level: "full"  # minimal, standard, full
+    retention_period: "61320h"  # 7 years
+    encryption_enabled: true
+    external_logging: false
+    external_endpoint: ""  # External SIEM or audit system
+  
+  # Brazilian LGPD Compliance
+  lgpd:
+    enabled: true
+    dpo_contact: "dpo@vertikon.com"
+    shared_third_party: false
+    legal_basis:
+      - "consent"                    # Article 7(I)
+      - "legitimate_interests"       # Article 7(IX)
+      - "contractual_fulfillment"   # Article 7(V)
+      - "legal_obligation"          # Article 7(II)
+    data_categories:
+      - "identification_data"       # CPF, name, address
+      - "contact_data"             # email, phone
+      - "professional_data"        # job title, company
+      - "usage_data"              # app usage, preferences
+      - "technical_data"          # IP, device info
+  
+  # European GDPR Compliance
+  gdpr:
+    enabled: false  # Enable for EU operations
+    dpo_contact: "dpo-eu@vertikon.com"
+    cross_border_transfer: false
+    adequacy_decisions:
+      - "adequacy_decision_eu_uk"
+    legal_basis:
+      - "consent"                   # Article 6(1)(a)
+      - "contract"                  # Article 6(1)(b)
+      - "legal_obligation"          # Article 6(1)(c)
+      - "legitimate_interests"      # Article 6(1)(f)
+    data_categories:
+      - "personal_data"
+      - "special_categories"        # Article 9 data (if applicable)
+      - "criminal_data"            # Article 10 data (if applicable)
+  
+  # Data Anonymization
+  anonymization:
+    enabled: true
+    reversible: false  # True for pseudonymization, false for anonymization
+    k_anonymity: 5     # Minimum group size for k-anonymity
+    hash_salt: "${ANONYMIZATION_SALT}"  # From environment
+    methods:
+      - "hash"
+      - "tokenize"
+      - "redact"
+      - "generalize"
+      - "noise"
+    algorithms:
+      email: "hash"
+      phone: "generalize"
+      cpf: "tokenize"
+      name: "generalize"
+      address: "generalize"
+      ip_address: "hash"
+  
+  # Data Subject Rights
+  data_rights:
+    enabled: true
+    response_time: "720h"  # 30 days (30 * 24 hours)
+    auto_fulfillment: false
+    verification_required: true
+    notification_channels:
+      - "email"
+      - "api"
+      - "webhook"
+
+---
+# Environment-specific configurations
+
+# Development Environment
+development:
+  compliance:
+    enabled: true
+    pii_detection:
+      auto_mask: false  # Don't mask in development
+      confidence: 0.6   # Lower threshold for testing
+    audit_logging:
+      detail_level: "full"
+      encryption_enabled: false  # Disable for easier debugging
+    data_retention:
+      auto_delete: false  # Manual cleanup in dev
+      default_period: "168h"  # 1 week for testing
+    anonymization:
+      reversible: true  # Allow reversible anonymization in dev
+
+# Staging Environment
+staging:
+  compliance:
+    enabled: true
+    pii_detection:
+      auto_mask: true
+      confidence: 0.7
+    audit_logging:
+      detail_level: "standard"
+      encryption_enabled: true
+    data_retention:
+      auto_delete: false  # Manual review in staging
+      default_period: "720h"  # 30 days
+    anonymization:
+      reversible: false
+
+# Production Environment
+production:
+  compliance:
+    enabled: true
+    audit_logging:
+      external_logging: true
+      external_endpoint: "https://siem.vertikon.com/api/audit"
+    lgpd:
+      enabled: true
+    gdpr:
+      enabled: false  # Set to true for EU operations
+
+# Multi-region configurations
+
+# European Union
+eu:
+  compliance:
+    default_region: "EU"
+    lgpd:
+      enabled: false
+    gdpr:
+      enabled: true
+      cross_border_transfer: true
+      adequacy_decisions:
+        - "adequacy_decision_eu_uk"
+        - "adequacy_decision_eu_us_dpf"  # Data Privacy Framework
+
+# United States
+us:
+  compliance:
+    default_region: "US"
+    lgpd:
+      enabled: false
+    gdpr:
+      enabled: false  # Unless serving EU residents
+    # Add CCPA, CPRA configurations as needed
+
+# Compliance Templates for Different Industries
+
+# Healthcare (Additional HIPAA considerations)
+healthcare:
+  compliance:
+    data_retention:
+      category_periods:
+        health_data: "175200h"     # 20 years
+        patient_data: "175200h"    # 20 years
+        medical_records: "262800h" # 30 years
+    anonymization:
+      k_anonymity: 10  # Higher privacy standard
+      reversible: false
+    audit_logging:
+      detail_level: "full"
+      retention_period: "87600h"  # 10 years
+
+# Financial Services
+financial:
+  compliance:
+    data_retention:
+      category_periods:
+        transaction_data: "61320h"  # 7 years
+        customer_data: "61320h"     # 7 years
+        audit_records: "87600h"     # 10 years
+    audit_logging:
+      detail_level: "full"
+      retention_period: "87600h"   # 10 years
+    lgpd:
+      legal_basis:
+        - "legal_obligation"       # Financial regulations
+        - "legitimate_interests"   # Fraud prevention
+
+# E-commerce
+ecommerce:
+  compliance:
+    data_retention:
+      category_periods:
+        customer_data: "26280h"    # 3 years
+        order_data: "61320h"      # 7 years (tax requirements)
+        marketing_data: "8760h"    # 1 year
+        analytics_data: "4380h"    # 6 months
+    consent:
+      default_purposes:
+        - "service_provision"
+        - "order_fulfillment"
+        - "customer_support"
+        - "analytics"
+        - "marketing"  # Requires explicit consent
+    lgpd:
+      shared_third_party: true     # Payment processors, logistics

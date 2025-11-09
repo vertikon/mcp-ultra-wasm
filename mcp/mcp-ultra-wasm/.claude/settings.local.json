@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Read(//c/Users/Notebook/Meu Drive/vertikon/waba/gera-mcp-lista/**)",
+      "Read(//e/vertikon/business/SaaS/templates/sdk-ultra-wasm/**)",
+      "Bash(go install:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "mcp-bridge-tools"
+  ]
+}

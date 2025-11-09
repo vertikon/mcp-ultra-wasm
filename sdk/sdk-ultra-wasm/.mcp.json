@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "mcp-bridge-tools": {
+      "command": "E:\\vertikon\\.ecosistema-claude\\mcp-bridge-tools\\sdk\\sdk-bridge-tools\\bin\\mcp-bridge-stdio.exe",
+      "args": ["--config", "E:\\vertikon\\.ecosistema-claude\\mcp-bridge-tools\\sdk\\sdk-bridge-tools\\configs\\mcps.yaml"],
+      "env": {
+        "LOG_LEVEL": "info"
+      },
+      "metadata": {
+        "name": "MCP Universal Bridge",
+        "version": "1.0.0",
+        "description": "Universal MCP aggregator - 137 tools (96 ferramentas + 38 go-architect + 3 agent2agent)",
+        "totalTools": 137,
+        "downstreamServers": [
+          "mcp-ferramentas-sdk (96 tools)",
+          "mcp-go-architect (38 tools)",
+          "mcp-agent2agent (3 tools)"
+        ]
+      }
+    }
+  }
+}

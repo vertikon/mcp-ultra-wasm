@@ -1,0 +1,528 @@
+syntax = "proto3";
+
+package system.v1;
+
+option go_package = "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen/system/v1;systemv1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+// SystemService provides system management and health check operations
+service SystemService {
+  // Health checking
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/health"
+    };
+  }
+
+  rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+
+  // System information
+  rpc GetSystemInfo(GetSystemInfoRequest) returns (GetSystemInfoResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/info"
+    };
+  }
+
+  rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/metrics"
+    };
+  }
+
+  // Configuration management
+  rpc GetConfig(GetConfigRequest) returns (GetConfigResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/config"
+    };
+  }
+
+  rpc UpdateConfig(UpdateConfigRequest) returns (UpdateConfigResponse) {
+    option (google.api.http) = {
+      put: "/v1/system/config"
+      body: "*"
+    };
+  }
+
+  rpc ReloadConfig(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/system/config:reload"
+    };
+  }
+
+  // Service management
+  rpc ListServices(ListServicesRequest) returns (ListServicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/services"
+    };
+  }
+
+  rpc GetServiceStatus(GetServiceStatusRequest) returns (GetServiceStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/services/{service_name}"
+    };
+  }
+
+  rpc RestartService(RestartServiceRequest) returns (RestartServiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/system/services/{service_name}:restart"
+    };
+  }
+
+  // Feature flags management
+  rpc GetFeatureFlags(GetFeatureFlagsRequest) returns (GetFeatureFlagsResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/feature-flags"
+    };
+  }
+
+  rpc UpdateFeatureFlag(UpdateFeatureFlagRequest) returns (UpdateFeatureFlagResponse) {
+    option (google.api.http) = {
+      put: "/v1/system/feature-flags/{flag_key}"
+      body: "*"
+    };
+  }
+
+  // Observability
+  rpc GetTraces(GetTracesRequest) returns (GetTracesResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/traces"
+    };
+  }
+
+  rpc GetLogs(GetLogsRequest) returns (GetLogsResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/logs"
+    };
+  }
+
+  rpc StreamLogs(StreamLogsRequest) returns (stream StreamLogsResponse);
+
+  // Circuit breaker management
+  rpc GetCircuitBreakers(GetCircuitBreakersRequest) returns (GetCircuitBreakersResponse) {
+    option (google.api.http) = {
+      get: "/v1/system/circuit-breakers"
+    };
+  }
+
+  rpc TriggerCircuitBreaker(TriggerCircuitBreakerRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/system/circuit-breakers/{name}:trigger"
+    };
+  }
+
+  rpc ResetCircuitBreaker(ResetCircuitBreakerRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/system/circuit-breakers/{name}:reset"
+    };
+  }
+}
+
+// Health Check Messages
+
+message HealthCheckRequest {
+  string service = 1;
+  bool deep_check = 2;
+}
+
+message HealthCheckResponse {
+  ServingStatus status = 1;
+  repeated ComponentHealth components = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  google.protobuf.Duration response_time = 4;
+  string version = 5;
+  map<string, string> metadata = 6;
+}
+
+enum ServingStatus {
+  SERVING_STATUS_UNSPECIFIED = 0;
+  SERVING_STATUS_SERVING = 1;
+  SERVING_STATUS_NOT_SERVING = 2;
+  SERVING_STATUS_SERVICE_UNKNOWN = 3;
+  SERVING_STATUS_DEGRADED = 4;
+}
+
+message ComponentHealth {
+  string name = 1;
+  ComponentStatus status = 2;
+  string message = 3;
+  google.protobuf.Duration response_time = 4;
+  map<string, string> metadata = 5;
+  repeated HealthCheck checks = 6;
+}
+
+enum ComponentStatus {
+  COMPONENT_STATUS_UNSPECIFIED = 0;
+  COMPONENT_STATUS_HEALTHY = 1;
+  COMPONENT_STATUS_UNHEALTHY = 2;
+  COMPONENT_STATUS_DEGRADED = 3;
+  COMPONENT_STATUS_UNKNOWN = 4;
+}
+
+message HealthCheck {
+  string name = 1;
+  bool passed = 2;
+  string message = 3;
+  google.protobuf.Duration response_time = 4;
+  map<string, string> metadata = 5;
+}
+
+// System Information Messages
+
+message GetSystemInfoRequest {
+  bool include_runtime = 1;
+  bool include_build = 2;
+  bool include_dependencies = 3;
+}
+
+message GetSystemInfoResponse {
+  SystemInfo system = 1;
+}
+
+message SystemInfo {
+  string service_name = 1;
+  string version = 2;
+  string build_date = 3;
+  string git_commit = 4;
+  string git_branch = 5;
+  RuntimeInfo runtime = 6;
+  BuildInfo build = 7;
+  repeated Dependency dependencies = 8;
+  map<string, string> environment = 9;
+}
+
+message RuntimeInfo {
+  string go_version = 1;
+  string os = 2;
+  string arch = 3;
+  int32 num_cpu = 4;
+  int32 num_goroutine = 5;
+  MemoryStats memory = 6;
+  google.protobuf.Duration uptime = 7;
+  google.protobuf.Timestamp start_time = 8;
+}
+
+message MemoryStats {
+  uint64 alloc = 1;
+  uint64 total_alloc = 2;
+  uint64 sys = 3;
+  uint64 heap_alloc = 4;
+  uint64 heap_sys = 5;
+  uint64 heap_inuse = 6;
+  uint64 stack_inuse = 7;
+  uint64 stack_sys = 8;
+  uint32 num_gc = 9;
+  google.protobuf.Duration gc_pause_total = 10;
+}
+
+message BuildInfo {
+  string compiler = 1;
+  repeated string build_tags = 2;
+  repeated BuildSetting settings = 3;
+}
+
+message BuildSetting {
+  string key = 1;
+  string value = 2;
+}
+
+message Dependency {
+  string name = 1;
+  string version = 2;
+  string type = 3; // direct, indirect, stdlib
+  bool replace = 4;
+  string path = 5;
+}
+
+// Metrics Messages
+
+message GetMetricsRequest {
+  string format = 1; // prometheus, json
+  repeated string metric_names = 2;
+  map<string, string> labels = 3;
+}
+
+message GetMetricsResponse {
+  string format = 1;
+  bytes data = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  MetricsSummary summary = 4;
+}
+
+message MetricsSummary {
+  int32 total_metrics = 1;
+  repeated MetricFamily families = 2;
+}
+
+message MetricFamily {
+  string name = 1;
+  string help = 2;
+  MetricType type = 3;
+  int32 metric_count = 4;
+}
+
+enum MetricType {
+  METRIC_TYPE_UNSPECIFIED = 0;
+  METRIC_TYPE_COUNTER = 1;
+  METRIC_TYPE_GAUGE = 2;
+  METRIC_TYPE_HISTOGRAM = 3;
+  METRIC_TYPE_SUMMARY = 4;
+}
+
+// Configuration Messages
+
+message GetConfigRequest {
+  string section = 1;
+  bool mask_sensitive = 2;
+}
+
+message GetConfigResponse {
+  google.protobuf.Struct config = 1;
+  string checksum = 2;
+  google.protobuf.Timestamp last_updated = 3;
+}
+
+message UpdateConfigRequest {
+  string section = 1;
+  google.protobuf.Struct config = 2;
+  bool dry_run = 3;
+}
+
+message UpdateConfigResponse {
+  bool success = 1;
+  repeated ConfigValidationError errors = 2;
+  google.protobuf.Struct diff = 3;
+}
+
+message ConfigValidationError {
+  string field = 1;
+  string message = 2;
+  string code = 3;
+}
+
+// Service Management Messages
+
+message ListServicesRequest {
+  bool include_internal = 1;
+}
+
+message ListServicesResponse {
+  repeated ServiceInfo services = 1;
+}
+
+message ServiceInfo {
+  string name = 1;
+  string version = 2;
+  ServiceStatus status = 3;
+  google.protobuf.Timestamp started_at = 4;
+  google.protobuf.Duration uptime = 5;
+  string endpoint = 6;
+  repeated string dependencies = 7;
+  map<string, string> metadata = 8;
+}
+
+enum ServiceStatus {
+  SERVICE_STATUS_UNSPECIFIED = 0;
+  SERVICE_STATUS_RUNNING = 1;
+  SERVICE_STATUS_STOPPED = 2;
+  SERVICE_STATUS_STARTING = 3;
+  SERVICE_STATUS_STOPPING = 4;
+  SERVICE_STATUS_ERROR = 5;
+}
+
+message GetServiceStatusRequest {
+  string service_name = 1 [(validate.rules).string.min_len = 1];
+}
+
+message GetServiceStatusResponse {
+  ServiceInfo service = 1;
+  repeated ComponentHealth components = 2;
+}
+
+message RestartServiceRequest {
+  string service_name = 1 [(validate.rules).string.min_len = 1];
+  bool force = 2;
+  google.protobuf.Duration timeout = 3;
+}
+
+message RestartServiceResponse {
+  bool success = 1;
+  string message = 2;
+  google.protobuf.Duration restart_time = 3;
+}
+
+// Feature Flags Messages
+
+message GetFeatureFlagsRequest {
+  string prefix = 1;
+  bool include_disabled = 2;
+}
+
+message GetFeatureFlagsResponse {
+  repeated FeatureFlag flags = 1;
+  google.protobuf.Timestamp last_updated = 2;
+}
+
+message FeatureFlag {
+  string key = 1;
+  string name = 2;
+  string description = 3;
+  bool enabled = 4;
+  FeatureFlagType type = 5;
+  google.protobuf.Struct value = 6;
+  repeated FeatureFlagRule rules = 7;
+  map<string, string> tags = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+  string created_by = 11;
+  string updated_by = 12;
+}
+
+enum FeatureFlagType {
+  FEATURE_FLAG_TYPE_UNSPECIFIED = 0;
+  FEATURE_FLAG_TYPE_BOOLEAN = 1;
+  FEATURE_FLAG_TYPE_STRING = 2;
+  FEATURE_FLAG_TYPE_NUMBER = 3;
+  FEATURE_FLAG_TYPE_JSON = 4;
+}
+
+message FeatureFlagRule {
+  string id = 1;
+  string description = 2;
+  repeated FeatureFlagCondition conditions = 3;
+  google.protobuf.Struct value = 4;
+  int32 weight = 5;
+  bool enabled = 6;
+}
+
+message FeatureFlagCondition {
+  string attribute = 1;
+  string operator = 2; // eq, ne, in, not_in, gt, lt, gte, lte, contains, etc.
+  repeated string values = 3;
+}
+
+message UpdateFeatureFlagRequest {
+  string flag_key = 1 [(validate.rules).string.min_len = 1];
+  FeatureFlag flag = 2 [(validate.rules).message.required = true];
+}
+
+message UpdateFeatureFlagResponse {
+  FeatureFlag flag = 1;
+}
+
+// Observability Messages
+
+message GetTracesRequest {
+  string service_name = 1;
+  string operation_name = 2;
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  int32 limit = 5 [(validate.rules).int32 = {gte: 1, lte: 1000}];
+  map<string, string> tags = 6;
+  google.protobuf.Duration min_duration = 7;
+  google.protobuf.Duration max_duration = 8;
+}
+
+message GetTracesResponse {
+  repeated TraceInfo traces = 1;
+}
+
+message TraceInfo {
+  string trace_id = 1;
+  string span_id = 2;
+  string operation_name = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Duration duration = 5;
+  map<string, string> tags = 6;
+  repeated LogEntry logs = 7;
+  string status = 8;
+}
+
+message GetLogsRequest {
+  string service_name = 1;
+  string level = 2; // debug, info, warn, error
+  google.protobuf.Timestamp start_time = 3;
+  google.protobuf.Timestamp end_time = 4;
+  int32 limit = 5 [(validate.rules).int32 = {gte: 1, lte: 10000}];
+  string query = 6;
+  map<string, string> labels = 7;
+}
+
+message GetLogsResponse {
+  repeated LogEntry logs = 1;
+  string next_token = 2;
+}
+
+message LogEntry {
+  google.protobuf.Timestamp timestamp = 1;
+  string level = 2;
+  string message = 3;
+  string service = 4;
+  string trace_id = 5;
+  string span_id = 6;
+  map<string, string> fields = 7;
+}
+
+message StreamLogsRequest {
+  string service_name = 1;
+  string level = 2;
+  string query = 3;
+  map<string, string> labels = 4;
+  bool follow = 5;
+}
+
+message StreamLogsResponse {
+  LogEntry log = 1;
+}
+
+// Circuit Breaker Messages
+
+message GetCircuitBreakersRequest {
+  string service_name = 1;
+}
+
+message GetCircuitBreakersResponse {
+  repeated CircuitBreakerInfo circuit_breakers = 1;
+}
+
+message CircuitBreakerInfo {
+  string name = 1;
+  string service = 2;
+  CircuitBreakerState state = 3;
+  int32 failure_count = 4;
+  int32 success_count = 5;
+  int32 request_count = 6;
+  double failure_rate = 7;
+  google.protobuf.Timestamp last_failure_at = 8;
+  google.protobuf.Timestamp next_attempt_at = 9;
+  CircuitBreakerConfig config = 10;
+}
+
+enum CircuitBreakerState {
+  CIRCUIT_BREAKER_STATE_UNSPECIFIED = 0;
+  CIRCUIT_BREAKER_STATE_CLOSED = 1;
+  CIRCUIT_BREAKER_STATE_OPEN = 2;
+  CIRCUIT_BREAKER_STATE_HALF_OPEN = 3;
+}
+
+message CircuitBreakerConfig {
+  int32 max_requests = 1;
+  google.protobuf.Duration interval = 2;
+  google.protobuf.Duration timeout = 3;
+  int32 failure_threshold = 4;
+  double failure_rate_threshold = 5;
+}
+
+message TriggerCircuitBreakerRequest {
+  string name = 1 [(validate.rules).string.min_len = 1];
+  string reason = 2;
+}
+
+message ResetCircuitBreakerRequest {
+  string name = 1 [(validate.rules).string.min_len = 1];
+}

@@ -1,0 +1,150 @@
+{
+  "linter_report_version": 14,
+  "modules": [
+    {
+      "module_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+      "module_name": "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm-wasm/sdk/sdk-ultra-wasm",
+      "linter_results": [
+        {
+          "tool": "golangci-lint",
+          "exit_code": 1,
+          "issues": [
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 203,
+              "col": 11,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.ReadFile` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 215,
+              "col": 13,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.MkdirAll` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 216,
+              "col": 13,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.MkdirAll` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 217,
+              "col": 14,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.WriteFile` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 218,
+              "col": 14,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.WriteFile` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 219,
+              "col": 14,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.WriteFile` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 255,
+              "col": 14,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.ReadFile` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "internal/seeds/manager_test.go",
+              "line": 276,
+              "col": 14,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `os.ReadFile` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/registry/registry_additional_test.go",
+              "line": 18,
+              "col": 29,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'ctx' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/registry/registry_additional_test.go",
+              "line": 25,
+              "col": 35,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'ctx' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/registry/registry_additional_test.go",
+              "line": 26,
+              "col": 34,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'ctx' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/registry/registry_additional_test.go",
+              "line": 130,
+              "col": 10,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value is not checked",
+              "snippet": ""
+            }
+          ],
+          "fail_count": 9,
+          "warn_count": 3,
+          "info_count": 0,
+          "raw_log_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\lint-temp.json"
+        }
+      ],
+      "total_fail": 9,
+      "total_warn": 3,
+      "total_info": 0,
+      "status": "FAIL"
+    }
+  ],
+  "timestamp": "2025-11-02 18:31:18",
+  "total_fail": 9,
+  "total_info": 0,
+  "total_modules": 1,
+  "total_warn": 3
+}

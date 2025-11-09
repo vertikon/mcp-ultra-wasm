@@ -1,0 +1,41 @@
+{
+  "$id": "ultra.ai.inference.error.v1",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "mcp_id": {
+      "type": "string"
+    },
+    "sdk_name": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "timestamp",
+    "tenant_id",
+    "mcp_id",
+    "sdk_name",
+    "provider",
+    "model",
+    "code",
+    "message"
+  ]
+}

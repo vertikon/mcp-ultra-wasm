@@ -1,0 +1,46 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+cmd/cmd
+cmd/cmd.exe
+
+# Test binaries
+*.test
+*.out
+
+# Go workspace
+go.work
+go.work.sum
+
+# Seeds (local copies)
+seeds/
+!seeds/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Backups
+backup-*/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Environment
+.env
+.env.local
+
+# Temporary
+tmp/
+temp/

@@ -1,0 +1,516 @@
+{
+  "project_name": "sdk-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+  "timestamp": "2025-11-01 23:36:33",
+  "validator_version": "9.1",
+  "critical": [
+    {
+      "type": "Dependencias resolvidas",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Erro ao baixar dependencias",
+      "suggestion": "Execute: go mod tidy",
+      "fixability": {
+        "safe": true,
+        "rollback_easy": true,
+        "affects_behavior": false,
+        "requires_review": false,
+        "auto_fix_command": "go mod tidy",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "1-2 minutos",
+        "confidence": 0.9
+      },
+      "examples": [
+        ""
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Codigo compila",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Nao compila: ",
+      "suggestion": "Corrija os erros de compilacao listados",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "Variavel - depende dos erros",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log completo: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-23-36-32-compilation.log",
+        "",
+        ""
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "critical",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": true,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "5-15 minutos",
+        "priority": 1,
+        "risk_level": "high",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Testes PASSAM",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Testes falharam",
+      "suggestion": "Corrija os testes. Use 'go test -v ./...'",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-23-36-32-tests.log"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "high": null,
+  "medium": null,
+  "low": [
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Erro ao verificar formatacao",
+      "suggestion": "",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 6,
+  "score": 70,
+  "auto_fixable": 1,
+  "manual": 5,
+  "top_priorities": [
+    {
+      "type": "Dependencias resolvidas",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Erro ao baixar dependencias",
+      "suggestion": "Execute: go mod tidy",
+      "fixability": {
+        "safe": true,
+        "rollback_easy": true,
+        "affects_behavior": false,
+        "requires_review": false,
+        "auto_fix_command": "go mod tidy",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "1-2 minutos",
+        "confidence": 0.9
+      },
+      "examples": [
+        ""
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Testes PASSAM",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Testes falharam",
+      "suggestion": "Corrija os testes. Use 'go test -v ./...'",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-23-36-32-tests.log"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Erro ao verificar formatacao",
+      "suggestion": "",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "quick_wins": [
+    {
+      "type": "Dependencias resolvidas",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Erro ao baixar dependencias",
+      "suggestion": "Execute: go mod tidy",
+      "fixability": {
+        "safe": true,
+        "rollback_easy": true,
+        "affects_behavior": false,
+        "requires_review": false,
+        "auto_fix_command": "go mod tidy",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "1-2 minutos",
+        "confidence": 0.9
+      },
+      "examples": [
+        ""
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "blockers": [
+    {
+      "type": "Codigo compila",
+      "severity": "critical",
+      "location": "multiplos arquivos",
+      "description": "Nao compila: ",
+      "suggestion": "Corrija os erros de compilacao listados",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "Variavel - depende dos erros",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log completo: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-23-36-32-compilation.log",
+        "",
+        ""
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "critical",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": true,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "5-15 minutos",
+        "priority": 1,
+        "risk_level": "high",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "technical_debt": null,
+  "recommended_tools": null,
+  "next_steps": [
+    "🔴 URGENTE: Resolver 1 bloqueador(es)",
+    "⚡ Quick wins: 1 GAP(s) faceis",
+    "🤖 Auto-fixavel: 1 GAP(s)"
+  ],
+  "estimated_effort": "15m"
+}

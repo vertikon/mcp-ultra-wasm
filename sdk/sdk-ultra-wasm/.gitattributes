@@ -1,0 +1,44 @@
+# gitattributes - Normalize line endings across platforms
+# https://git-scm.com/docs/gitattributes
+
+# Auto detect text files and normalize line endings to LF on checkin
+* text=auto
+
+# Source code
+*.go            text eol=lf
+*.c             text eol=lf
+*.h             text eol=lf
+*.js            text eol=lf
+*.ts            text eol=lf
+*.json          text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+*.toml          text eol=lf
+
+# Documentation
+*.md            text eol=lf
+*.txt           text eol=lf
+
+# Shell scripts (Unix)
+*.sh            text eol=lf
+Makefile        text eol=lf
+
+# Windows scripts
+*.ps1           text eol=crlf
+*.bat           text eol=crlf
+*.cmd           text eol=crlf
+
+# Binary files (explicitly marked)
+*.exe           binary
+*.dll           binary
+*.so            binary
+*.dylib         binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.ico           binary
+*.zip           binary
+*.tar           binary
+*.gz            binary
+*.pdf           binary

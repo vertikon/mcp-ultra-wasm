@@ -1,0 +1,449 @@
+{
+  "project_name": "sdk-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+  "timestamp": "2025-11-01 17:11:12",
+  "validator_version": "9.0",
+  "critical": null,
+  "high": null,
+  "medium": [
+    {
+      "type": "Linter limpo",
+      "severity": "medium",
+      "location": "multiplos arquivos",
+      "description": "Linter encontrou 9 problema(s)",
+      "suggestion": "Corrija os problemas manualmente seguindo as dicas",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "manual_steps": "Corrija por categoria (do mais critico ao menos):\n\n",
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": [
+          {
+            "order": 1,
+            "description": "Gerar relatorio detalhado do linter",
+            "command": "golangci-lint run --out-format json \u003e linter-report.json",
+            "expected_output": "Arquivo JSON com todos os issues",
+            "validation": "cat linter-report.json | jq '.Issues | length'",
+            "rollback": "",
+            "prerequisites": null,
+            "warnings": [
+              "Review manual necessario para cada fix"
+            ]
+          }
+        ],
+        "estimated_time": "18m",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log completo: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-17-11-10-linter.log",
+        "",
+        "📊 Total de issues: 9",
+        "📋 Breakdown por categoria:",
+        "govet: 9 issue(s)",
+        "",
+        "🔝 Top 10 issues:",
+        "  1. pkg\\orchestrator\\types.go:15 - fieldalignment: struct with 88 pointer bytes could be 80 (govet)",
+        "  2. pkg\\orchestrator\\types.go:24 - fieldalignment: struct with 112 pointer bytes could be 104 (govet)",
+        "  3. pkg\\orchestrator\\types.go:34 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  4. pkg\\orchestrator\\types.go:46 - fieldalignment: struct with 64 pointer bytes could be 56 (govet)",
+        "  5. pkg\\orchestrator\\types.go:66 - fieldalignment: struct with 80 pointer bytes could be 64 (govet)",
+        "  6. pkg\\orchestrator\\types.go:74 - fieldalignment: struct with 144 pointer bytes could be 104 (govet)",
+        "  7. pkg\\orchestrator\\types.go:103 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  8. pkg\\orchestrator\\types.go:126 - fieldalignment: struct with 96 pointer bytes could be 88 (govet)",
+        "  9. pkg\\orchestrator\\types.go:145 - fieldalignment: struct with 80 pointer bytes could be 72 (govet)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": [
+        {
+          "file_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\pkg\\orchestrator\\types.go",
+          "line_number": 15,
+          "code_snippet": "    10 | // ─────────────────────────────────────────────────────────────────────────\n    11 | // SYNC TYPES\n    12 | // ─────────────────────────────────────────────────────────────────────────\n    13 | \n    14 | // SyncRequest representa uma solicitação de sincronização\n→   15 | type SyncRequest struct {\n    16 | \tSeeds      []string  `json:\"seeds\"`\n    17 | \tTimestamp  time.Time `json:\"timestamp\"`\n    18 | \tSDKVersion string    `json:\"sdk_version\"`\n    19 | \tModule     string    `json:\"module\"`\n    20 | \tRequester  string    `json:\"requester\"`\n",
+          "full_function": "type SyncRequest struct {\n\tSeeds      []string  `json:\"seeds\"`\n\tTimestamp  time.Time `json:\"timestamp\"`\n\tSDKVersion string    `json:\"sdk_version\"`\n\tModule     string    `json:\"module\"`\n\tRequester  string    `json:\"requester\"`\n}",
+          "symbol_name": "with",
+          "package_name": "orchestrator",
+          "dependencies": [
+            "time"
+          ],
+          "related_files": null
+        }
+      ],
+      "impact_analysis": {
+        "severity": "medium",
+        "affected_files": 1,
+        "affected_lines": 9,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "18m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "performance",
+        "memory-optimization"
+      ],
+      "error_breakdown": {
+        "govet": 9
+      },
+      "top_files": [
+        "pkg\\orchestrator\\types.go (9)"
+      ]
+    }
+  ],
+  "low": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 28.7% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 4,
+  "score": 80,
+  "auto_fixable": 0,
+  "manual": 4,
+  "top_priorities": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 28.7% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Linter limpo",
+      "severity": "medium",
+      "location": "multiplos arquivos",
+      "description": "Linter encontrou 9 problema(s)",
+      "suggestion": "Corrija os problemas manualmente seguindo as dicas",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "manual_steps": "Corrija por categoria (do mais critico ao menos):\n\n",
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": [
+          {
+            "order": 1,
+            "description": "Gerar relatorio detalhado do linter",
+            "command": "golangci-lint run --out-format json \u003e linter-report.json",
+            "expected_output": "Arquivo JSON com todos os issues",
+            "validation": "cat linter-report.json | jq '.Issues | length'",
+            "rollback": "",
+            "prerequisites": null,
+            "warnings": [
+              "Review manual necessario para cada fix"
+            ]
+          }
+        ],
+        "estimated_time": "18m",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log completo: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-17-11-10-linter.log",
+        "",
+        "📊 Total de issues: 9",
+        "📋 Breakdown por categoria:",
+        "govet: 9 issue(s)",
+        "",
+        "🔝 Top 10 issues:",
+        "  1. pkg\\orchestrator\\types.go:15 - fieldalignment: struct with 88 pointer bytes could be 80 (govet)",
+        "  2. pkg\\orchestrator\\types.go:24 - fieldalignment: struct with 112 pointer bytes could be 104 (govet)",
+        "  3. pkg\\orchestrator\\types.go:34 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  4. pkg\\orchestrator\\types.go:46 - fieldalignment: struct with 64 pointer bytes could be 56 (govet)",
+        "  5. pkg\\orchestrator\\types.go:66 - fieldalignment: struct with 80 pointer bytes could be 64 (govet)",
+        "  6. pkg\\orchestrator\\types.go:74 - fieldalignment: struct with 144 pointer bytes could be 104 (govet)",
+        "  7. pkg\\orchestrator\\types.go:103 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  8. pkg\\orchestrator\\types.go:126 - fieldalignment: struct with 96 pointer bytes could be 88 (govet)",
+        "  9. pkg\\orchestrator\\types.go:145 - fieldalignment: struct with 80 pointer bytes could be 72 (govet)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": [
+        {
+          "file_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\pkg\\orchestrator\\types.go",
+          "line_number": 15,
+          "code_snippet": "    10 | // ─────────────────────────────────────────────────────────────────────────\n    11 | // SYNC TYPES\n    12 | // ─────────────────────────────────────────────────────────────────────────\n    13 | \n    14 | // SyncRequest representa uma solicitação de sincronização\n→   15 | type SyncRequest struct {\n    16 | \tSeeds      []string  `json:\"seeds\"`\n    17 | \tTimestamp  time.Time `json:\"timestamp\"`\n    18 | \tSDKVersion string    `json:\"sdk_version\"`\n    19 | \tModule     string    `json:\"module\"`\n    20 | \tRequester  string    `json:\"requester\"`\n",
+          "full_function": "type SyncRequest struct {\n\tSeeds      []string  `json:\"seeds\"`\n\tTimestamp  time.Time `json:\"timestamp\"`\n\tSDKVersion string    `json:\"sdk_version\"`\n\tModule     string    `json:\"module\"`\n\tRequester  string    `json:\"requester\"`\n}",
+          "symbol_name": "with",
+          "package_name": "orchestrator",
+          "dependencies": [
+            "time"
+          ],
+          "related_files": null
+        }
+      ],
+      "impact_analysis": {
+        "severity": "medium",
+        "affected_files": 1,
+        "affected_lines": 9,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "18m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "performance",
+        "memory-optimization"
+      ],
+      "error_breakdown": {
+        "govet": 9
+      },
+      "top_files": [
+        "pkg\\orchestrator\\types.go (9)"
+      ]
+    }
+  ],
+  "quick_wins": null,
+  "blockers": null,
+  "technical_debt": null,
+  "recommended_tools": [
+    {
+      "tool_name": "golangci-lint",
+      "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+      "diagnose_command": "golangci-lint run",
+      "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+      "config_required": true,
+      "config_template": ".golangci.yml com linters selecionados",
+      "documentation": "https://golangci-lint.run/",
+      "alternative_tools": null
+    }
+  ],
+  "next_steps": null,
+  "estimated_effort": "0m"
+}

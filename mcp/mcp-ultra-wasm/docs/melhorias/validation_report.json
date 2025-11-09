@@ -1,0 +1,325 @@
+{
+  "ProjectName": "mcp-ultra-wasm",
+  "ProjectPath": "E:\\vertikon\\business\\SaaS\\templates\\mcp-ultra-wasm",
+  "ValidationDate": "2025-10-11",
+  "ValidatorVersion": "2.0",
+  "TotalRules": 25,
+  "Passed": 18,
+  "Warnings": 4,
+  "CriticalFailures": 3,
+  "Score": 72,
+  "Status": "❌ BLOQUEADO PARA DEPLOY",
+  "ValidationResults": [
+    {
+      "Name": "Clean Architecture Structure",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Estrutura Clean Architecture presente",
+      "Details": null
+    },
+    {
+      "Name": "No Circular Dependencies",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Sem ciclos (47 pacotes, 91 deps)",
+      "Details": [
+        "Pacotes analisados: 47",
+        "Dependências internas: 91",
+        "Ciclos detectados: 0"
+      ]
+    },
+    {
+      "Name": "Domain Layer Isolation",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Domain layer corretamente isolado",
+      "Details": null
+    },
+    {
+      "Name": "Code Coverage \u003e 80%",
+      "Passed": false,
+      "Critical": false,
+      "Message": "Erro ao executar testes",
+      "Details": [
+        "# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm\n# [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm]\n.\\main.go:33:3: slog.Logger.Info arg \"zap.String(\\\"version\\\", version.Version)\" should be a string or a slog.Attr (possible missing key or value)\n.\\main.go:85:4: slog.Logger.Info arg \"zap.String(\\\"address\\\", server.Addr)\" should be a string or a slog.Attr (possible missing key or value)\n.\\main.go:107:45: slog.Logger.Error arg \"zap.Error(err)\" should be a string or a slog.Attr (possible missing key or value)\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm [build failed]\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/compliance [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/compliance.test]\ninternal\\compliance\\framework_test.go:52:22: cannot use \"consent\" (untyped string constant) as []string value in struct literal\ninternal\\compliance\\framework_test.go:54:22: cannot use []string{…} (value of type []string) as bool value in struct literal\ninternal\\compliance\\framework_test.go:59:25: cannot use \"consent\" (untyped string constant) as []string value in struct literal\ninternal\\compliance\\framework_test.go:111:27: framework.ScanForPII undefined (type *ComplianceFramework has no field or method ScanForPII)\ninternal\\compliance\\framework_test.go:133:19: framework.RecordConsent undefined (type *ComplianceFramework has no field or method RecordConsent)\ninternal\\compliance\\framework_test.go:137:31: framework.HasConsent undefined (type *ComplianceFramework has no field or method HasConsent)\ninternal\\compliance\\framework_test.go:142:30: framework.HasConsent undefined (type *ComplianceFramework has no field or method HasConsent)\ninternal\\compliance\\framework_test.go:147:18: framework.WithdrawConsent undefined (type *ComplianceFramework has no field or method WithdrawConsent)\ninternal\\compliance\\framework_test.go:151:30: framework.HasConsent undefined (type *ComplianceFramework has no field or method HasConsent)\ninternal\\compliance\\framework_test.go:156:30: framework.HasConsent undefined (type *ComplianceFramework has no field or method HasConsent)\ninternal\\compliance\\framework_test.go:156:30: too many errors\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/cache [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/cache.test]\ninternal\\cache\\circuit_breaker_test.go:14:3: unknown field MaxRequests in struct literal of type CircuitBreakerConfig\ninternal\\cache\\circuit_breaker_test.go:15:3: unknown field Interval in struct literal of type CircuitBreakerConfig\ninternal\\cache\\circuit_breaker_test.go:16:3: unknown field Timeout in struct literal of type CircuitBreakerConfig\ninternal\\cache\\circuit_breaker_test.go:19:34: not enough arguments in call to NewCircuitBreaker\n\thave (string, CircuitBreakerConfig)\n\twant (int, time.Duration, int)\ninternal\\cache\\circuit_breaker_test.go:22:18: undefined: StateClosed\ninternal\\cache\\circuit_breaker_test.go:26:21: cb.Execute undefined (type *CircuitBreaker has no field or method Execute)\ninternal\\cache\\circuit_breaker_test.go:32:19: undefined: StateClosed\ninternal\\cache\\circuit_breaker_test.go:38:3: unknown field MaxRequests in struct literal of type CircuitBreakerConfig\ninternal\\cache\\circuit_breaker_test.go:39:3: unknown field Interval in struct literal of type CircuitBreakerConfig\ninternal\\cache\\circuit_breaker_test.go:40:3: unknown field Timeout in struct literal of type CircuitBreakerConfig\ninternal\\cache\\circuit_breaker_test.go:40:3: too many errors\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/domain [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/domain.test]\ninternal\\domain\\models_test.go:9:2: \"github.com/stretchr/testify/require\" imported and not used\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen/compliance/v1\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen/system/v1\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen/task/v1\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/automation\t\tcoverage: 0.0% of statements\nok  \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/ai/events\t(cached)\tcoverage: 100.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/ai/router\t\tcoverage: 0.0% of statements\nok  \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/ai/telemetry\t(cached)\tcoverage: 87.9% of statements\nok  \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/ai/wiring\t(cached)\tcoverage: 80.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/cache [build failed]\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/compliance [build failed]\n--- FAIL: TestNewTLSManager (0.66s)\n    logger.go:146: 2025-10-11T19:07:42.693-0300\tINFO\tTLS is disabled\n    --- FAIL: TestNewTLSManager/should_create_manager_with_valid_TLS_config (0.05s)\n        tls_test.go:120: \n            \tError Trace:\tE:/vertikon/business/SaaS/templates/mcp-ultra-wasm/internal/config/tls_test.go:120\n            \tError:      \tReceived unexpected error:\n            \t            \tfailed to load TLS configuration: failed to load certificate pair: tls: failed to find any PEM data in key input\n            \tTest:       \tTestNewTLSManager/should_create_manager_with_valid_TLS_config\n--- FAIL: TestTLSManager_GetTLSConfig (0.05s)\n    --- FAIL: TestTLSManager_GetTLSConfig/should_return_copy_of_TLS_config (0.05s)\n        tls_test.go:306: \n            \tError Trace:\tE:/vertikon/business/SaaS/templates/mcp-ultra-wasm/internal/config/tls_test.go:306\n            \tError:      \tReceived unexpected error:\n            \t            \tfailed to load TLS configuration: failed to load certificate pair: tls: failed to find any PEM data in key input\n            \tTest:       \tTestTLSManager_GetTLSConfig/should_return_copy_of_TLS_config\n--- FAIL: TestTLSManager_Stop (0.08s)\n    --- FAIL: TestTLSManager_Stop/should_stop_certificate_watcher (0.07s)\n        tls_test.go:334: \n            \tError Trace:\tE:/vertikon/business/SaaS/templates/mcp-ultra-wasm/internal/config/tls_test.go:334\n            \tError:      \tReceived unexpected error:\n            \t            \tfailed to load TLS configuration: failed to load certificate pair: tls: failed to find any PEM data in key input\n            \tTest:       \tTestTLSManager_Stop/should_stop_certificate_watcher\nFAIL\ncoverage: 39.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/config\t1.431s\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/features [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/features.test]\ninternal\\features\\manager_test.go:6:2: \"time\" imported and not used\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/config/secrets\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/constants\t\tcoverage: 0.0% of statements\n?   \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/dashboard\t[no test files]\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/domain [build failed]\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/http [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/http.test]\ninternal\\handlers\\http\\router_test.go:23:76: undefined: services.HealthStatus\ninternal\\handlers\\http\\router_test.go:25:42: undefined: services.HealthStatus\ninternal\\handlers\\http\\router_test.go:38:75: undefined: services.HealthChecker\ninternal\\handlers\\http\\router_test.go:47:70: undefined: domain.CreateTaskRequest\ninternal\\handlers\\http\\router_test.go:60:85: undefined: domain.UpdateTaskRequest\ninternal\\handlers\\http\\router_test.go:70:73: undefined: domain.TaskFilters\ninternal\\handlers\\http\\router_test.go:70:95: undefined: domain.TaskList\ninternal\\handlers\\http\\router_test.go:72:30: undefined: domain.TaskList\ninternal\\handlers\\http\\health_test.go:272:27: undefined: fmt\ninternal\\handlers\\http\\health_test.go:273:14: undefined: fmt\ninternal\\handlers\\http\\router_test.go:72:30: too many errors\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/middleware [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/middleware.test]\ninternal\\middleware\\auth_test.go:95:30: undefined: testhelpers.GetTestAPIKeys\ninternal\\middleware\\auth_test.go:284:9: undefined: fmt\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/observability [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/observability.test]\ninternal\\observability\\telemetry_test.go:60:20: service.GetTracer undefined (type *TelemetryService has no field or method GetTracer)\ninternal\\observability\\telemetry_test.go:63:19: service.GetMeter undefined (type *TelemetryService has no field or method GetMeter)\ninternal\\observability\\telemetry_test.go:83:20: service.GetTracer undefined (type *TelemetryService has no field or method GetTracer)\ninternal\\observability\\telemetry_test.go:96:3: undefined: attribute\ninternal\\observability\\telemetry_test.go:97:3: undefined: attribute\ninternal\\observability\\telemetry_test.go:102:26: undefined: attribute\ninternal\\observability\\telemetry_test.go:118:19: service.GetMeter undefined (type *TelemetryService has no field or method GetMeter)\ninternal\\observability\\telemetry_test.go:123:3: undefined: metric\ninternal\\observability\\telemetry_test.go:124:3: undefined: metric\ninternal\\observability\\telemetry_test.go:129:22: undefined: metric\ninternal\\observability\\telemetry_test.go:129:22: too many errors\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/dr\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/events\t\tcoverage: 0.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/features [build failed]\nok  \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers\t(cached)\tcoverage: 100.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/handlers/http [build failed]\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/http\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/lifecycle\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/metrics\t\tcoverage: 0.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/middleware [build failed]\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/security [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/security.test]\ninternal\\security\\enhanced_auth_test.go:22:6: MockOPAService redeclared in this block\n\tinternal\\security\\auth_test.go:23:6: other declaration of MockOPAService\ninternal\\security\\enhanced_auth_test.go:26:26: method MockOPAService.IsAuthorized already declared at internal\\security\\auth_test.go:27:26\ninternal\\security\\enhanced_auth_test.go:36:6: TestNewAuthService redeclared in this block\n\tinternal\\security\\auth_test.go:42:6: other declaration of TestNewAuthService\ninternal\\security\\enhanced_auth_test.go:326:6: TestGetUserFromContext redeclared in this block\n\tinternal\\security\\auth_test.go:414:6: other declaration of TestGetUserFromContext\ninternal\\security\\enhanced_auth_test.go:391:6: TestRequireScope redeclared in this block\n\tinternal\\security\\auth_test.go:285:6: other declaration of TestRequireScope\ninternal\\security\\enhanced_auth_test.go:459:6: TestRequireRole redeclared in this block\n\tinternal\\security\\auth_test.go:345:6: other declaration of TestRequireRole\ninternal\\security\\auth_test.go:52:48: cannot use opa (variable of type *MockOPAService) as *OPAService value in argument to NewAuthService\ninternal\\security\\auth_test.go:70:48: cannot use opa (variable of type *MockOPAService) as *OPAService value in argument to NewAuthService\ninternal\\security\\auth_test.go:143:48: cannot use opa (variable of type *MockOPAService) as *OPAService value in argument to NewAuthService\ninternal\\security\\auth_test.go:166:48: cannot use opa (variable of type *MockOPAService) as *OPAService value in argument to NewAuthService\ninternal\\security\\auth_test.go:166:48: too many errors\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/nats\t\tcoverage: 0.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/observability [build failed]\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/ratelimit\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/repository/postgres\t\tcoverage: 0.0% of statements\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/services [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/services.test]\ninternal\\services\\task_service_test.go:104:70: undefined: domain.UserFilter\ninternal\\services\\task_service_test.go:171:28: cannot use taskRepo (variable of type *mockTaskRepository) as domain.TaskRepository value in argument to NewTaskService: *mockTaskRepository does not implement domain.TaskRepository (wrong type for method List)\n\t\thave List(context.Context, domain.TaskFilter) ([]*domain.Task, error)\n\t\twant List(context.Context, domain.TaskFilter) ([]*domain.Task, int, error)\ninternal\\services\\task_service_test.go:171:48: cannot use eventRepo (variable of type *mockEventRepository) as domain.EventRepository value in argument to NewTaskService: *mockEventRepository does not implement domain.EventRepository (missing method GetByType)\ninternal\\services\\task_service_test.go:171:59: cannot use cacheRepo (variable of type *mockCacheRepository) as domain.CacheRepository value in argument to NewTaskService: *mockCacheRepository does not implement domain.CacheRepository (missing method Exists)\ninternal\\services\\task_service_test.go:199:31: declared and not used: eventRepo\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/compliance_test [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/compliance.test]\ntest\\compliance\\compliance_integration_test.go:366:3: declared and not used: result\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/component [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/component.test]\ntest\\component\\task_service_test.go:39:3: cannot use suite.taskRepo (variable of type *mocks.MockTaskRepository) as domain.TaskRepository value in argument to services.NewTaskService: *mocks.MockTaskRepository does not implement domain.TaskRepository (wrong type for method Delete)\n\t\thave Delete(context.Context, string) error\n\t\twant Delete(context.Context, uuid.UUID) error\ntest\\component\\task_service_test.go:40:3: cannot use suite.validator (variable of type *mocks.MockValidator) as domain.UserRepository value in argument to services.NewTaskService: *mocks.MockValidator does not implement domain.UserRepository (missing method Create)\ntest\\component\\task_service_test.go:42:3: cannot use suite.cacheRepo (variable of type *mocks.MockCacheRepository) as domain.CacheRepository value in argument to services.NewTaskService: *mocks.MockCacheRepository does not implement domain.CacheRepository (wrong type for method Get)\n\t\thave Get(context.Context, string) (interface{}, error)\n\t\twant Get(context.Context, string) (string, error)\ntest\\component\\task_service_test.go:44:3: cannot use suite.eventBus (variable of type *mocks.MockEventBus) as services.EventBus value in argument to services.NewTaskService: *mocks.MockEventBus does not implement services.EventBus (wrong type for method Publish)\n\t\thave Publish(context.Context, string, []byte) error\n\t\twant Publish(context.Context, *domain.Event) error\ntest\\component\\task_service_test.go:65:3: unknown field Metadata in struct literal of type services.CreateTaskRequest\ntest\\component\\task_service_test.go:78:20: req.Metadata undefined (type *services.CreateTaskRequest has no field or method Metadata)\ntest\\component\\task_service_test.go:97:55: too many arguments in call to suite.service.CreateTask\n\thave (context.Context, uuid.UUID, *services.CreateTaskRequest)\n\twant (context.Context, services.CreateTaskRequest)\ntest\\component\\task_service_test.go:118:29: undefined: services.ValidationError\ntest\\component\\task_service_test.go:127:55: too many arguments in call to suite.service.CreateTask\n\thave (context.Context, uuid.UUID, *services.CreateTaskRequest)\n\twant (context.Context, services.CreateTaskRequest)\ntest\\component\\task_service_test.go:151:52: too many arguments in call to suite.service.GetTask\n\thave (context.Context, uuid.UUID, uuid.UUID)\n\twant (context.Context, uuid.UUID)\ntest\\component\\task_service_test.go:151:52: too many errors\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/repository/redis\t\tcoverage: 0.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/security [build failed]\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/services [build failed]\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/slo\t\tcoverage: 0.0% of statements\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/observability_test [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/observability.test]\ntest\\observability\\integration_test.go:4:2: \"bytes\" imported and not used\ntest\\observability\\integration_test.go:8:2: \"io\" imported and not used\ntest\\observability\\integration_test.go:100:21: telemetryService.CreateAttribute undefined (type *observability.TelemetryService has no field or method CreateAttribute)\ntest\\observability\\integration_test.go:101:21: telemetryService.CreateAttribute undefined (type *observability.TelemetryService has no field or method CreateAttribute)\ntest\\observability\\integration_test.go:109:21: telemetryService.CreateAttribute undefined (type *observability.TelemetryService has no field or method CreateAttribute)\ntest\\observability\\integration_test.go:127:20: telemetryService.IncrementCounter undefined (type *observability.TelemetryService has no field or method IncrementCounter)\n# github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/property [github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/property.test]\ntest\\property\\task_properties_test.go:11:2: \"github.com/stretchr/testify/assert\" imported and not used\ntest\\property\\task_properties_test.go:232:4: declared and not used: originalTitle\npanic: a previously registered descriptor with the same fully-qualified name as Desc{fqName: \"http_request_duration_seconds\", help: \"Duration of HTTP requests in seconds\", constLabels: {}, variableLabels: {method,path,status}} has different label names or a different help string\n\ngoroutine 1 [running]:\ngithub.com/prometheus/client_golang/prometheus.(*Registry).MustRegister(0x7ff6a49f1a00, {0xc000053cc0?, 0x0?, 0x0?})\n\tC:/Users/Notebook/go/pkg/mod/github.com/prometheus/client_golang@v1.23.0/prometheus/registry.go:406 +0x65\ngithub.com/prometheus/client_golang/prometheus/promauto.Factory.NewHistogramVec({{0x7ff6a443d340?, 0x7ff6a49f1a00?}}, {{0x0, 0x0}, {0x0, 0x0}, {0x7ff6a4326236, 0x1d}, {0x7ff6a432e045, 0x24}, ...}, ...)\n\tC:/Users/Notebook/go/pkg/mod/github.com/prometheus/client_golang@v1.23.0/prometheus/promauto/auto.go:362 +0x1cb\ngithub.com/prometheus/client_golang/prometheus/promauto.NewHistogramVec(...)\n\tC:/Users/Notebook/go/pkg/mod/github.com/prometheus/client_golang@v1.23.0/prometheus/promauto/auto.go:235\ngithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/telemetry.init()\n\tE:/vertikon/business/SaaS/templates/mcp-ultra-wasm/internal/telemetry/telemetry.go:33 +0x3d2\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/telemetry\t0.462s\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/testhelpers\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/tracing\t\tcoverage: 0.0% of statements\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/scripts\t\tcoverage: 0.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/compliance [build failed]\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/component [build failed]\n\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/mocks\t\tcoverage: 0.0% of statements\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/observability [build failed]\nFAIL\tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/test/property [build failed]\nok  \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/tests/integration\t(cached)\tcoverage: [no statements]\nok  \tgithub.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/tests/smoke\t(cached)\tcoverage: [no statements]\nFAIL\n"
+      ]
+    },
+    {
+      "Name": "Linter Passing (golangci-lint)",
+      "Passed": false,
+      "Critical": true,
+      "Message": "Linter encontrou problemas",
+      "Details": [
+        ""
+      ]
+    },
+    {
+      "Name": "No Critical TODOs in Production Code",
+      "Passed": true,
+      "Critical": false,
+      "Message": "Sem TODOs críticos",
+      "Details": null
+    },
+    {
+      "Name": "Proper Error Handling",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Error handling adequado",
+      "Details": null
+    },
+    {
+      "Name": "No Hardcoded Secrets",
+      "Passed": false,
+      "Critical": true,
+      "Message": "⚠️  SECRETS HARDCODED DETECTADOS",
+      "Details": [
+        "test_constants.go - Possível secret hardcoded"
+      ]
+    },
+    {
+      "Name": "Dependencies Security Check",
+      "Passed": true,
+      "Critical": true,
+      "Message": "govulncheck não disponível (instalar recomendado)",
+      "Details": null
+    },
+    {
+      "Name": "SQL Injection Protection",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Proteção SQL adequada",
+      "Details": null
+    },
+    {
+      "Name": "Structured Logging Implementation",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Logging estruturado com zap",
+      "Details": null
+    },
+    {
+      "Name": "Metrics Exposed (Prometheus)",
+      "Passed": true,
+      "Critical": false,
+      "Message": "Prometheus metrics integrado",
+      "Details": null
+    },
+    {
+      "Name": "Health Check Endpoint",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Health check endpoint presente",
+      "Details": null
+    },
+    {
+      "Name": "OpenTelemetry Integration",
+      "Passed": true,
+      "Critical": false,
+      "Message": "OpenTelemetry integrado",
+      "Details": null
+    },
+    {
+      "Name": "NATS Subjects Documented",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Subjects documentados em NATS_SUBJECTS.md",
+      "Details": null
+    },
+    {
+      "Name": "Message Schemas Defined",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Schemas de mensagem definidos",
+      "Details": null
+    },
+    {
+      "Name": "NATS Error Handling",
+      "Passed": false,
+      "Critical": true,
+      "Message": "Error handlers NATS não configurados",
+      "Details": [
+        "publisher.go"
+      ]
+    },
+    {
+      "Name": "Database Indexes Defined",
+      "Passed": true,
+      "Critical": false,
+      "Message": "Índices de banco definidos",
+      "Details": null
+    },
+    {
+      "Name": "Migration Files Present",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Migrations presentes",
+      "Details": null
+    },
+    {
+      "Name": "No Shared Database Access",
+      "Passed": true,
+      "Critical": true,
+      "Message": "Sem compartilhamento de database",
+      "Details": null
+    },
+    {
+      "Name": "README.md Complete",
+      "Passed": false,
+      "Critical": false,
+      "Message": "README incompleto",
+      "Details": [
+        "Instalação"
+      ]
+    },
+    {
+      "Name": "API Documentation (Swagger/OpenAPI)",
+      "Passed": false,
+      "Critical": false,
+      "Message": "Documentação API não encontrada",
+      "Details": [
+        "Adicionar docs/swagger.yaml ou docs/openapi.yaml"
+      ]
+    },
+    {
+      "Name": "GoDoc Comments",
+      "Passed": false,
+      "Critical": false,
+      "Message": "GoDoc coverage baixo: 61%",
+      "Details": null
+    },
+    {
+      "Name": "Dockerfile Multi-stage Build",
+      "Passed": true,
+      "Critical": false,
+      "Message": "Dockerfile multi-stage presente",
+      "Details": null
+    },
+    {
+      "Name": "Docker Compose for Development",
+      "Passed": true,
+      "Critical": false,
+      "Message": "docker-compose.yml presente",
+      "Details": null
+    }
+  ],
+  "DependencyAnalysis": {
+    "TotalPackages": 47,
+    "InternalDeps": 91,
+    "CyclesDetected": 0,
+    "CycleDetails": []
+  },
+  "CategoryScores": {
+    "Arquitetura": {
+      "Category": "Arquitetura",
+      "Score": 100,
+      "Percentage": "100%",
+      "Status": "✅ A+",
+      "Details": null
+    },
+    "Banco de Dados": {
+      "Category": "Banco de Dados",
+      "Score": 100,
+      "Percentage": "100%",
+      "Status": "✅ A+",
+      "Details": null
+    },
+    "DevOps": {
+      "Category": "DevOps",
+      "Score": 100,
+      "Percentage": "100%",
+      "Status": "✅ A+",
+      "Details": null
+    },
+    "Documentação": {
+      "Category": "Documentação",
+      "Score": 0,
+      "Percentage": "0%",
+      "Status": "❌ F",
+      "Details": null
+    },
+    "NATS": {
+      "Category": "NATS",
+      "Score": 66,
+      "Percentage": "66%",
+      "Status": "⚠️ B",
+      "Details": null
+    },
+    "Observabilidade": {
+      "Category": "Observabilidade",
+      "Score": 100,
+      "Percentage": "100%",
+      "Status": "✅ A+",
+      "Details": null
+    },
+    "Qualidade": {
+      "Category": "Qualidade",
+      "Score": 50,
+      "Percentage": "50%",
+      "Status": "❌ F",
+      "Details": null
+    },
+    "Segurança": {
+      "Category": "Segurança",
+      "Score": 66,
+      "Percentage": "66%",
+      "Status": "⚠️ B",
+      "Details": null
+    }
+  },
+  "ActionPlan": {
+    "Urgent": [
+      {
+        "Priority": "🔴 CRÍTICA",
+        "Title": "Linter Passing (golangci-lint)",
+        "Description": "Linter encontrou problemas",
+        "TimeEstimate": "1-2 horas",
+        "Commands": null
+      },
+      {
+        "Priority": "🔴 CRÍTICA",
+        "Title": "No Hardcoded Secrets",
+        "Description": "⚠️  SECRETS HARDCODED DETECTADOS",
+        "TimeEstimate": "1-2 horas",
+        "Commands": null
+      },
+      {
+        "Priority": "🔴 CRÍTICA",
+        "Title": "NATS Error Handling",
+        "Description": "Error handlers NATS não configurados",
+        "TimeEstimate": "1-2 horas",
+        "Commands": null
+      }
+    ],
+    "Important": [
+      {
+        "Priority": "🟡 IMPORTANTE",
+        "Title": "Code Coverage \u003e 80%",
+        "Description": "Erro ao executar testes",
+        "TimeEstimate": "30 min - 1 hora",
+        "Commands": null
+      },
+      {
+        "Priority": "🟡 IMPORTANTE",
+        "Title": "README.md Complete",
+        "Description": "README incompleto",
+        "TimeEstimate": "30 min - 1 hora",
+        "Commands": null
+      },
+      {
+        "Priority": "🟡 IMPORTANTE",
+        "Title": "API Documentation (Swagger/OpenAPI)",
+        "Description": "Documentação API não encontrada",
+        "TimeEstimate": "30 min - 1 hora",
+        "Commands": null
+      },
+      {
+        "Priority": "🟡 IMPORTANTE",
+        "Title": "GoDoc Comments",
+        "Description": "GoDoc coverage baixo: 61%",
+        "TimeEstimate": "30 min - 1 hora",
+        "Commands": null
+      }
+    ],
+    "Recommended": []
+  }
+}

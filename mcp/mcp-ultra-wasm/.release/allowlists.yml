@@ -1,0 +1,26 @@
+licenses_allowed:
+  - "Apache-2.0"
+  - "MIT"
+  - "BSD-2-Clause"
+  - "BSD-3-Clause"
+  - "ISC"
+
+dependencies_blocklist:
+  - "github.com/vertikon-private/*"
+  - "github.com/vertikon/internal-*"
+  - "gitlab.vertikon.com/*"
+
+file_patterns_blocklist:
+  - "configs/prod/**"
+  - "internal/enterprise/**"
+  - "**/.env.prod"
+  - "**/.env.staging"
+  - "**/credentials.json"
+  - "**/service-account.json"
+
+# Contratos públicos que devem ser versionados semanticamente
+public_contracts:
+  - "pkg/sdk/**/*.go"
+  - "pkg/events/**/*.go"
+  - "pkg/publicapi/**/*.go"
+  - "nats-schemas/**/*.json"

@@ -1,0 +1,19 @@
+{
+  "linter_report_version": 11,
+  "modules": [
+    {
+      "module_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+      "module_name": "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm-wasm/sdk/sdk-ultra-wasm",
+      "linter_results": [],
+      "total_fail": 0,
+      "total_warn": 0,
+      "total_info": 0,
+      "status": "PASS"
+    }
+  ],
+  "timestamp": "2025-11-02 17:42:09",
+  "total_fail": 0,
+  "total_info": 0,
+  "total_modules": 1,
+  "total_warn": 0
+}

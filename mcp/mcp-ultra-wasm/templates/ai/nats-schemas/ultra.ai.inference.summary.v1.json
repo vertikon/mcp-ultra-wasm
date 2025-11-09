@@ -1,0 +1,48 @@
+{
+  "$id": "ultra.ai.inference.summary.v1",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "mcp_id": {
+      "type": "string"
+    },
+    "sdk_name": {
+      "type": "string"
+    },
+    "use_case": {
+      "type": "string"
+    },
+    "tokens_in": {
+      "type": "integer"
+    },
+    "tokens_out": {
+      "type": "integer"
+    },
+    "latency_ms": {
+      "type": "integer"
+    },
+    "cost_brl": {
+      "type": "number"
+    },
+    "cached": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "timestamp",
+    "tenant_id",
+    "mcp_id",
+    "sdk_name",
+    "use_case",
+    "tokens_in",
+    "tokens_out",
+    "latency_ms",
+    "cost_brl"
+  ]
+}

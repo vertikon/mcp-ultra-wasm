@@ -1,0 +1,8 @@
+//go:build ultra_advanced
+// +build ultra_advanced
+
+package lifecycle
+
+// This is a stub file. The full implementation is available in components.go.disabled
+// To enable advanced features, rename components.go.disabled to components.go and build with:
+// go build -tags ultra_advanced ./...

@@ -1,0 +1,99 @@
+{
+  "project_name": "mcp-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\mcp-ultra-wasm",
+  "timestamp": "2025-11-01 18:23:57",
+  "validator_version": "9.1",
+  "critical": null,
+  "high": null,
+  "medium": null,
+  "low": [
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 1,
+  "score": 95,
+  "auto_fixable": 0,
+  "manual": 1,
+  "top_priorities": [
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "quick_wins": null,
+  "blockers": null,
+  "technical_debt": null,
+  "recommended_tools": null,
+  "next_steps": null,
+  "estimated_effort": "0m"
+}

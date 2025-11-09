@@ -1,0 +1,140 @@
+version: "1.0"
+
+product:
+  name: "Vertikon MCP-Ultra"
+  description: "Template SaaS inteligente baseado em MCP para construir verticais (CRM, Billing, Calendar, etc.)."
+  owners:
+    - name: "Rogério Festa"
+      email: "rogeriofesta@gmail.com"
+  baseline: "Ecossistema Vertikon v11"
+  repo: "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm"
+
+plans:
+  - id: "free"
+    name: "Free (30 dias)"
+    price: 0
+    period: "trial"
+    limits:
+      agents: 2
+      tenants: 1
+      requests_per_minute: 60
+    features:
+      - "Seed Agent"
+      - "Dashboard básico"
+      - "Logs locais"
+  - id: "pro"
+    name: "Pro"
+    price: 299
+    currency: "BRL"
+    period: "monthly"
+    limits:
+      agents: 25
+      tenants: 5
+      requests_per_minute: 600
+    features:
+      - "Agentes ilimitados por tenant*"
+      - "Observabilidade completa (Prometheus/Grafana/Jaeger)"
+      - "Roteamento NATS + AI Router"
+      - "Modelos MCP custom (sdk/sdk-ultra-wasm)"
+  - id: "enterprise"
+    name: "Enterprise"
+    price: 1499
+    currency: "BRL"
+    period: "monthly"
+    limits:
+      agents: 200
+      tenants: 50
+      requests_per_minute: 6000
+    features:
+      - "SLO 99.9%"
+      - "Suporte prioritário"
+      - "Compliance avançado (LGPD/GDPR)"
+      - "Multi-região e HA"
+
+billing:
+  provider: "Vertikon Billing"
+  mode: "postpaid"
+  invoice_day: 1
+  payment_methods: ["credit_card", "pix", "boleto"]
+
+kpis:
+  mrr_target: 100000
+  cac_ltv_ratio_min: 4.0
+  payback_months_max: 3
+  churn_monthly_max_pct: 2.5
+
+slo:
+  latency_p95_ms: 120
+  error_rate_pct: 0.5
+  uptime_pct: 99.9
+  test_coverage_min_pct: 80
+
+observability:
+  metrics:
+    prometheus:
+      enabled: true
+      endpoint: "/metrics"
+  tracing:
+    jaeger:
+      enabled: true
+      endpoint: "http://localhost:16686"
+  logging:
+    level: "info"
+    json: true
+
+infrastructure:
+  database:
+    type: "postgres"
+    url_env: "DATABASE_URL"
+    migrations_dir: "migrations"
+  cache:
+    type: "redis"
+    addr_env: "REDIS_ADDR"
+  messaging:
+    type: "nats"
+    url_env: "NATS_URL"
+
+compliance:
+  lgpd:
+    pii_scanner_enabled: true
+    consent_tracking_enabled: true
+    retention_default_days: 365
+    audit_log_path: "compliance/audit.log"
+
+feature_flags:
+  ai_router: true
+  predictive_engine: true
+  sentiment_mapper: false
+
+deployment:
+  docker_compose_services:
+    - "postgres"
+    - "redis"
+    - "nats"
+  health_endpoints:
+    - "/livez"
+    - "/readyz"
+    - "/health"
+
+tenancy:
+  model: "multi-tenant"
+  id_strategy: "TenantKey"
+  default_tenant:
+    id: "vertikon-dev"
+    name: "Vertikon Dev Workspace"
+
+ai_agents:
+  seed_agent:
+    enabled: true
+    config_path: "agents/seed/config.json"
+  trainer_agent:
+    enabled: true
+    schedule_cron: "*/15 * * * *"
+  evaluator_agent:
+    enabled: true
+  reflector_agent:
+    enabled: true
+
+paths:
+  env_dir_windows: "E:\\rfesta\\.env"
+  config_dir: "configs"

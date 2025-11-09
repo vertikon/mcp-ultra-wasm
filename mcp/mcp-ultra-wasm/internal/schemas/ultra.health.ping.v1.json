@@ -1,0 +1,24 @@
+{
+  "$id": "ultra.health.ping.v1",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "msg_id": {
+      "type": "string"
+    },
+    "mcp_id": {
+      "type": "string"
+    },
+    "sdk_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "timestamp",
+    "msg_id",
+    "mcp_id"
+  ]
+}

@@ -1,0 +1,90 @@
+SHELL := /bin/bash
+GOLANGCI ?= golangci-lint
+VETTOOL  := $(PWD)/vettools/depguard-lite
+
+.PHONY: help tidy verify lint lint-new vettool vet-dep test coverage-html mocks build ci
+
+help:
+	@echo "═══════════════════════════════════════════════════════"
+	@echo "   Makefile do mcp-ultra-wasm - Blueprint Depguard-Lite"
+	@echo "═══════════════════════════════════════════════════════"
+	@echo ""
+	@echo "📦 Gerenciamento de Módulos:"
+	@echo "  tidy       - Executa go mod tidy"
+	@echo "  verify     - Executa go mod verify"
+	@echo ""
+	@echo "🔍 Linting:"
+	@echo "  lint       - golangci-lint com depguard (configuração antiga)"
+	@echo "  lint-new   - golangci-lint com gomodguard (nova configuração)"
+	@echo "  vettool    - Compila depguard-lite (vettool nativo Go)"
+	@echo "  vet-dep    - go vet com depguard-lite"
+	@echo ""
+	@echo "🧪 Testes:"
+	@echo "  test       - Executa testes"
+	@echo "  coverage-html - Gera relatório HTML de cobertura"
+	@echo "  mocks      - Regenera mocks"
+	@echo ""
+	@echo "🏗️  Build:"
+	@echo "  build      - Compila o projeto"
+	@echo ""
+	@echo "🚀 CI:"
+	@echo "  ci         - Pipeline completo (tidy + verify + lint-new + vet-dep + test)"
+
+tidy:
+	@echo "📦 Executando go mod tidy..."
+	go mod tidy
+
+verify:
+	@echo "✓ Verificando go.sum..."
+	go mod verify
+
+# Lint com configuração antiga (depguard)
+lint:
+	@echo "🔍 Executando golangci-lint (configuração antiga)..."
+	$(GOLANGCI) run --timeout=5m
+
+# Lint com nova configuração (gomodguard)
+lint-new: tidy verify
+	@echo "🔍 Executando golangci-lint (nova configuração com gomodguard)..."
+	$(GOLANGCI) run --config=.golangci-new.yml --timeout=5m
+
+# Compila o vettool depguard-lite
+vettool:
+	@echo "🔨 Compilando depguard-lite..."
+	@mkdir -p vettools
+	go build -o vettools/depguard-lite ./cmd/depguard-lite
+	@echo "✅ Vettool compilado em vettools/depguard-lite"
+
+# Executa go vet com depguard-lite
+vet-dep: vettool
+	@echo "🔍 Executando go vet com depguard-lite..."
+	go vet -vettool=$(VETTOOL) ./...
+
+# Testes
+test:
+	@echo "🧪 Executando testes..."
+	go test ./... -v -count=1
+
+# Coverage HTML
+coverage-html:
+	@echo "📊 Gerando relatório de cobertura..."
+	go test ./... -coverprofile=coverage.out
+	go tool cover -html=coverage.out -o coverage.html
+	@echo "✅ Coverage HTML gerado em coverage.html"
+
+# Mocks
+mocks:
+	@echo "🔄 Regenerando mocks..."
+	bash scripts/regenerate_mocks.sh
+
+# Build
+build:
+	@echo "🏗️  Compilando projeto..."
+	go build -o bin/mcp-ultra-wasm ./cmd/...
+
+# Pipeline de CI completo
+ci: tidy verify lint-new test vet-dep
+	@echo ""
+	@echo "═══════════════════════════════════════════════════════"
+	@echo "   ✅ CI COMPLETO - Todas as verificações passaram"
+	@echo "═══════════════════════════════════════════════════════"

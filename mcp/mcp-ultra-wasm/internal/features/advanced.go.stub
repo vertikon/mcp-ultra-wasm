@@ -1,0 +1,8 @@
+//go:build ultra_advanced
+// +build ultra_advanced
+
+package features
+
+// This is a stub file. The full implementation is available in advanced.go.disabled
+// To enable advanced features, rename advanced.go.disabled to advanced.go and build with:
+// go build -tags ultra_advanced ./...

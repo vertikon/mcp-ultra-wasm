@@ -1,0 +1,559 @@
+{
+  "linter_report_version": 7,
+  "modules": [
+    {
+      "module_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+      "module_name": "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm-wasm/sdk/sdk-ultra-wasm",
+      "linter_results": [
+        {
+          "tool": "golangci-lint",
+          "exit_code": 1,
+          "issues": [
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/fsx/mode_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/httpx/status_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 15,
+              "col": 18,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 88 pointer bytes could be 80",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 24,
+              "col": 19,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 112 pointer bytes could be 104",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 34,
+              "col": 17,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 128 pointer bytes could be 120",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 46,
+              "col": 21,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 64 pointer bytes could be 56",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 66,
+              "col": 19,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 72 pointer bytes could be 64",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 74,
+              "col": 20,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 144 pointer bytes could be 104",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 103,
+              "col": 20,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 128 pointer bytes could be 120",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 126,
+              "col": 21,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 96 pointer bytes could be 88",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/orchestrator/types.go",
+              "line": 145,
+              "col": 25,
+              "code": "govet",
+              "severity": "WARN",
+              "message": "fieldalignment: struct with 80 pointer bytes could be 72",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/context_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 25,
+              "col": 20,
+              "code": "err113",
+              "severity": "WARN",
+              "message": "do not define dynamic errors, use wrapped static errors instead: \"errors.New(\\\"invalid token\\\")\"",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 43,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 61,
+              "col": 22,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'raw' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 62,
+              "col": 20,
+              "code": "err113",
+              "severity": "WARN",
+              "message": "do not define dynamic errors, use wrapped static errors instead: \"errors.New(\\\"invalid token\\\")\"",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 68,
+              "col": 35,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'w' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 87,
+              "col": 22,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'raw' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 94,
+              "col": 35,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'w' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 113,
+              "col": 22,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'raw' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 120,
+              "col": 35,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'w' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/jwt_test.go",
+              "line": 140,
+              "col": 22,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'raw' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 14,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 16,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 39,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 59,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 78,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 80,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 99,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/policies/rbac_test.go",
+              "line": 119,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/cors_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/cors_test.go",
+              "line": 14,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/cors_test.go",
+              "line": 42,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/cors_test.go",
+              "line": 62,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/logger_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/logger_test.go",
+              "line": 13,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/logger_test.go",
+              "line": 15,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/logger_test.go",
+              "line": 38,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/recovery_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/recovery_test.go",
+              "line": 13,
+              "col": 40,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'w' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/recovery_test.go",
+              "line": 37,
+              "col": 64,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/middleware/recovery_test.go",
+              "line": 39,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 1,
+              "col": 1,
+              "code": "gofmt",
+              "severity": "WARN",
+              "message": "File is not properly formatted",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 24,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 27,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 64,
+              "col": 58,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 87,
+              "col": 59,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 88,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 91,
+              "col": 60,
+              "code": "revive",
+              "severity": "WARN",
+              "message": "unused-parameter: parameter 'r' seems to be unused, consider removing or renaming it as _",
+              "snippet": ""
+            },
+            {
+              "tool": "golangci-lint",
+              "file": "pkg/router/mux_test.go",
+              "line": 92,
+              "col": 6,
+              "code": "errcheck",
+              "severity": "FAIL",
+              "message": "Error return value of `w.Write` is not checked",
+              "snippet": ""
+            }
+          ],
+          "fail_count": 8,
+          "warn_count": 44,
+          "info_count": 0,
+          "raw_log_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\lint-temp.json"
+        },
+        {
+          "tool": "gosec",
+          "exit_code": 1,
+          "issues": [],
+          "fail_count": 0,
+          "warn_count": 0,
+          "info_count": 0,
+          "raw_log_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\gosec.json"
+        }
+      ],
+      "total_fail": 8,
+      "total_warn": 44,
+      "total_info": 0,
+      "status": "FAIL"
+    }
+  ],
+  "timestamp": "2025-11-02 09:06:45",
+  "total_fail": 8,
+  "total_info": 0,
+  "total_modules": 1,
+  "total_warn": 44
+}

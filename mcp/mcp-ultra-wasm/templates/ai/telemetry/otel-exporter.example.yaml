@@ -1,0 +1,16 @@
+# OpenTelemetry Exporter (exemplo)
+
+exporter:
+  otlp:
+    endpoint: http://localhost:4317
+    headers:
+      api-key: <secret>
+    timeout: 10s
+    
+traces:
+  sampler:
+    type: parentbased_traceidratio
+    arg: 0.1  # 10% sampling
+    
+metrics:
+  export_interval: 60s

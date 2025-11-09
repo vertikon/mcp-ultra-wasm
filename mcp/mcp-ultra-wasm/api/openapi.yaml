@@ -1,0 +1,1257 @@
+openapi: 3.0.3
+info:
+  title: MCP Ultra v21 API
+  description: |
+    Enterprise-grade microservice with Clean Architecture, DDD patterns, and comprehensive security.
+    
+    ## Features
+    - JWT Authentication with JWKS
+    - Fine-grained authorization with OPA
+    - Feature flags system
+    - Real-time events with NATS
+    - Multi-tenant architecture
+    - Comprehensive monitoring
+    
+    ## Authentication
+    This API uses Bearer token authentication. Include the JWT token in the Authorization header:
+    ```
+    Authorization: Bearer <your-jwt-token>
+    ```
+  version: "21.0.0"
+  contact:
+    name: Vertikon Team
+    email: dev@vertikon.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://api.vertikon.com/v1
+    description: Production server
+  - url: https://staging-api.vertikon.com/v1
+    description: Staging server
+  - url: http://localhost:9655/api/v1
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  # Health and System Endpoints
+  /healthz:
+    get:
+      tags:
+        - System
+      summary: Health check endpoint
+      description: Returns the health status of the service
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /readyz:
+    get:
+      tags:
+        - System
+      summary: Readiness check endpoint
+      description: Returns whether the service is ready to accept traffic
+      security: []
+      responses:
+        '200':
+          description: Service is ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadinessResponse'
+        '503':
+          description: Service is not ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /metrics:
+    get:
+      tags:
+        - System
+      summary: Prometheus metrics endpoint
+      description: Returns Prometheus metrics
+      security: []
+      responses:
+        '200':
+          description: Metrics data
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  # Task Management Endpoints
+  /tasks:
+    get:
+      tags:
+        - Tasks
+      summary: List tasks
+      description: Retrieve a paginated list of tasks for the authenticated user
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Status'
+        - $ref: '#/components/parameters/Priority'
+        - $ref: '#/components/parameters/Tags'
+        - $ref: '#/components/parameters/Search'
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      tags:
+        - Tasks
+      summary: Create a new task
+      description: Create a new task for the authenticated user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskRequest'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /tasks/{id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get task by ID
+      description: Retrieve a specific task by its ID
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - Tasks
+      summary: Update task
+      description: Update an existing task
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+    delete:
+      tags:
+        - Tasks
+      summary: Delete task
+      description: Delete a task (admin only)
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      security:
+        - BearerAuth: ['admin']
+      responses:
+        '204':
+          description: Task deleted successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tasks/{id}/complete:
+    patch:
+      tags:
+        - Tasks
+      summary: Complete task
+      description: Mark a task as completed
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Bad request - task cannot be completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tasks/{id}/cancel:
+    patch:
+      tags:
+        - Tasks
+      summary: Cancel task
+      description: Cancel a task
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '200':
+          description: Task cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+        '400':
+          description: Bad request - task cannot be cancelled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Feature Flags Endpoints
+  /features:
+    get:
+      tags:
+        - Features
+      summary: List feature flags
+      description: Get all feature flags (admin only)
+      security:
+        - BearerAuth: ['admin']
+      responses:
+        '200':
+          description: List of feature flags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlagListResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /features/{key}:
+    get:
+      tags:
+        - Features
+      summary: Check feature flag
+      description: Check if a feature flag is enabled for the current user
+      parameters:
+        - name: key
+          in: path
+          required: true
+          description: Feature flag key
+          schema:
+            type: string
+            example: "new-ui-enabled"
+      responses:
+        '200':
+          description: Feature flag status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlagResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Feature flag not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # User Profile Endpoints  
+  /me:
+    get:
+      tags:
+        - User
+      summary: Get current user profile
+      description: Get the profile of the authenticated user
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # Analytics and Metrics Endpoints
+  /analytics/tasks:
+    get:
+      tags:
+        - Analytics
+      summary: Get task analytics
+      description: Get analytics data for tasks
+      parameters:
+        - name: period
+          in: query
+          description: Time period for analytics
+          schema:
+            type: string
+            enum: [day, week, month, year]
+            default: month
+        - name: groupBy
+          in: query
+          description: Group results by field
+          schema:
+            type: string
+            enum: [status, priority, created_date]
+            default: status
+      responses:
+        '200':
+          description: Task analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # AI Inference Endpoints
+  /ai/infer:
+    post:
+      tags:
+        - AI
+      summary: AI Inference
+      description: |
+        Perform AI inference with automatic routing, policy enforcement, and budget tracking.
+        Supports classification, generation, and reranking use cases.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRequest'
+      responses:
+        '200':
+          description: Inference completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceResponse'
+        '400':
+          description: Bad request - invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - policy violation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyViolationResponse'
+        '429':
+          description: Budget limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BudgetExceededResponse'
+
+  /ai/router/status:
+    get:
+      tags:
+        - AI
+      summary: Get AI router status
+      description: Get current AI routing configuration and provider health
+      security:
+        - BearerAuth: ['admin']
+      responses:
+        '200':
+          description: Router status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterStatusResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token authentication. The token should include the following claims:
+        - `user_id`: User identifier
+        - `email`: User email
+        - `role`: User role (admin, user)
+        - `scopes`: Array of permission scopes
+        - `tenant_id`: Tenant identifier for multi-tenant isolation
+
+  parameters:
+    TaskId:
+      name: id
+      in: path
+      required: true
+      description: Task ID
+      schema:
+        type: string
+        format: uuid
+        example: "123e4567-e89b-12d3-a456-426614174000"
+
+    Page:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        example: 1
+
+    Limit:
+      name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        example: 20
+
+    Status:
+      name: status
+      in: query
+      description: Filter by task status
+      schema:
+        type: string
+        enum: [pending, in_progress, completed, cancelled]
+        example: "pending"
+
+    Priority:
+      name: priority
+      in: query
+      description: Filter by task priority
+      schema:
+        type: string
+        enum: [low, medium, high, urgent]
+        example: "high"
+
+    Tags:
+      name: tags
+      in: query
+      description: Filter by tags (comma-separated)
+      schema:
+        type: string
+        example: "work,important"
+
+    Search:
+      name: search
+      in: query
+      description: Search in title and description
+      schema:
+        type: string
+        example: "project meeting"
+
+  schemas:
+    # Task Schemas
+    Task:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - status
+        - priority
+        - created_by
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique task identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Task title
+          example: "Complete project documentation"
+        description:
+          type: string
+          maxLength: 2000
+          description: Detailed task description
+          example: "Write comprehensive documentation for the new API endpoints"
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+          description: Current task status
+          example: "pending"
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+          description: Task priority level
+          example: "high"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Task tags for categorization
+          example: ["documentation", "api", "urgent"]
+        due_date:
+          type: string
+          format: date-time
+          description: Task due date
+          example: "2024-12-31T23:59:59Z"
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Task completion timestamp
+          example: "2024-01-15T10:30:00Z"
+        created_by:
+          type: string
+          format: uuid
+          description: ID of user who created the task
+          example: "456e7890-e89b-12d3-a456-426614174111"
+        created_at:
+          type: string
+          format: date-time
+          description: Task creation timestamp
+          example: "2024-01-01T09:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Task last update timestamp
+          example: "2024-01-15T10:30:00Z"
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional task metadata
+          example: 
+            source: "api"
+            integration_id: "slack-123"
+
+    CreateTaskRequest:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Task title
+          example: "Complete project documentation"
+        description:
+          type: string
+          maxLength: 2000
+          description: Detailed task description
+          example: "Write comprehensive documentation for the new API endpoints"
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+          default: medium
+          description: Task priority level
+          example: "high"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Task tags for categorization
+          example: ["documentation", "api"]
+        due_date:
+          type: string
+          format: date-time
+          description: Task due date
+          example: "2024-12-31T23:59:59Z"
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional task metadata
+          example: 
+            source: "web"
+            priority_reason: "client request"
+
+    UpdateTaskRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Task title
+          example: "Updated task title"
+        description:
+          type: string
+          maxLength: 2000
+          description: Detailed task description
+          example: "Updated task description"
+        status:
+          type: string
+          enum: [pending, in_progress, completed, cancelled]
+          description: Task status
+          example: "in_progress"
+        priority:
+          type: string
+          enum: [low, medium, high, urgent]
+          description: Task priority level
+          example: "urgent"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Task tags for categorization
+          example: ["updated", "important"]
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: Task due date
+          example: "2024-12-31T23:59:59Z"
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional task metadata
+
+    TaskResponse:
+      type: object
+      properties:
+        task:
+          $ref: '#/components/schemas/Task'
+
+    TaskListResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 1
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          minimum: 1
+          description: Items per page
+          example: 20
+        total:
+          type: integer
+          minimum: 0
+          description: Total number of items
+          example: 150
+        total_pages:
+          type: integer
+          minimum: 0
+          description: Total number of pages
+          example: 8
+        has_next:
+          type: boolean
+          description: Whether there is a next page
+          example: true
+        has_prev:
+          type: boolean
+          description: Whether there is a previous page
+          example: false
+
+    # Feature Flag Schemas
+    FeatureFlag:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Feature flag key
+          example: "new-ui-enabled"
+        enabled:
+          type: boolean
+          description: Whether the feature is enabled
+          example: true
+        strategy:
+          type: string
+          enum: [boolean, percentage, userlist, attribute]
+          description: Feature flag strategy
+          example: "percentage"
+        parameters:
+          type: object
+          additionalProperties: true
+          description: Strategy-specific parameters
+          example:
+            percentage: 50.0
+        description:
+          type: string
+          description: Feature flag description
+          example: "Enable new UI for selected users"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T00:00:00Z"
+
+    FeatureFlagResponse:
+      type: object
+      properties:
+        key:
+          type: string
+          example: "new-ui-enabled"
+        enabled:
+          type: boolean
+          example: true
+        reason:
+          type: string
+          description: Reason why the flag is enabled/disabled
+          example: "User in percentage rollout"
+
+    FeatureFlagListResponse:
+      type: object
+      properties:
+        feature_flags:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureFlag'
+
+    # User Schemas
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "456e7890-e89b-12d3-a456-426614174111"
+        email:
+          type: string
+          format: email
+          example: "user@example.com"
+        role:
+          type: string
+          enum: [admin, user]
+          example: "user"
+        tenant_id:
+          type: string
+          format: uuid
+          example: "789e0123-e89b-12d3-a456-426614174222"
+        scopes:
+          type: array
+          items:
+            type: string
+          example: ["tasks:read", "tasks:write"]
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T00:00:00Z"
+
+    UserProfileResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserProfile'
+
+    # System Health Schemas
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, unhealthy]
+          example: "healthy"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        version:
+          type: string
+          example: "21.0.0"
+        checks:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [healthy, unhealthy]
+              example: "healthy"
+            redis:
+              type: string
+              enum: [healthy, unhealthy]
+              example: "healthy"
+            nats:
+              type: string
+              enum: [healthy, unhealthy]
+              example: "healthy"
+            vault:
+              type: string
+              enum: [healthy, unhealthy, disabled]
+              example: "healthy"
+            opa:
+              type: string
+              enum: [healthy, unhealthy, disabled]
+              example: "healthy"
+
+    ReadinessResponse:
+      type: object
+      properties:
+        ready:
+          type: boolean
+          example: true
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+    # Analytics Schemas
+    AnalyticsResponse:
+      type: object
+      properties:
+        period:
+          type: string
+          example: "month"
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+                example: "pending"
+              count:
+                type: integer
+                example: 42
+              percentage:
+                type: number
+                format: float
+                example: 28.5
+
+    # Error Schemas
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: "validation_error"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "The request body is invalid"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2024-01-15T10:30:00Z"
+        path:
+          type: string
+          description: Request path where error occurred
+          example: "/api/v1/tasks"
+        trace_id:
+          type: string
+          description: Trace ID for debugging
+          example: "abc123def456"
+
+    ValidationErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+        - validation_errors
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: "validation_error"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Validation failed"
+        validation_errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that failed validation
+                example: "title"
+              message:
+                type: string
+                description: Validation error message
+                example: "Title is required"
+              code:
+                type: string
+                description: Error code
+                example: "required"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+    # AI Inference Schemas
+    InferenceRequest:
+      type: object
+      required:
+        - prompt
+        - use_case
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+          description: Input prompt for AI inference
+          example: "Classify this text: This is a great product!"
+        use_case:
+          type: string
+          enum: [classification, generation, rerank]
+          description: Type of AI task to perform
+          example: "classification"
+        temperature:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 2
+          description: Sampling temperature for generation
+          example: 0.7
+        max_tokens:
+          type: integer
+          minimum: 1
+          maximum: 32000
+          description: Maximum tokens to generate
+          example: 1000
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional request metadata
+          example:
+            user_context: "premium_user"
+            session_id: "abc123"
+
+    InferenceResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: AI-generated response
+          example: "This text expresses a positive sentiment"
+        provider:
+          type: string
+          description: AI provider used
+          example: "openai"
+        model:
+          type: string
+          description: Model used for inference
+          example: "gpt-4o"
+        tokens_in:
+          type: integer
+          description: Input tokens consumed
+          example: 50
+        tokens_out:
+          type: integer
+          description: Output tokens generated
+          example: 200
+        latency_ms:
+          type: integer
+          description: Request latency in milliseconds
+          example: 1250
+        cost_brl:
+          type: number
+          format: float
+          description: Cost in Brazilian Reais
+          example: 0.015
+        cached:
+          type: boolean
+          description: Whether response was served from cache
+          example: false
+
+    RouterStatusResponse:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          example: true
+        mode:
+          type: string
+          enum: [fast, balanced, quality]
+          example: "balanced"
+        canary_percent:
+          type: number
+          format: float
+          example: 10.0
+        providers:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              healthy:
+                type: boolean
+              latency_p50_ms:
+                type: integer
+              latency_p99_ms:
+                type: integer
+              error_rate:
+                type: number
+                format: float
+          example:
+            openai:
+              healthy: true
+              latency_p50_ms: 800
+              latency_p99_ms: 2500
+              error_rate: 0.01
+            qwen:
+              healthy: true
+              latency_p50_ms: 600
+              latency_p99_ms: 1800
+              error_rate: 0.02
+
+    PolicyViolationResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "policy_violation"
+        message:
+          type: string
+          example: "Content blocked by pre-inference policy"
+        policy:
+          type: string
+          example: "pre_profanity_filter"
+        details:
+          type: object
+          additionalProperties: true
+          example:
+            violated_terms: ["blocked_word1", "blocked_word2"]
+        timestamp:
+          type: string
+          format: date-time
+
+    BudgetExceededResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "budget_exceeded"
+        message:
+          type: string
+          example: "Monthly budget limit reached"
+        budget_type:
+          type: string
+          enum: [global, tenant, mcp]
+          example: "tenant"
+        current_usage:
+          type: number
+          format: float
+          description: Current usage in BRL
+          example: 1500.50
+        limit:
+          type: number
+          format: float
+          description: Budget limit in BRL
+          example: 1500.00
+        reset_at:
+          type: string
+          format: date-time
+          description: When budget resets
+          example: "2024-02-01T00:00:00Z"
+
+tags:
+  - name: System
+    description: System health and monitoring endpoints
+  - name: Tasks
+    description: Task management operations
+  - name: Features
+    description: Feature flag management
+  - name: User
+    description: User profile and authentication
+  - name: Analytics
+    description: Analytics and reporting endpoints
+  - name: AI
+    description: AI inference, routing, and policy management

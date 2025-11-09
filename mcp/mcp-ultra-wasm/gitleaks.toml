@@ -1,0 +1,191 @@
+# Gitleaks Configuration for MCP Ultra
+# Configures security scanner to ignore legitimate test values and templates
+# Version: 1.0
+# Date: 2025-10-02
+
+title = "MCP Ultra Gitleaks Configuration"
+
+# Global allowlist for the entire project
+[allowlist]
+description = "Global patterns to ignore"
+
+# Ignore test constants (all values starting with TEST_)
+regexes = [
+  '''TEST_.*''',
+  '''test-.*-123''',
+  '''example\.com''',
+  '''localhost''',
+]
+
+# Ignore common placeholder patterns
+[[allowlist.regexTarget]]
+[allowlist.regexTarget.regexes]
+description = "CHANGE_ME placeholders"
+regexes = [
+  '''CHANGE_ME_.*''',
+  '''MUST_BE_SET''',
+  '''GENERATE_.*''',
+  '''REPLACE_THIS''',
+  '''YOUR_.*_HERE''',
+]
+
+# Ignore specific safe paths
+[[allowlist.paths]]
+description = "Safe paths that contain non-sensitive generated content"
+paths = [
+  # Scripts that generate secrets (not actual secrets)
+  '''scripts/generate-secrets\.go''',
+  '''scripts/.*-generator\.go''',
+  
+  # Template files (contain CHANGE_ME placeholders)
+  '''.*\.template\.yaml''',
+  '''.*\.template\.yml''',
+  '''.*\.example''',
+  '''.env\.example''',
+  
+  # Test files (use TEST_ constants)
+  '''.*_test\.go''',
+  '''test/.*''',
+  '''tests/.*''',
+  
+  # Documentation files
+  '''docs/.*\.md''',
+  '''README.*''',
+  '''SECURITY.*\.md''',
+  
+  # Backup files
+  '''.*\.backup''',
+]
+
+# Rule configurations
+[[rules]]
+id = "generic-api-key"
+description = "Detected a Generic API Key"
+regex = '''(?i)(?:key|api|token|secret|password)[a-z0-9_-]*\s*[:=]\s*['"][a-z0-9_\-]{20,}['"]'''
+keywords = ["key", "api", "token", "secret"]
+
+[[rules.allowlist]]
+description = "Allow test values and placeholders"
+regexes = [
+  '''TEST_''',
+  '''CHANGE_ME''',
+  '''example''',
+]
+
+[[rules]]
+id = "aws-access-token"
+description = "AWS Access Token"
+regex = '''(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}'''
+
+[[rules.allowlist]]
+regexes = ['''TEST_''', '''EXAMPLE''']
+
+[[rules]]
+id = "jwt-token"
+description = "JWT Token"
+regex = '''eyJ[A-Za-z0-9-_=]+\.eyJ[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*'''
+
+[[rules.allowlist]]
+description = "Allow test JWT tokens"
+regexes = [
+  '''TEST_eyJ''',
+  '''test\.signature''',
+]
+
+[[rules]]
+id = "generic-password"
+description = "Generic Password"
+regex = '''(?i)password\s*[:=]\s*['"][^'"]{8,}['"]'''
+
+[[rules.allowlist]]
+description = "Allow test passwords and placeholders"
+regexes = [
+  '''TEST_''',
+  '''CHANGE_ME''',
+  '''password_example''',
+  '''your_password_here''',
+]
+
+[[rules]]
+id = "database-connection-string"
+description = "Database Connection String"
+regex = '''(?i)(postgres|mysql|mongodb)://[^:]+:[^@]+@'''
+
+[[rules.allowlist]]
+regexes = [
+  '''TEST_''',
+  '''localhost''',
+  '''example\.com''',
+]
+
+[[rules]]
+id = "private-key"
+description = "Private Key"
+regex = '''-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'''
+
+[[rules.allowlist]]
+paths = [
+  '''test/fixtures/.*''',
+  '''.*_test\.go''',
+]
+
+# Entropy detection settings
+[allowlist.stopwords]
+stopwords = [
+  "example",
+  "test",
+  "sample",
+  "demo",
+  "placeholder",
+  "template",
+]
+
+# Custom rule for MCP Ultra specific patterns
+[[rules]]
+id = "mcp-ultra-wasm-custom"
+description = "MCP Ultra specific secret patterns"
+regex = '''(?i)(grpc_.*_token|audit_.*_key|encryption_key)\s*[:=]\s*['"][^'"]{10,}['"]'''
+
+[[rules.allowlist]]
+description = "Allow test and placeholder values"
+regexes = [
+  '''TEST_''',
+  '''CHANGE_ME''',
+]
+
+# File extensions to scan
+[extend]
+useDefault = true
+paths = [
+  "*.go",
+  "*.yaml",
+  "*.yml",
+  "*.json",
+  "*.env",
+  "*.sh",
+]
+
+# Performance settings
+[extend.timeout]
+total = 30  # 30 seconds total timeout
+per-file = 5  # 5 seconds per file
+
+# Reporting settings
+[extend.report]
+format = "json"  # Can be: json, csv, sarif
+
+# Notes for developers
+# ====================
+# 
+# This configuration is designed to:
+# 1. Ignore all values prefixed with TEST_ (test constants)
+# 2. Ignore all CHANGE_ME_* placeholders (templates)
+# 3. Ignore files in test/ directories and *_test.go files
+# 4. Allow scripts that generate secrets (not actual secrets)
+# 5. Be strict with production code while lenient with tests/docs
+#
+# To run Gitleaks with this config:
+#   gitleaks detect --config .gitleaks.toml --no-git
+#
+# To update this config, edit and test with:
+#   gitleaks detect --config .gitleaks.toml --verbose

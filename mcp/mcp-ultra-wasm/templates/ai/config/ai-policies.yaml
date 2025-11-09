@@ -1,0 +1,18 @@
+version: "1.0"
+pre:
+  - name: pii_check
+    config: { policy_file: "../policies/pii-detectors.yaml", action: "mask" }
+  - name: profanity_check
+    config: { policy_file: "../policies/profanity.yaml", action: "block_if_high" }
+  - name: tenant_constraints
+    config:
+      strict_for:
+        - mcp-wa-autenticacao
+      deny_generation_for:
+        - mcp-wa-otp
+post:
+  - name: redact_sensitive
+    config: { max_name_chars: 2, phone_mask: "****####" }
+  - name: risk_annotation
+    config: { tiers_file: "../policies/risk-tiers.yaml" }
+fail_closed: true

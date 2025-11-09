@@ -1,0 +1,306 @@
+# golangci-lint configuration for mcp-ultra-wasm
+# Optimized for Clean Architecture and production-ready code
+
+run:
+  timeout: 10m
+  tests: true
+  build-tags:
+    - integration
+    - contract
+  skip-dirs:
+    - vendor
+    - testdata
+    - docs
+    - tmp
+    - .git
+  skip-files:
+    - ".*\\.pb\\.go$"
+    - ".*_gen\\.go$"
+    - "mock_.*\\.go$"
+  modules-download-mode: readonly
+  allow-parallel-runners: true
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: false
+  sort-results: true
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+    exclude-functions:
+      - (io.Closer).Close
+      - (*database/sql.Rows).Close
+      - (*os.File).Close
+      - fmt.Println
+      - fmt.Printf
+      
+  govet:
+    check-shadowing: true
+    enable-all: true
+    settings:
+      shadow:
+        strict: false
+    
+  gocyclo:
+    min-complexity: 20
+    
+  dupl:
+    threshold: 150
+    
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+    ignore-tests: true
+    ignore-calls: true
+    
+  misspell:
+    locale: US
+    ignore-words:
+      - cancelled
+      - cancelling
+      
+  lll:
+    line-length: 140
+    tab-width: 4
+    
+  depguard:
+    rules:
+      main:
+        files:
+          - $all
+          - "!$test"
+        deny:
+          - pkg: "io/ioutil"
+            desc: "Use os and io packages instead"
+          - pkg: "github.com/pkg/errors"
+            desc: "Use fmt.Errorf with %w for error wrapping"
+        allow:
+          - $gostd
+          - github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm
+          - github.com/stretchr/testify
+          - github.com/google/uuid
+          - github.com/lib/pq
+          - github.com/gin-gonic/gin
+          - go.uber.org/zap
+          - github.com/nats-io/nats.go
+          - github.com/redis/go-redis/v9
+          - go.opentelemetry.io/otel
+          - github.com/prometheus/client_golang
+          
+  gosec:
+    severity: medium
+    confidence: medium
+    excludes:
+      - G104  # Audit errors not checked (will be fixed manually)
+    config:
+      G301: "0750"
+      G302: "0640"
+      G306: "0600"
+      
+  exhaustive:
+    default-signifies-exhaustive: true
+    ignore-enum-members: ""
+    package-scope-only: false
+    
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+      - experimental
+    disabled-checks:
+      - whyNoLint
+      - unnamedResult
+    settings:
+      hugeParam:
+        sizeThreshold: 256
+      rangeValCopy:
+        sizeThreshold: 512
+        
+  funlen:
+    lines: 150
+    statements: 80
+    
+  cyclop:
+    max-complexity: 20
+    skip-tests: true
+    package-average: 0.0
+    
+  nestif:
+    min-complexity: 6
+    
+  gocognit:
+    min-complexity: 30
+    
+  godot:
+    scope: declarations
+    exclude:
+      - "^$"
+    capital: false
+    
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm)
+    skip-generated: true
+    custom-order: true
+
+linters:
+  enable:
+    # Default
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    
+    # Additional quality
+    - gocyclo
+    - gocognit
+    - dupl
+    - goconst
+    - misspell
+    - lll
+    - unparam
+    - unconvert
+    
+    # Security
+    - gosec
+    
+    # Style
+    - godot
+    - gci
+    - gofmt
+    - goimports
+    
+    # Bugs
+    - bodyclose
+    - errorlint
+    - exhaustive
+    - noctx
+    - rowserrcheck
+    - sqlclosecheck
+    
+    # Performance
+    - prealloc
+    
+    # Complexity
+    - funlen
+    - cyclop
+    - nestif
+    
+    # Best practices
+    - gocritic
+    - revive
+    
+  disable:
+    - gochecknoglobals
+    - gochecknoinits
+    - wsl
+    - nlreturn
+    - wrapcheck
+    - paralleltest
+    - testpackage
+    - varnamelen
+    - tagliatelle
+    - ireturn
+    - exhaustruct
+    
+  fast: false
+
+issues:
+  exclude-rules:
+    # Exclude test files from certain checks
+    - path: _test\.go
+      linters:
+        - errcheck
+        - dupl
+        - gosec
+        - funlen
+        - gocyclo
+        - gocognit
+        - goconst
+        
+    # Exclude test helpers
+    - path: internal/testhelpers/
+      linters:
+        - all
+        
+    # Exclude generated code
+    - path: pkg/proto/
+      linters:
+        - all
+        
+    # Exclude migrations
+    - path: internal/migrations/
+      linters:
+        - all
+        
+    # Allow main.go to have long functions
+    - path: ^main\.go$
+      linters:
+        - funlen
+        - gocyclo
+        
+    # Allow init functions
+    - text: "should not use init()"
+      linters:
+        - gochecknoinits
+        
+    # Allow TODO comments
+    - source: "TODO|FIXME"
+      linters:
+        - godox
+        
+    # Specific exclusions for common patterns
+    - text: "G104:"
+      linters:
+        - gosec
+      path: internal/telemetry/
+      
+    - text: "G304:"
+      linters:
+        - gosec
+      path: internal/config/
+      
+    # Exclude some staticcheck messages
+    - linters:
+        - staticcheck
+      text: "SA1019:"
+      
+    # Exclude unused parameters in interface implementations
+    - text: "is unused"
+      linters:
+        - unparam
+      path: _test\.go
+      
+    # Allow blank imports for drivers
+    - path: internal/repository/postgres/connection\.go
+      text: "blank-imports"
+      
+  exclude-use-default: false
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
+  fix: false
+
+severity:
+  default-severity: error
+  case-sensitive: false
+  rules:
+    - linters:
+        - dupl
+      severity: warning
+    - linters:
+        - goconst
+      severity: warning
+    - linters:
+        - lll
+      severity: warning

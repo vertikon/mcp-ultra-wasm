@@ -1,0 +1,32 @@
+{
+  "title": "MCP Resilience & Experimentation (Lite)",
+  "panels": [
+    {
+      "title": "Health",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "avg(up) * 100"
+        }
+      ]
+    },
+    {
+      "title": "P95 Latency",
+      "type": "graph",
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))"
+        }
+      ]
+    },
+    {
+      "title": "Feature Flags Enabled (demo)",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "sum(feature_flag_evaluations_total)"
+        }
+      ]
+    }
+  ]
+}

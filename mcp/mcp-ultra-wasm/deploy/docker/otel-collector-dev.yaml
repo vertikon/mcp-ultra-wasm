@@ -1,0 +1,122 @@
+# OpenTelemetry Collector Configuration for Development
+# Simplified configuration for local development and testing
+
+receivers:
+  # OTLP receiver for traces and metrics from application
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - http://localhost:*
+            - http://127.0.0.1:*
+
+  # Prometheus receiver to scrape application metrics
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'mcp-ultra-wasm-dev'
+          scrape_interval: 15s
+          static_configs:
+            - targets: ['host.docker.internal:9090']
+          metrics_path: /metrics
+
+processors:
+  # Batch processor for efficiency
+  batch:
+    timeout: 1s
+    send_batch_max_size: 1024
+    send_batch_size: 512
+
+  # Memory limiter to prevent OOM in development
+  memory_limiter:
+    limit_mib: 256
+    spike_limit_mib: 64
+    check_interval: 5s
+
+  # Resource processor to add development context
+  resource:
+    attributes:
+      - key: service.environment
+        value: "development"
+        action: upsert
+      - key: service.namespace
+        value: "mcp-ultra-wasm-dev"
+        action: upsert
+
+  # Sampling processor - higher rate for development
+  probabilistic_sampler:
+    hash_seed: 22
+    sampling_percentage: 100  # Sample everything in development
+
+exporters:
+  # Jaeger exporter for trace visualization
+  jaeger:
+    endpoint: jaeger:14250
+    tls:
+      insecure: true
+
+  # Prometheus exporter for metrics
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: mcp_ultra_wasm_dev
+    const_labels:
+      environment: development
+
+  # Console exporter for debugging
+  logging:
+    loglevel: debug
+    sampling_initial: 2
+    sampling_thereafter: 500
+
+  # OTLP exporter (for external services if needed)
+  otlp:
+    endpoint: http://host.docker.internal:4317
+    tls:
+      insecure: true
+
+extensions:
+  # Health check endpoint
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+  # pprof for performance debugging
+  pprof:
+    endpoint: 0.0.0.0:1777
+
+  # zpages for internal collector debugging
+  zpages:
+    endpoint: 0.0.0.0:55679
+
+service:
+  extensions: [health_check, pprof, zpages]
+  
+  pipelines:
+    # Traces pipeline
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch, probabilistic_sampler]
+      exporters: [jaeger, logging]
+    
+    # Metrics pipeline
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [memory_limiter, resource, batch]
+      exporters: [prometheus, logging]
+    
+    # Logs pipeline
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [logging]
+
+  # Telemetry for the collector itself
+  telemetry:
+    logs:
+      level: "debug"
+    metrics:
+      level: "detailed"
+      address: 0.0.0.0:8888

@@ -1,0 +1,20 @@
+{
+  "ai": {
+    "enabled": false,
+    "mode": "balanced",
+    "canary_percent": 0,
+    "guardrails": {
+      "pre": true,
+      "post": true
+    },
+    "router": "rules",
+    "budgets": {
+      "enforce": true,
+      "hard_stop_on_breach": true
+    },
+    "telemetry": {
+      "prometheus": true,
+      "otel": true
+    }
+  }
+}

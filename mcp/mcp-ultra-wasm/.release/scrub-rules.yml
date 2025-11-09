@@ -1,0 +1,40 @@
+exclude:
+  - ".git/**"
+  - "internal/enterprise/**"
+  - "pkg/enterprise/**"
+  - "configs/prod/**"
+  - "vendor/**"
+  - "tests/integration/**"
+  - "**/.env"
+  - "**/.env.*"
+  - "**/secrets/**"
+  - "**/*.pem"
+  - "**/*.key"
+  - "**/id_rsa*"
+  - ".backup_*/**"
+  - "docs/gaps/**"
+  - "docs/melhorias/**"
+  - "**/analyze_gaps.ps1"
+
+include:
+  - "**/*"
+
+sanitize_examples:
+  - pattern: "vertikon.internal"
+    replace: "localhost"
+  - pattern: "vertikon-private"
+    replace: "example-org"
+  - pattern: "E:\\vertikon"
+    replace: "/workspace"
+  - pattern: "E:\\rfesta"
+    replace: "/config"
+
+headers:
+  license: "Apache-2.0"
+  copyright: "Copyright (c) 2025 Vertikon"
+
+contracts_watch:
+  - "nats-schemas/**/*.json"
+  - "pkg/events/**/*.go"
+  - "pkg/publicapi/**/*.go"
+  - "pkg/sdk/**/*.go"

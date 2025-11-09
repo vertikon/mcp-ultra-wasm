@@ -1,0 +1,163 @@
+{
+  "project_name": "sdk-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+  "timestamp": "2025-11-02 18:37:18",
+  "validator_version": "9.3",
+  "critical": null,
+  "high": null,
+  "medium": null,
+  "low": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 68.9% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 2,
+  "score": 90,
+  "auto_fixable": 0,
+  "manual": 2,
+  "top_priorities": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 68.9% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "quick_wins": null,
+  "blockers": null,
+  "technical_debt": null,
+  "recommended_tools": null,
+  "next_steps": null,
+  "estimated_effort": "0m"
+}

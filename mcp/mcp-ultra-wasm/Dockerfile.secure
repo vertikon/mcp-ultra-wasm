@@ -1,0 +1,131 @@
+# MCP Ultra - Security-Hardened Multi-stage Dockerfile
+# ========================================================
+
+# Build stage with security optimizations
+FROM golang:1.22-alpine AS builder
+
+# Install build dependencies with security updates
+RUN apk update && \
+    apk add --no-cache \
+    git \
+    make \
+    ca-certificates \
+    tzdata && \
+    rm -rf /var/cache/apk/*
+
+# Create build directory
+WORKDIR /build
+
+# Copy dependency files first for better caching
+COPY go.mod go.sum ./
+
+# Download dependencies with verification
+RUN go mod download && \
+    go mod verify
+
+# Copy source code
+COPY . .
+
+# Build with security flags
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -trimpath \
+    -ldflags="-w -s \
+    -extldflags '-static' \
+    -X 'github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/pkg/version.Version=v1.0.0' \
+    -X 'github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/pkg/version.GitCommit=$(git rev-parse HEAD 2>/dev/null || echo unknown)' \
+    -X 'github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/pkg/version.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)'" \
+    -a -installsuffix cgo \
+    -o mcp-ultra-wasm cmd/mcp-model-ultra/main.go
+
+# Verify binary
+RUN ./mcp-ultra-wasm --version || true
+
+# ========================================================
+# Security scanner stage (optional but recommended)
+FROM aquasec/trivy:latest AS scanner
+
+COPY --from=builder /build/mcp-ultra-wasm /mcp-ultra-wasm
+RUN trivy fs --no-progress --severity HIGH,CRITICAL --exit-code 0 /mcp-ultra-wasm
+
+# ========================================================
+# Final runtime stage - Distroless for maximum security
+FROM gcr.io/distroless/static-debian12:nonroot
+
+# Labels for metadata
+LABEL maintainer="Vertikon Team" \
+      org.opencontainers.image.title="MCP Ultra" \
+      org.opencontainers.image.description="MCP Ultra Security-Hardened Service" \
+      org.opencontainers.image.vendor="Vertikon" \
+      org.opencontainers.image.version="v1.0.0" \
+      org.opencontainers.image.source="https://github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm"
+
+# Copy timezone data and CA certificates
+COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# Create app directory structure
+WORKDIR /app
+
+# Copy binary with proper permissions (distroless handles user)
+COPY --from=builder --chown=nonroot:nonroot /build/mcp-ultra-wasm /app/mcp-ultra-wasm
+
+# Copy configuration files
+COPY --from=builder --chown=nonroot:nonroot /build/config /app/config
+
+# Expose application ports (HTTP and metrics)
+EXPOSE 9655 9656
+
+# Health check (note: distroless doesn't have shell, so we use the binary itself)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD ["/app/mcp-ultra-wasm", "health"]
+
+# Set user (nonroot is UID 65532 in distroless)
+USER nonroot:nonroot
+
+# Security capabilities drop (all by default in distroless)
+# No SETUID/SETGID binaries
+# Read-only root filesystem compatible
+
+# Entrypoint
+ENTRYPOINT ["/app/mcp-ultra-wasm"]
+
+# Default command arguments
+CMD ["serve"]
+
+# ========================================================
+# Alternative Alpine-based runtime (if distroless incompatible)
+# Uncomment below and comment distroless section if needed
+# ========================================================
+
+# FROM alpine:3.20 AS runtime-alpine
+#
+# # Security updates
+# RUN apk update && \
+#     apk upgrade && \
+#     apk add --no-cache ca-certificates tzdata && \
+#     rm -rf /var/cache/apk/*
+#
+# # Create non-root user with specific UID
+# RUN addgroup -g 10001 -S appgroup && \
+#     adduser -u 10001 -S -G appgroup -h /app -s /bin/false appuser
+#
+# WORKDIR /app
+#
+# # Copy binary and config
+# COPY --from=builder --chown=10001:10001 /build/mcp-ultra-wasm ./
+# COPY --from=builder --chown=10001:10001 /build/config ./config
+#
+# # Security settings
+# RUN chmod -R 755 /app && \
+#     chmod 555 /app/mcp-ultra-wasm
+#
+# # Drop all capabilities
+# USER 10001:10001
+#
+# EXPOSE 9655 9656
+#
+# HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+#     CMD wget --no-verbose --tries=1 --spider http://localhost:9655/healthz || exit 1
+#
+# ENTRYPOINT ["./mcp-ultra-wasm"]
+# CMD ["serve"]

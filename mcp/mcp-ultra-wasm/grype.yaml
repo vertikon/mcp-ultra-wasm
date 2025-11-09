@@ -1,0 +1,44 @@
+# MCP Ultra - Grype vulnerability scanner configuration
+
+fail-on-severity: high
+
+ignore:
+  # Known false positives
+  - vulnerability: CVE-2024-12345
+    fix-state: not-fixed
+    rationale: "Falso positivo em go.mod - não afeta runtime"
+
+  - vulnerability: GHSA-xxyy-zzzz
+    package:
+      name: "test-package"
+    rationale: "Apenas em devDependencies, não vai para produção"
+
+  # Vulnerabilidades monitoradas aguardando fix
+  - vulnerability: CVE-2024-24790
+    fix-state: wont-fix
+    rationale: "Go stdlib - monitorado, aguardando Go 1.23"
+
+# Configurações de scan
+check-for-updates: true
+db:
+  auto-update: true
+  update-url: "https://toolbox-data.anchore.io/grype/databases/listing.json"
+
+# Formato de saída padrão
+output: "table"
+
+# Incluir CPEs para melhor detecção
+add-cpes-if-none: true
+
+# Configurações de match
+match:
+  golang:
+    using-cpes: true
+    always-use-cpe-for-stdlib: true
+
+# Exclusões de path
+exclude:
+  - "./test/**"
+  - "./examples/**"
+  - "./docs/**"
+  - "./**/*_test.go"

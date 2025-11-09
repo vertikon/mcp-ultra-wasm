@@ -1,0 +1,12 @@
+flags:
+  - key: enable_cache
+    type: boolean
+    enabled: true
+  - key: beta_ui
+    type: percentage
+    percentage: 25
+  - key: new_checkout
+    type: variant
+    variants:
+      control: 0.5
+      treatment: 0.5

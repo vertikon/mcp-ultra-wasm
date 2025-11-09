@@ -1,0 +1,72 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: mcp-ultra-wasm-pdb
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: mcp-ultra-wasm
+    app.kubernetes.io/instance: production
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mcp-ultra-wasm
+      app.kubernetes.io/instance: production
+      app.kubernetes.io/component: application
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: postgresql-pdb
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: redis-pdb
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: nats-pdb
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: nats
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nats
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: opa-pdb
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: opa
+    app.kubernetes.io/component: pdb
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: opa

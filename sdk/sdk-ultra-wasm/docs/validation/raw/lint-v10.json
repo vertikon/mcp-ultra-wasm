@@ -1,0 +1,29 @@
+{
+  "linter_report_version": 10,
+  "modules": [
+    {
+      "module_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+      "module_name": "github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm-wasm/sdk/sdk-ultra-wasm",
+      "linter_results": [
+        {
+          "tool": "gosec",
+          "exit_code": 1,
+          "issues": [],
+          "fail_count": 0,
+          "warn_count": 0,
+          "info_count": 0,
+          "raw_log_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\gosec.json"
+        }
+      ],
+      "total_fail": 0,
+      "total_warn": 0,
+      "total_info": 0,
+      "status": "PASS"
+    }
+  ],
+  "timestamp": "2025-11-02 12:59:22",
+  "total_fail": 0,
+  "total_info": 0,
+  "total_modules": 1,
+  "total_warn": 0
+}

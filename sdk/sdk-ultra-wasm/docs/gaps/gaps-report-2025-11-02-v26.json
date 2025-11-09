@@ -1,0 +1,632 @@
+{
+  "project_name": "sdk-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+  "timestamp": "2025-11-02 09:06:52",
+  "validator_version": "9.1",
+  "critical": null,
+  "high": [
+    {
+      "type": "Linter limpo",
+      "severity": "high",
+      "location": "multiplos arquivos",
+      "description": "✗ FAIL: 8 issues críticos, 44 warnings",
+      "suggestion": "Corrija os issues FAIL primeiro, depois warnings",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "staticcheck",
+            "install_command": "go install honnef.co/go/tools/cmd/staticcheck@latest",
+            "diagnose_command": "staticcheck ./...",
+            "fix_command": "# Manual - staticcheck nao tem auto-fix",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://staticcheck.io/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "gosec",
+            "install_command": "go install github.com/securego/gosec/v2/cmd/gosec@latest",
+            "diagnose_command": "gosec ./...",
+            "fix_command": "# Manual - corrija issues de seguranca",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://github.com/securego/gosec",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": null,
+        "estimated_time": "4h43m",
+        "confidence": 0
+      },
+      "examples": [
+        "📦 Módulos analisados: 1",
+        "📄 Linter Report v7: JSON + SARIF gerados",
+        "",
+        "📊 Resumo por ferramenta (todos os módulos):",
+        "  • golangci-lint: 𐄂 8 FAIL / ⚠ 44 WARN / ℹ 0 INFO",
+        "  • gosec: 𐄂 0 FAIL / ⚠ 0 WARN / ℹ 0 INFO",
+        "",
+        "🔝 Top issues prioritários (FAIL):",
+        "  1. [golangci-lint] pkg/policies/jwt_test.go:43 - Error return value of `w.Write` is not checked (errcheck)",
+        "  2. [golangci-lint] pkg/policies/rbac_test.go:16 - Error return value of `w.Write` is not checked (errcheck)",
+        "  3. [golangci-lint] pkg/policies/rbac_test.go:80 - Error return value of `w.Write` is not checked (errcheck)",
+        "  4. [golangci-lint] pkg/router/middleware/logger_test.go:15 - Error return value of `w.Write` is not checked (errcheck)",
+        "  5. [golangci-lint] pkg/router/middleware/recovery_test.go:39 - Error return value of `w.Write` is not checked (errcheck)",
+        "  6. [golangci-lint] pkg/router/mux_test.go:27 - Error return value of `w.Write` is not checked (errcheck)",
+        "  7. [golangci-lint] pkg/router/mux_test.go:88 - Error return value of `w.Write` is not checked (errcheck)",
+        "  8. [golangci-lint] pkg/router/mux_test.go:92 - Error return value of `w.Write` is not checked (errcheck)",
+        "",
+        "⚠ Top warnings:",
+        "  1. [golangci-lint] pkg/fsx/mode_test.go:1 - File is not properly formatted (gofmt)",
+        "  2. [golangci-lint] pkg/httpx/status_test.go:1 - File is not properly formatted (gofmt)",
+        "  3. [golangci-lint] pkg/orchestrator/types.go:15 - fieldalignment: struct with 88 pointer bytes could be 80 (govet)",
+        "  4. [golangci-lint] pkg/orchestrator/types.go:24 - fieldalignment: struct with 112 pointer bytes could be 104 (govet)",
+        "  5. [golangci-lint] pkg/orchestrator/types.go:34 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "high",
+        "affected_files": 52,
+        "affected_lines": 52,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "4h43m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "best-practices",
+        "critical",
+        "performance",
+        "memory-optimization",
+        "error-handling"
+      ],
+      "error_breakdown": {
+        "err113": 2,
+        "errcheck": 8,
+        "gofmt": 9,
+        "govet": 9,
+        "revive": 24
+      },
+      "top_files": [
+        "pkg/policies/jwt_test.go (11)",
+        "pkg/policies/rbac_test.go (9)",
+        "pkg/orchestrator/types.go (9)",
+        "pkg/router/mux_test.go (8)",
+        "pkg/router/middleware/recovery_test.go (4)"
+      ]
+    }
+  ],
+  "medium": null,
+  "low": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 55.7% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "9 arquivo(s) mal formatado(s)",
+      "suggestion": "Execute: gofmt -w .",
+      "fixability": {
+        "safe": true,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "auto_fix_command": "gofmt -w . \u0026\u0026 goimports -w .",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "\u003c 1 minuto",
+        "confidence": 1
+      },
+      "examples": [
+        "pkg\\fsx\\mode_test.go",
+        "pkg\\httpx\\status_test.go",
+        "pkg\\policies\\context_test.go",
+        "pkg\\policies\\jwt_test.go",
+        "pkg\\policies\\rbac_test.go",
+        "pkg\\router\\middleware\\cors_test.go",
+        "pkg\\router\\middleware\\logger_test.go",
+        "pkg\\router\\middleware\\recovery_test.go",
+        "pkg\\router\\mux_test.go"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 5,
+  "score": 75,
+  "auto_fixable": 0,
+  "manual": 5,
+  "top_priorities": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 55.7% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "9 arquivo(s) mal formatado(s)",
+      "suggestion": "Execute: gofmt -w .",
+      "fixability": {
+        "safe": true,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "auto_fix_command": "gofmt -w . \u0026\u0026 goimports -w .",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "\u003c 1 minuto",
+        "confidence": 1
+      },
+      "examples": [
+        "pkg\\fsx\\mode_test.go",
+        "pkg\\httpx\\status_test.go",
+        "pkg\\policies\\context_test.go",
+        "pkg\\policies\\jwt_test.go",
+        "pkg\\policies\\rbac_test.go",
+        "pkg\\router\\middleware\\cors_test.go",
+        "pkg\\router\\middleware\\logger_test.go",
+        "pkg\\router\\middleware\\recovery_test.go",
+        "pkg\\router\\mux_test.go"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Linter limpo",
+      "severity": "high",
+      "location": "multiplos arquivos",
+      "description": "✗ FAIL: 8 issues críticos, 44 warnings",
+      "suggestion": "Corrija os issues FAIL primeiro, depois warnings",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "staticcheck",
+            "install_command": "go install honnef.co/go/tools/cmd/staticcheck@latest",
+            "diagnose_command": "staticcheck ./...",
+            "fix_command": "# Manual - staticcheck nao tem auto-fix",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://staticcheck.io/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "gosec",
+            "install_command": "go install github.com/securego/gosec/v2/cmd/gosec@latest",
+            "diagnose_command": "gosec ./...",
+            "fix_command": "# Manual - corrija issues de seguranca",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://github.com/securego/gosec",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": null,
+        "estimated_time": "4h43m",
+        "confidence": 0
+      },
+      "examples": [
+        "📦 Módulos analisados: 1",
+        "📄 Linter Report v7: JSON + SARIF gerados",
+        "",
+        "📊 Resumo por ferramenta (todos os módulos):",
+        "  • golangci-lint: 𐄂 8 FAIL / ⚠ 44 WARN / ℹ 0 INFO",
+        "  • gosec: 𐄂 0 FAIL / ⚠ 0 WARN / ℹ 0 INFO",
+        "",
+        "🔝 Top issues prioritários (FAIL):",
+        "  1. [golangci-lint] pkg/policies/jwt_test.go:43 - Error return value of `w.Write` is not checked (errcheck)",
+        "  2. [golangci-lint] pkg/policies/rbac_test.go:16 - Error return value of `w.Write` is not checked (errcheck)",
+        "  3. [golangci-lint] pkg/policies/rbac_test.go:80 - Error return value of `w.Write` is not checked (errcheck)",
+        "  4. [golangci-lint] pkg/router/middleware/logger_test.go:15 - Error return value of `w.Write` is not checked (errcheck)",
+        "  5. [golangci-lint] pkg/router/middleware/recovery_test.go:39 - Error return value of `w.Write` is not checked (errcheck)",
+        "  6. [golangci-lint] pkg/router/mux_test.go:27 - Error return value of `w.Write` is not checked (errcheck)",
+        "  7. [golangci-lint] pkg/router/mux_test.go:88 - Error return value of `w.Write` is not checked (errcheck)",
+        "  8. [golangci-lint] pkg/router/mux_test.go:92 - Error return value of `w.Write` is not checked (errcheck)",
+        "",
+        "⚠ Top warnings:",
+        "  1. [golangci-lint] pkg/fsx/mode_test.go:1 - File is not properly formatted (gofmt)",
+        "  2. [golangci-lint] pkg/httpx/status_test.go:1 - File is not properly formatted (gofmt)",
+        "  3. [golangci-lint] pkg/orchestrator/types.go:15 - fieldalignment: struct with 88 pointer bytes could be 80 (govet)",
+        "  4. [golangci-lint] pkg/orchestrator/types.go:24 - fieldalignment: struct with 112 pointer bytes could be 104 (govet)",
+        "  5. [golangci-lint] pkg/orchestrator/types.go:34 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "high",
+        "affected_files": 52,
+        "affected_lines": 52,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "4h43m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "best-practices",
+        "critical",
+        "performance",
+        "memory-optimization",
+        "error-handling"
+      ],
+      "error_breakdown": {
+        "err113": 2,
+        "errcheck": 8,
+        "gofmt": 9,
+        "govet": 9,
+        "revive": 24
+      },
+      "top_files": [
+        "pkg/policies/jwt_test.go (11)",
+        "pkg/policies/rbac_test.go (9)",
+        "pkg/orchestrator/types.go (9)",
+        "pkg/router/mux_test.go (8)",
+        "pkg/router/middleware/recovery_test.go (4)"
+      ]
+    }
+  ],
+  "quick_wins": [
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "9 arquivo(s) mal formatado(s)",
+      "suggestion": "Execute: gofmt -w .",
+      "fixability": {
+        "safe": true,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "auto_fix_command": "gofmt -w . \u0026\u0026 goimports -w .",
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "\u003c 1 minuto",
+        "confidence": 1
+      },
+      "examples": [
+        "pkg\\fsx\\mode_test.go",
+        "pkg\\httpx\\status_test.go",
+        "pkg\\policies\\context_test.go",
+        "pkg\\policies\\jwt_test.go",
+        "pkg\\policies\\rbac_test.go",
+        "pkg\\router\\middleware\\cors_test.go",
+        "pkg\\router\\middleware\\logger_test.go",
+        "pkg\\router\\middleware\\recovery_test.go",
+        "pkg\\router\\mux_test.go"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "blockers": null,
+  "technical_debt": null,
+  "recommended_tools": [
+    {
+      "tool_name": "golangci-lint",
+      "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+      "diagnose_command": "golangci-lint run",
+      "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+      "config_required": true,
+      "config_template": ".golangci.yml com linters selecionados",
+      "documentation": "https://golangci-lint.run/",
+      "alternative_tools": null
+    },
+    {
+      "tool_name": "staticcheck",
+      "install_command": "go install honnef.co/go/tools/cmd/staticcheck@latest",
+      "diagnose_command": "staticcheck ./...",
+      "fix_command": "# Manual - staticcheck nao tem auto-fix",
+      "config_required": false,
+      "config_template": "",
+      "documentation": "https://staticcheck.io/",
+      "alternative_tools": null
+    },
+    {
+      "tool_name": "gosec",
+      "install_command": "go install github.com/securego/gosec/v2/cmd/gosec@latest",
+      "diagnose_command": "gosec ./...",
+      "fix_command": "# Manual - corrija issues de seguranca",
+      "config_required": false,
+      "config_template": "",
+      "documentation": "https://github.com/securego/gosec",
+      "alternative_tools": null
+    }
+  ],
+  "next_steps": [
+    "⚡ Quick wins: 1 GAP(s) faceis"
+  ],
+  "estimated_effort": "0m"
+}

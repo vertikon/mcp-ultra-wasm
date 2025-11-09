@@ -1,0 +1,277 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-ultra-wasm-config
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: mcp-ultra-wasm
+    app.kubernetes.io/instance: production
+    app.kubernetes.io/component: configuration
+data:
+  config.yaml: |
+    server:
+      port: 9655
+      read_timeout: 30s
+      write_timeout: 30s
+      idle_timeout: 120s
+
+    database:
+      postgresql:
+        host: postgresql-service
+        port: 5432
+        database: mcp_ultra_wasm
+        user: postgres
+        ssl_mode: require
+        max_open_conns: 25
+        max_idle_conns: 5
+        conn_max_lifetime: 5m
+      redis:
+        addr: redis-service:6379
+        db: 0
+        pool_size: 10
+
+    nats:
+      url: nats://nats-service:4222
+      cluster_id: mcp-cluster
+      client_id: mcp-ultra-wasm
+
+    telemetry:
+      metrics:
+        enabled: true
+        port: 9090
+      tracing:
+        enabled: true
+        endpoint: http://jaeger-collector:14268/api/traces
+        sample_rate: 0.1
+
+    features:
+      flags_refresh_interval: 30s
+      experiments_enabled: true
+
+    security:
+      auth:
+        mode: jwt
+        jwks_url: ${JWT_JWKS_URL}
+        issuer: ${JWT_ISSUER}
+        audience: ${JWT_AUDIENCE}
+        token_expiry: 24h
+        refresh_expiry: 168h
+      opa:
+        url: http://opa-service:8181
+        timeout: 5s
+      vault:
+        address: ${VAULT_ADDR}
+        timeout: 10s
+        auth_method: k8s
+        role: mcp-ultra-wasm
+      tls:
+        cert_file: /etc/tls/tls.crt
+        key_file: /etc/tls/tls.key
+        ca_file: /etc/tls/ca.crt
+        client_auth: true
+        min_version: "1.2"
+
+  log-config.yaml: |
+    level: info
+    encoding: json
+    encoderConfig:
+      timeKey: timestamp
+      levelKey: level
+      nameKey: logger
+      callerKey: caller
+      messageKey: message
+      stacktraceKey: stacktrace
+      lineEnding: "\n"
+      levelEncoder: lowercase
+      timeEncoder: iso8601
+      durationEncoder: seconds
+      callerEncoder: short
+    outputPaths:
+      - stdout
+    errorOutputPaths:
+      - stderr
+    initialFields:
+      service: mcp-ultra-wasm-wasm
+      version: "21.0.0"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/component: reverse-proxy
+data:
+  nginx.conf: |
+    upstream mcp-ultra-wasm-backend {
+        least_conn;
+        server mcp-ultra-wasm-service:9655 max_fails=3 fail_timeout=30s;
+    }
+
+    server {
+        listen 80;
+        listen [::]:80;
+        server_name _;
+        return 301 https://$server_name$request_uri;
+    }
+
+    server {
+        listen 443 ssl http2;
+        listen [::]:443 ssl http2;
+        server_name _;
+
+        ssl_certificate /etc/ssl/certs/tls.crt;
+        ssl_certificate_key /etc/ssl/private/tls.key;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+        ssl_prefer_server_ciphers off;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 10m;
+
+        # Security headers
+        add_header X-Frame-Options DENY always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';" always;
+
+        # Rate limiting
+        limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+        limit_req zone=api burst=20 nodelay;
+
+        location / {
+            proxy_pass http://mcp-ultra-wasm-backend;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+            proxy_connect_timeout 30s;
+            proxy_send_timeout 30s;
+            proxy_read_timeout 30s;
+            
+            proxy_buffering on;
+            proxy_buffer_size 4k;
+            proxy_buffers 8 4k;
+        }
+
+        location /healthz {
+            proxy_pass http://mcp-ultra-wasm-backend/healthz;
+            access_log off;
+        }
+
+        location /metrics {
+            proxy_pass http://mcp-ultra-wasm-backend/metrics;
+            allow 10.0.0.0/8;
+            allow 172.16.0.0/12;
+            allow 192.168.0.0/16;
+            deny all;
+        }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opa-policies
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: opa
+    app.kubernetes.io/component: policies
+data:
+  authz.rego: |
+    package authz
+
+    import rego.v1
+
+    # Default deny
+    default allow := false
+
+    # Allow access to health endpoints for everyone
+    allow if {
+      input.path in ["/healthz", "/readyz", "/metrics"]
+    }
+
+    # Admin role has full access
+    allow if {
+      input.user.role == "admin"
+    }
+
+    # User role permissions
+    allow if {
+      input.user.role == "user"
+      user_allowed_actions[input.action]
+    }
+
+    # Define allowed actions for regular users
+    user_allowed_actions := {
+      "read",
+      "list", 
+      "create",
+      "update"
+    }
+
+    # Tenant isolation
+    allow if {
+      input.user.role == "user"
+      input.user.tenant_id
+      tenant_resource_access
+    }
+
+    tenant_resource_access if {
+      input.resource == "tasks"
+      input.action in ["read", "list", "create", "update"]
+    }
+
+    # Resource-specific authorization rules
+    allow if {
+      resource_permissions[input.resource][input.action][input.user.role]
+    }
+
+    resource_permissions := {
+      "tasks": {
+        "create": {"admin": true, "user": true},
+        "read": {"admin": true, "user": true},
+        "update": {"admin": true, "user": true},
+        "delete": {"admin": true, "user": false},
+        "list": {"admin": true, "user": true}
+      },
+      "users": {
+        "create": {"admin": true, "user": false},
+        "read": {"admin": true, "user": false},
+        "update": {"admin": true, "user": false},
+        "delete": {"admin": true, "user": false},
+        "list": {"admin": true, "user": false}
+      }
+    }
+
+    # Scope-based permissions
+    allow if {
+      required_scope := scope_requirements[input.resource][input.action]
+      required_scope
+      has_scope(required_scope)
+    }
+
+    has_scope(required) if {
+      some scope in input.user.scopes
+      scope == required
+    }
+
+    scope_requirements := {
+      "tasks": {
+        "create": "tasks:write",
+        "read": "tasks:read", 
+        "update": "tasks:write",
+        "delete": "tasks:delete",
+        "list": "tasks:read"
+      }
+    }
+
+    reason := "Access denied: insufficient permissions" if not allow
+    reason := "Access granted" if allow
+
+    decision := {
+      "allow": allow,
+      "deny": not allow,
+      "reason": reason
+    }

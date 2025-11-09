@@ -1,0 +1,23 @@
+version: v1
+managed:
+  enabled: true
+  go_package_prefix:
+    default: github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/api/grpc/gen
+plugins:
+  - plugin: buf.build/protocolbuffers/go
+    out: api/grpc/gen
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc/go
+    out: api/grpc/gen
+    opt:
+      - paths=source_relative
+  - plugin: buf.build/grpc-ecosystem/grpc-gateway
+    out: api/grpc/gen
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+  - plugin: buf.build/grpc-ecosystem/openapiv2
+    out: api
+    opt:
+      - generate_unbound_methods=true

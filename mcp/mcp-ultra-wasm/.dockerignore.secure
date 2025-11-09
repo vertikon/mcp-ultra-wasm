@@ -1,0 +1,207 @@
+# Security-focused dockerignore file
+
+# Documentation
+*.md
+*.txt
+LICENSE*
+CHANGELOG*
+
+# Git
+.git
+.gitignore
+.gitattributes
+.github
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.backup
+
+# Test files (exclude from production)
+*_test.go
+test/
+tests/
+testing/
+coverage.out
+coverage.html
+*.coverage
+test-results/
+benchmark.txt
+
+# Development tools
+Makefile.dev
+docker-compose.dev.yml
+docker-compose.override.yml
+
+# Configuration files with secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Build artifacts
+bin/
+dist/
+build/
+target/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Dependencies
+vendor/
+node_modules/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Cache directories
+.cache/
+cache/
+*.cache
+
+# Logs
+logs/
+*.log
+log/
+
+# Development containers
+Dockerfile.dev
+docker-compose.dev.yml
+
+# Scripts (potentially containing secrets)
+scripts/local/
+scripts/dev/
+deploy/dev/
+
+# CI/CD files (may contain sensitive info)
+.circleci/
+.travis.yml
+.gitlab-ci.yml
+azure-pipelines.yml
+
+# Kubernetes development files
+k8s/dev/
+deploy/dev/
+
+# Helm development values
+values-dev.yaml
+values-local.yaml
+values.*.yaml
+!values-prod.yaml
+
+# Documentation generation
+docs/build/
+site/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Editor files
+*.sublime-project
+*.sublime-workspace
+
+# Python artifacts (if any)
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+
+# Java artifacts (if any)
+*.class
+*.jar
+*.war
+*.ear
+
+# Go specific excludes
+*.mod.backup
+go.work
+go.work.sum
+
+# Security scan results
+*.sarif
+*-results.sarif
+trivy-results/
+security-report/
+
+# Performance test results
+*.pprof
+*.trace
+
+# Local development files
+local/
+.local/
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Media files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.ico
+*.mp3
+*.mp4
+*.avi
+
+# Large data files
+*.csv
+*.json
+*.xml
+!small-config.json
+!schema.json
+
+# Monitoring and observability configs (dev)
+prometheus/
+grafana/
+jaeger/
+
+# Certificate files (should be mounted at runtime)
+certs/
+*.crt
+*.cert
+certificates/
+
+# Database migrations (handled separately)
+migrations/dev/
+migrate/dev/
+
+# Container scanning results
+container-scan-results/
+image-scan/
+
+# SBOM files (generated during build)
+*.spdx
+*.cyclonedx
+sbom/
+
+# Dependency check results
+dependency-check-report/
+owasp-report/

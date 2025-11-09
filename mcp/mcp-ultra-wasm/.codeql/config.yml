@@ -1,0 +1,38 @@
+name: "mcp-ultra-wasm-codeql-config"
+# MCP Ultra Security - CodeQL configuration
+
+paths:
+  - "cmd"
+  - "internal"
+  - "pkg"
+  - "api"
+
+paths-ignore:
+  - "docs"
+  - "examples"
+  - "test"
+  - "**/*_test.go"
+  - "**/*_testdata/*"
+  - "**/testdata/*"
+  - "**/*.pb.go"
+  - "**/mocks/*"
+  - "**/vendor/*"
+
+queries:
+  - uses: security-and-quality
+  - uses: security-extended
+
+query-filters:
+  - exclude:
+      id: go/hardcoded-credentials
+      paths:
+        - "**/*_test.go"
+        - "**/testdata/**"
+  - exclude:
+      id: go/clear-text-logging
+      paths:
+        - "**/logger/**"
+  - exclude:
+      id: go/path-injection
+      paths:
+        - "**/migrations/**"

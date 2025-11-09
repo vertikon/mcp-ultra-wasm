@@ -1,0 +1,563 @@
+{
+  "project_name": "sdk-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+  "timestamp": "2025-11-01 16:57:47",
+  "validator_version": "9.0",
+  "critical": null,
+  "high": null,
+  "medium": [
+    {
+      "type": "Linter limpo",
+      "severity": "medium",
+      "location": "multiplos arquivos",
+      "description": "Linter encontrou 14 problema(s)",
+      "suggestion": "Corrija os problemas manualmente seguindo as dicas",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "manual_steps": "Corrija por categoria (do mais critico ao menos):\n\n",
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": [
+          {
+            "order": 1,
+            "description": "Gerar relatorio detalhado do linter",
+            "command": "golangci-lint run --out-format json \u003e linter-report.json",
+            "expected_output": "Arquivo JSON com todos os issues",
+            "validation": "cat linter-report.json | jq '.Issues | length'",
+            "rollback": "",
+            "prerequisites": null,
+            "warnings": [
+              "Review manual necessario para cada fix"
+            ]
+          }
+        ],
+        "estimated_time": "34m",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log completo: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-16-57-45-linter.log",
+        "",
+        "📊 Total de issues: 14",
+        "📋 Breakdown por categoria:",
+        "gofmt: 2 issue(s)",
+        "govet: 12 issue(s)",
+        "",
+        "🔝 Top 10 issues:",
+        "  1. internal\\seeds\\manager.go:14 - File is not properly formatted (gofmt)",
+        "  2. pkg\\orchestrator\\types.go:15 - fieldalignment: struct with 88 pointer bytes could be 80 (govet)",
+        "  3. pkg\\orchestrator\\types.go:24 - fieldalignment: struct with 120 pointer bytes could be 104 (govet)",
+        "  4. pkg\\orchestrator\\types.go:34 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  5. pkg\\orchestrator\\types.go:35 - File is not properly formatted (gofmt)",
+        "  6. pkg\\orchestrator\\types.go:46 - fieldalignment: struct with 64 pointer bytes could be 56 (govet)",
+        "  7. pkg\\orchestrator\\types.go:66 - fieldalignment: struct with 80 pointer bytes could be 64 (govet)",
+        "  8. pkg\\orchestrator\\types.go:74 - fieldalignment: struct with 144 pointer bytes could be 104 (govet)",
+        "  9. pkg\\orchestrator\\types.go:103 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  10. pkg\\orchestrator\\types.go:119 - fieldalignment: struct with 48 pointer bytes could be 40 (govet)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": [
+        {
+          "file_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\internal\\seeds\\manager.go",
+          "line_number": 14,
+          "code_snippet": "     9 | \t\"path/filepath\"\n    10 | \t\"strings\"\n    11 | )\n    12 | \n    13 | const (\n→   14 | \tSeedPath                  = \"seeds/mcp-ultra-wasm\"\n    15 | \tdefaultDirPermissions     = 0755\n    16 | \tdefaultFilePermissions    = 0644\n    17 | \tsecureFilePermissions     = 0600 // Somente owner leitura/escrita\n    18 | )\n    19 | \n",
+          "full_function": "\tSeedPath                  = \"seeds/mcp-ultra-wasm\"\n\tdefaultDirPermissions     = 0755\n\tdefaultFilePermissions    = 0644\n\tsecureFilePermissions     = 0600 // Somente owner leitura/escrita\n)\n\nvar (\n\t// ErrTemplateNotFound indica que o template não foi encontrado\n\tErrTemplateNotFound = errors.New(\"template not found\")\n\t// ErrGoModTidyFailed indica que go mod tidy falhou\n\tErrGoModTidyFailed = errors.New(\"go mod tidy failed\")\n)\n\n// StatusInfo contém informações sobre o status da seed\ntype StatusInfo struct {\n\tPath        string `json:\"path\"`\n\tModule      string `json:\"module,omitempty\"`\n\tHasGoMod    bool   `json:\"has_go_mod\"`\n\tHasGoSum    bool   `json:\"has_go_sum\"`\n\tCompiles    bool   `json:\"compiles\"`\n\tMainPresent bool   `json:\"main_present\"`\n}",
+          "symbol_name": "",
+          "package_name": "seeds",
+          "dependencies": [
+            "errors",
+            "fmt",
+            "io",
+            "os",
+            "os/exec",
+            "path/filepath",
+            "strings"
+          ],
+          "related_files": null
+        },
+        {
+          "file_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\pkg\\orchestrator\\types.go",
+          "line_number": 15,
+          "code_snippet": "    10 | // ─────────────────────────────────────────────────────────────────────────\n    11 | // SYNC TYPES\n    12 | // ─────────────────────────────────────────────────────────────────────────\n    13 | \n    14 | // SyncRequest representa uma solicitação de sincronização\n→   15 | type SyncRequest struct {\n    16 | \tSDKVersion string    `json:\"sdk_version\"`\n    17 | \tModule     string    `json:\"module\"`\n    18 | \tSeeds      []string  `json:\"seeds\"`\n    19 | \tTimestamp  time.Time `json:\"timestamp\"`\n    20 | \tRequester  string    `json:\"requester\"`\n",
+          "full_function": "type SyncRequest struct {\n\tSDKVersion string    `json:\"sdk_version\"`\n\tModule     string    `json:\"module\"`\n\tSeeds      []string  `json:\"seeds\"`\n\tTimestamp  time.Time `json:\"timestamp\"`\n\tRequester  string    `json:\"requester\"`\n}",
+          "symbol_name": "with",
+          "package_name": "orchestrator",
+          "dependencies": [
+            "time"
+          ],
+          "related_files": null
+        }
+      ],
+      "impact_analysis": {
+        "severity": "medium",
+        "affected_files": 2,
+        "affected_lines": 14,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "34m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "performance",
+        "memory-optimization"
+      ],
+      "error_breakdown": {
+        "gofmt": 2,
+        "govet": 12
+      },
+      "top_files": [
+        "pkg\\orchestrator\\types.go (13)",
+        "internal\\seeds\\manager.go (1)"
+      ]
+    }
+  ],
+  "low": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 28.7% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Erro ao verificar formatacao",
+      "suggestion": "",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 5,
+  "score": 75,
+  "auto_fixable": 0,
+  "manual": 5,
+  "top_priorities": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 28.7% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Formatacao (gofmt)",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Erro ao verificar formatacao",
+      "suggestion": "",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "README completo",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "README incompleto",
+      "suggestion": "Adicione secoes: descricao, instalacao",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": [
+        "descricao",
+        "instalacao"
+      ],
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Linter limpo",
+      "severity": "medium",
+      "location": "multiplos arquivos",
+      "description": "Linter encontrou 14 problema(s)",
+      "suggestion": "Corrija os problemas manualmente seguindo as dicas",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "manual_steps": "Corrija por categoria (do mais critico ao menos):\n\n",
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": [
+          {
+            "order": 1,
+            "description": "Gerar relatorio detalhado do linter",
+            "command": "golangci-lint run --out-format json \u003e linter-report.json",
+            "expected_output": "Arquivo JSON com todos os issues",
+            "validation": "cat linter-report.json | jq '.Issues | length'",
+            "rollback": "",
+            "prerequisites": null,
+            "warnings": [
+              "Review manual necessario para cada fix"
+            ]
+          }
+        ],
+        "estimated_time": "34m",
+        "confidence": 0
+      },
+      "examples": [
+        "📄 Log completo: E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\docs\\validation\\raw\\2025-11-01-16-57-45-linter.log",
+        "",
+        "📊 Total de issues: 14",
+        "📋 Breakdown por categoria:",
+        "gofmt: 2 issue(s)",
+        "govet: 12 issue(s)",
+        "",
+        "🔝 Top 10 issues:",
+        "  1. internal\\seeds\\manager.go:14 - File is not properly formatted (gofmt)",
+        "  2. pkg\\orchestrator\\types.go:15 - fieldalignment: struct with 88 pointer bytes could be 80 (govet)",
+        "  3. pkg\\orchestrator\\types.go:24 - fieldalignment: struct with 120 pointer bytes could be 104 (govet)",
+        "  4. pkg\\orchestrator\\types.go:34 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  5. pkg\\orchestrator\\types.go:35 - File is not properly formatted (gofmt)",
+        "  6. pkg\\orchestrator\\types.go:46 - fieldalignment: struct with 64 pointer bytes could be 56 (govet)",
+        "  7. pkg\\orchestrator\\types.go:66 - fieldalignment: struct with 80 pointer bytes could be 64 (govet)",
+        "  8. pkg\\orchestrator\\types.go:74 - fieldalignment: struct with 144 pointer bytes could be 104 (govet)",
+        "  9. pkg\\orchestrator\\types.go:103 - fieldalignment: struct with 128 pointer bytes could be 120 (govet)",
+        "  10. pkg\\orchestrator\\types.go:119 - fieldalignment: struct with 48 pointer bytes could be 40 (govet)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": [
+        {
+          "file_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\internal\\seeds\\manager.go",
+          "line_number": 14,
+          "code_snippet": "     9 | \t\"path/filepath\"\n    10 | \t\"strings\"\n    11 | )\n    12 | \n    13 | const (\n→   14 | \tSeedPath                  = \"seeds/mcp-ultra-wasm\"\n    15 | \tdefaultDirPermissions     = 0755\n    16 | \tdefaultFilePermissions    = 0644\n    17 | \tsecureFilePermissions     = 0600 // Somente owner leitura/escrita\n    18 | )\n    19 | \n",
+          "full_function": "\tSeedPath                  = \"seeds/mcp-ultra-wasm\"\n\tdefaultDirPermissions     = 0755\n\tdefaultFilePermissions    = 0644\n\tsecureFilePermissions     = 0600 // Somente owner leitura/escrita\n)\n\nvar (\n\t// ErrTemplateNotFound indica que o template não foi encontrado\n\tErrTemplateNotFound = errors.New(\"template not found\")\n\t// ErrGoModTidyFailed indica que go mod tidy falhou\n\tErrGoModTidyFailed = errors.New(\"go mod tidy failed\")\n)\n\n// StatusInfo contém informações sobre o status da seed\ntype StatusInfo struct {\n\tPath        string `json:\"path\"`\n\tModule      string `json:\"module,omitempty\"`\n\tHasGoMod    bool   `json:\"has_go_mod\"`\n\tHasGoSum    bool   `json:\"has_go_sum\"`\n\tCompiles    bool   `json:\"compiles\"`\n\tMainPresent bool   `json:\"main_present\"`\n}",
+          "symbol_name": "",
+          "package_name": "seeds",
+          "dependencies": [
+            "errors",
+            "fmt",
+            "io",
+            "os",
+            "os/exec",
+            "path/filepath",
+            "strings"
+          ],
+          "related_files": null
+        },
+        {
+          "file_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm\\pkg\\orchestrator\\types.go",
+          "line_number": 15,
+          "code_snippet": "    10 | // ─────────────────────────────────────────────────────────────────────────\n    11 | // SYNC TYPES\n    12 | // ─────────────────────────────────────────────────────────────────────────\n    13 | \n    14 | // SyncRequest representa uma solicitação de sincronização\n→   15 | type SyncRequest struct {\n    16 | \tSDKVersion string    `json:\"sdk_version\"`\n    17 | \tModule     string    `json:\"module\"`\n    18 | \tSeeds      []string  `json:\"seeds\"`\n    19 | \tTimestamp  time.Time `json:\"timestamp\"`\n    20 | \tRequester  string    `json:\"requester\"`\n",
+          "full_function": "type SyncRequest struct {\n\tSDKVersion string    `json:\"sdk_version\"`\n\tModule     string    `json:\"module\"`\n\tSeeds      []string  `json:\"seeds\"`\n\tTimestamp  time.Time `json:\"timestamp\"`\n\tRequester  string    `json:\"requester\"`\n}",
+          "symbol_name": "with",
+          "package_name": "orchestrator",
+          "dependencies": [
+            "time"
+          ],
+          "related_files": null
+        }
+      ],
+      "impact_analysis": {
+        "severity": "medium",
+        "affected_files": 2,
+        "affected_lines": 14,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "34m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "performance",
+        "memory-optimization"
+      ],
+      "error_breakdown": {
+        "gofmt": 2,
+        "govet": 12
+      },
+      "top_files": [
+        "pkg\\orchestrator\\types.go (13)",
+        "internal\\seeds\\manager.go (1)"
+      ]
+    }
+  ],
+  "quick_wins": null,
+  "blockers": null,
+  "technical_debt": null,
+  "recommended_tools": [
+    {
+      "tool_name": "golangci-lint",
+      "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+      "diagnose_command": "golangci-lint run",
+      "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+      "config_required": true,
+      "config_template": ".golangci.yml com linters selecionados",
+      "documentation": "https://golangci-lint.run/",
+      "alternative_tools": null
+    }
+  ],
+  "next_steps": null,
+  "estimated_effort": "0m"
+}

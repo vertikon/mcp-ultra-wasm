@@ -1,0 +1,38 @@
+{
+  "mcp_id": "mcp-<preencher>",
+  "sdk": "sdk-<opcional>",
+  "ports": {
+    "http": 0,
+    "metrics": 0
+  },
+  "ai": {
+    "enabled": false,
+    "router": "rules",
+    "canary_percent": 0,
+    "models": [
+      {
+        "use": "classification",
+        "provider": "openai",
+        "model": "gpt-4o-mini"
+      },
+      {
+        "use": "generation",
+        "provider": "openai",
+        "model": "gpt-4o"
+      },
+      {
+        "use": "rerank",
+        "provider": "openai",
+        "model": "text-embedding-3-large"
+      }
+    ],
+    "budgets": {
+      "daily_brl_cap": 120.0,
+      "on_breach": "degrade"
+    }
+  },
+  "flags": {
+    "ENABLE_AI": false,
+    "AI_MODE": "balanced"
+  }
+}

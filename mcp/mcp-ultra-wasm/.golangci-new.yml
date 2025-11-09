@@ -1,0 +1,114 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  disable-all: true
+  enable:
+    - gomodguard
+    - staticcheck
+    - gosimple
+    - unused        # substitui deadcode/structcheck/varcheck
+    - errcheck
+    - govet
+    - revive
+    - gofmt
+    - goimports
+
+linters-settings:
+  gomodguard:
+    allowed:
+      modules:
+        - std
+        - github.com/jackc/pgx/v5
+        - github.com/nats-io/nats.go
+        - github.com/rs/zerolog
+        - go.uber.org/zap
+        - github.com/stretchr/testify
+        - github.com/leanovate/gopter  # Property-based testing
+        - golang.org/x/tools  # Go analysis tools (para vettool)
+        - github.com/google/uuid  # UUID (transitório - migrar para pkg/types)
+        - github.com/prometheus/client_golang  # Prometheus metrics
+        - github.com/prometheus/common  # Prometheus common
+        - github.com/hashicorp/vault  # Vault secrets management
+        - gopkg.in/yaml.v3  # YAML parsing
+        - github.com/cespare/xxhash/v2  # Hash functions
+        - github.com/golang-jwt/jwt/v5  # JWT authentication
+        - github.com/kelseyhightower/envconfig  # Environment config
+        - github.com/opentracing/opentracing-go  # OpenTracing
+        - github.com/uber/jaeger-client-go  # Jaeger tracing
+        - github.com/DataDog/datadog-go  # DataDog
+        - github.com/lightstep/lightstep-tracer-go  # LightStep
+        - github.com/uptrace/opentelemetry-go-extra  # OpenTelemetry extras
+        - github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm  # Own modules
+        - github.com/lib/pq  # PostgreSQL driver
+        - go.opentelemetry.io/otel  # OpenTelemetry SDK
+        - go.opentelemetry.io/contrib  # OpenTelemetry contrib
+        - github.com/alicebob/miniredis  # Redis mock for tests
+    blocked:
+      modules:
+        - github.com/sirupsen/logrus:
+            reason: "Padronizar zerolog/zap"
+        - github.com/pkg/errors:
+            reason: "Use errors nativo (Go 1.20+)"
+        - github.com/go-chi/chi/v5:
+            reason: "Use o facade pkg/httpx"
+        - github.com/redis/go-redis/v9:
+            reason: "Use o facade pkg/redisx (exceto em pkg/redisx)"
+
+  gocyclo:
+    min-complexity: 18
+
+  revive:
+    rules:
+      - name: exported
+      - name: unused-parameter
+      - name: var-naming
+      - name: increment-decrement
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+    # Facades: não aplicar guardas de módulo dentro deles (evita o paradoxo observado)
+    - path: pkg/httpx/
+      linters: [gomodguard]
+    - path: pkg/redisx/
+      linters: [gomodguard]
+    - path: pkg/metrics/
+      linters: [gomodguard]
+    - path: pkg/observability/
+      linters: [gomodguard]
+    - path: pkg/types/
+      linters: [gomodguard]
+    - path: pkg/natsx/
+      linters: [gomodguard]
+    # Middleware pode usar chi e otel diretamente para instrumentação
+    - path: internal/middleware/
+      linters: [gomodguard]
+    # Repository layer pode usar drivers diretamente
+    - path: internal/repository/
+      linters: [gomodguard]
+    # Telemetry pode usar otel diretamente
+    - path: internal/telemetry/
+      linters: [gomodguard]
+    # Dashboard pode usar prometheus diretamente
+    - path: internal/dashboard/
+      linters: [gomodguard]
+    # Observability pode usar otel diretamente
+    - path: internal/observability/
+      linters: [gomodguard]
+    # Handlers podem usar chi diretamente (migração em andamento)
+    - path: internal/handlers/http/
+      linters: [gomodguard]
+    # Cache e ratelimit podem usar redis diretamente
+    - path: internal/cache/
+      linters: [gomodguard]
+    - path: internal/ratelimit/
+      linters: [gomodguard]
+    # Security pode usar vault e jwt diretamente
+    - path: internal/security/
+      linters: [gomodguard]
+    - path: internal/config/secrets/
+      linters: [gomodguard]

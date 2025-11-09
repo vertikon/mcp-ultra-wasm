@@ -1,0 +1,212 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-ultra-wasm-ingress
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: mcp-ultra-wasm
+    app.kubernetes.io/instance: production
+    app.kubernetes.io/component: ingress
+  annotations:
+    # Ingress Controller Annotations
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    
+    # SSL/TLS Configuration
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-protocols: "TLSv1.2 TLSv1.3"
+    nginx.ingress.kubernetes.io/ssl-ciphers: "ECDHE-ECDSA-AES128-GCM-SHA256,ECDHE-RSA-AES128-GCM-SHA256,ECDHE-ECDSA-AES256-GCM-SHA384,ECDHE-RSA-AES256-GCM-SHA384"
+    
+    # Rate Limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "10"
+    
+    # Security Headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains; preload";
+    
+    # Backend Configuration
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/upstream-hash-by: "$remote_addr"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-next-upstream: "error timeout invalid_header http_502 http_503 http_504"
+    
+    # Load Balancing
+    nginx.ingress.kubernetes.io/load-balance: "round_robin"
+    
+    # Health Checks
+    nginx.ingress.kubernetes.io/health-check-path: "/healthz"
+    nginx.ingress.kubernetes.io/health-check-interval: "30s"
+    nginx.ingress.kubernetes.io/health-check-timeout: "5s"
+    
+    # CORS (if needed for API)
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://app.vertikon.com,https://dashboard.vertikon.com"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-max-age: "1728000"
+    
+    # Monitoring and Observability
+    nginx.ingress.kubernetes.io/enable-access-log: "true"
+    nginx.ingress.kubernetes.io/enable-opentracing: "true"
+    
+    # Custom error pages
+    nginx.ingress.kubernetes.io/custom-http-errors: "404,503,500,502"
+    nginx.ingress.kubernetes.io/default-backend: "nginx-errors"
+
+spec:
+  tls:
+  - hosts:
+    - api.vertikon.com
+    - mcp-ultra-wasm.vertikon.com
+    secretName: mcp-ultra-wasm-tls-cert
+  
+  rules:
+  # Production API
+  - host: api.vertikon.com
+    http:
+      paths:
+      - path: /v1(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-ultra-wasm-service
+            port:
+              number: 80
+      
+      # API Documentation
+      - path: /docs(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-ultra-wasm-service
+            port:
+              number: 80
+  
+  # Development/Staging API
+  - host: mcp-ultra-wasm.vertikon.com
+    http:
+      paths:
+      - path: /(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-ultra-wasm-service
+            port:
+              number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-ultra-wasm-internal-ingress
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: mcp-ultra-wasm
+    app.kubernetes.io/instance: production
+    app.kubernetes.io/component: internal-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx-internal"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    
+spec:
+  tls:
+  - hosts:
+    - internal-api.vertikon.com
+    secretName: mcp-ultra-wasm-internal-tls-cert
+  
+  rules:
+  # Internal API for monitoring and admin operations
+  - host: internal-api.vertikon.com
+    http:
+      paths:
+      # Metrics endpoint (protected by source IP)
+      - path: /metrics(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-ultra-wasm-service
+            port:
+              number: 9090
+      
+      # Health endpoints
+      - path: /health(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-ultra-wasm-service
+            port:
+              number: 8080
+      
+      # Admin endpoints (if implemented)
+      - path: /admin(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: mcp-ultra-wasm-service
+            port:
+              number: 80
+
+---
+# Ingress for monitoring dashboard access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monitoring-ingress
+  namespace: mcp-ultra-wasm
+  labels:
+    app.kubernetes.io/name: monitoring
+    app.kubernetes.io/component: ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx-internal"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: monitoring-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required - Monitoring Dashboard'
+    
+spec:
+  tls:
+  - hosts:
+    - monitoring.vertikon.com
+    secretName: monitoring-tls-cert
+  
+  rules:
+  - host: monitoring.vertikon.com
+    http:
+      paths:
+      - path: /prometheus(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-service
+            port:
+              number: 9090
+      - path: /grafana(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-service
+            port:
+              number: 3000
+      - path: /alertmanager(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: alertmanager-service
+            port:
+              number: 9093

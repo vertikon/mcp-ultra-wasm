@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mcp-model-ultra
+spec:
+  selector:
+    matchLabels:
+      app: mcp-model-ultra
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s

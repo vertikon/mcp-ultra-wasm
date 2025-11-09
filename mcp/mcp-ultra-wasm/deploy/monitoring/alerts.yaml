@@ -1,0 +1,9 @@
+groups:
+- name: mcp-alerts
+  rules:
+  - alert: HighLatencyP95
+    expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 0.5
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: P95 latency > 500ms

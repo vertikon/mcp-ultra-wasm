@@ -1,0 +1,54 @@
+# Force LF line endings for all text files
+* text=auto
+
+# Go source files
+*.go text eol=lf
+
+# Markdown documentation
+*.md text eol=lf
+
+# YAML configuration
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# JSON configuration
+*.json text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# PowerShell scripts
+*.ps1 text eol=lf
+
+# Makefiles
+Makefile text eol=lf
+*.mk text eol=lf
+
+# Git configuration
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# Docker files
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+
+# SQL migrations
+*.sql text eol=lf
+
+# Protocol buffers
+*.proto text eol=lf
+
+# Binary files (no conversion)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.so binary
+*.dll binary
+*.exe binary

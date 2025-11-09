@@ -1,0 +1,393 @@
+{
+  "project_name": "sdk-ultra-wasm",
+  "project_path": "E:\\vertikon\\business\\SaaS\\templates\\sdk-ultra-wasm",
+  "timestamp": "2025-11-02 18:31:24",
+  "validator_version": "9.3",
+  "critical": null,
+  "high": [
+    {
+      "type": "Linter limpo",
+      "severity": "high",
+      "location": "multiplos arquivos",
+      "description": "✗ FAIL: 9 issues críticos, 3 warnings",
+      "suggestion": "Corrija os issues FAIL primeiro, depois warnings",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "staticcheck",
+            "install_command": "go install honnef.co/go/tools/cmd/staticcheck@latest",
+            "diagnose_command": "staticcheck ./...",
+            "fix_command": "# Manual - staticcheck nao tem auto-fix",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://staticcheck.io/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "gosec",
+            "install_command": "go install github.com/securego/gosec/v2/cmd/gosec@latest",
+            "diagnose_command": "gosec ./...",
+            "fix_command": "# Manual - corrija issues de seguranca",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://github.com/securego/gosec",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": null,
+        "estimated_time": "1h45m",
+        "confidence": 0
+      },
+      "examples": [
+        "📦 Módulos analisados: 1",
+        "📄 Linter Report v14: JSON + SARIF gerados",
+        "",
+        "📊 Resumo por ferramenta (todos os módulos):",
+        "  • golangci-lint: 𐄂 9 FAIL / ⚠ 3 WARN / ℹ 0 INFO",
+        "",
+        "🔝 Top issues prioritários (FAIL):",
+        "  1. [golangci-lint] internal/seeds/manager_test.go:203 - Error return value of `os.ReadFile` is not checked (errcheck)",
+        "  2. [golangci-lint] internal/seeds/manager_test.go:215 - Error return value of `os.MkdirAll` is not checked (errcheck)",
+        "  3. [golangci-lint] internal/seeds/manager_test.go:216 - Error return value of `os.MkdirAll` is not checked (errcheck)",
+        "  4. [golangci-lint] internal/seeds/manager_test.go:217 - Error return value of `os.WriteFile` is not checked (errcheck)",
+        "  5. [golangci-lint] internal/seeds/manager_test.go:218 - Error return value of `os.WriteFile` is not checked (errcheck)",
+        "  6. [golangci-lint] internal/seeds/manager_test.go:219 - Error return value of `os.WriteFile` is not checked (errcheck)",
+        "  7. [golangci-lint] internal/seeds/manager_test.go:255 - Error return value of `os.ReadFile` is not checked (errcheck)",
+        "  8. [golangci-lint] internal/seeds/manager_test.go:276 - Error return value of `os.ReadFile` is not checked (errcheck)",
+        "  9. [golangci-lint] pkg/registry/registry_additional_test.go:130 - Error return value is not checked (errcheck)",
+        "",
+        "⚠ Top warnings:",
+        "  1. [golangci-lint] pkg/registry/registry_additional_test.go:18 - unused-parameter: parameter 'ctx' seems to be unused, consider removin... (revive)",
+        "  2. [golangci-lint] pkg/registry/registry_additional_test.go:25 - unused-parameter: parameter 'ctx' seems to be unused, consider removin... (revive)",
+        "  3. [golangci-lint] pkg/registry/registry_additional_test.go:26 - unused-parameter: parameter 'ctx' seems to be unused, consider removin... (revive)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "high",
+        "affected_files": 12,
+        "affected_lines": 12,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "1h45m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "error-handling",
+        "critical"
+      ],
+      "error_breakdown": {
+        "errcheck": 9,
+        "revive": 3
+      },
+      "top_files": [
+        "internal/seeds/manager_test.go (8)",
+        "pkg/registry/registry_additional_test.go (4)"
+      ]
+    }
+  ],
+  "medium": null,
+  "low": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 68.9% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    }
+  ],
+  "total_gaps": 3,
+  "score": 85,
+  "auto_fixable": 0,
+  "manual": 3,
+  "top_priorities": [
+    {
+      "type": "Coverage \u003e= 70%",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Coverage: 68.9% (meta: 70%)",
+      "suggestion": "Aumente cobertura para 70%",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Logs estruturados",
+      "severity": "low",
+      "location": "multiplos arquivos",
+      "description": "Logs estruturados nao encontrados",
+      "suggestion": "Use zap, zerolog, logrus ou slog",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": false,
+        "requires_review": false,
+        "tools": null,
+        "executable_steps": null,
+        "estimated_time": "",
+        "confidence": 0
+      },
+      "examples": null,
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "",
+        "affected_files": 0,
+        "affected_lines": 0,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "",
+        "priority": 0,
+        "risk_level": "",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [],
+      "error_breakdown": {},
+      "top_files": []
+    },
+    {
+      "type": "Linter limpo",
+      "severity": "high",
+      "location": "multiplos arquivos",
+      "description": "✗ FAIL: 9 issues críticos, 3 warnings",
+      "suggestion": "Corrija os issues FAIL primeiro, depois warnings",
+      "fixability": {
+        "safe": false,
+        "rollback_easy": false,
+        "affects_behavior": true,
+        "requires_review": true,
+        "non_fixable_reason": "BUSINESS_LOGIC",
+        "tools": [
+          {
+            "tool_name": "golangci-lint",
+            "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+            "diagnose_command": "golangci-lint run",
+            "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+            "config_required": true,
+            "config_template": ".golangci.yml com linters selecionados",
+            "documentation": "https://golangci-lint.run/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "staticcheck",
+            "install_command": "go install honnef.co/go/tools/cmd/staticcheck@latest",
+            "diagnose_command": "staticcheck ./...",
+            "fix_command": "# Manual - staticcheck nao tem auto-fix",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://staticcheck.io/",
+            "alternative_tools": null
+          },
+          {
+            "tool_name": "gosec",
+            "install_command": "go install github.com/securego/gosec/v2/cmd/gosec@latest",
+            "diagnose_command": "gosec ./...",
+            "fix_command": "# Manual - corrija issues de seguranca",
+            "config_required": false,
+            "config_template": "",
+            "documentation": "https://github.com/securego/gosec",
+            "alternative_tools": null
+          }
+        ],
+        "executable_steps": null,
+        "estimated_time": "1h45m",
+        "confidence": 0
+      },
+      "examples": [
+        "📦 Módulos analisados: 1",
+        "📄 Linter Report v14: JSON + SARIF gerados",
+        "",
+        "📊 Resumo por ferramenta (todos os módulos):",
+        "  • golangci-lint: 𐄂 9 FAIL / ⚠ 3 WARN / ℹ 0 INFO",
+        "",
+        "🔝 Top issues prioritários (FAIL):",
+        "  1. [golangci-lint] internal/seeds/manager_test.go:203 - Error return value of `os.ReadFile` is not checked (errcheck)",
+        "  2. [golangci-lint] internal/seeds/manager_test.go:215 - Error return value of `os.MkdirAll` is not checked (errcheck)",
+        "  3. [golangci-lint] internal/seeds/manager_test.go:216 - Error return value of `os.MkdirAll` is not checked (errcheck)",
+        "  4. [golangci-lint] internal/seeds/manager_test.go:217 - Error return value of `os.WriteFile` is not checked (errcheck)",
+        "  5. [golangci-lint] internal/seeds/manager_test.go:218 - Error return value of `os.WriteFile` is not checked (errcheck)",
+        "  6. [golangci-lint] internal/seeds/manager_test.go:219 - Error return value of `os.WriteFile` is not checked (errcheck)",
+        "  7. [golangci-lint] internal/seeds/manager_test.go:255 - Error return value of `os.ReadFile` is not checked (errcheck)",
+        "  8. [golangci-lint] internal/seeds/manager_test.go:276 - Error return value of `os.ReadFile` is not checked (errcheck)",
+        "  9. [golangci-lint] pkg/registry/registry_additional_test.go:130 - Error return value is not checked (errcheck)",
+        "",
+        "⚠ Top warnings:",
+        "  1. [golangci-lint] pkg/registry/registry_additional_test.go:18 - unused-parameter: parameter 'ctx' seems to be unused, consider removin... (revive)",
+        "  2. [golangci-lint] pkg/registry/registry_additional_test.go:25 - unused-parameter: parameter 'ctx' seems to be unused, consider removin... (revive)",
+        "  3. [golangci-lint] pkg/registry/registry_additional_test.go:26 - unused-parameter: parameter 'ctx' seems to be unused, consider removin... (revive)"
+      ],
+      "non_fixable_reason": "BUSINESS_LOGIC",
+      "code_contexts": null,
+      "impact_analysis": {
+        "severity": "high",
+        "affected_files": 12,
+        "affected_lines": 12,
+        "blocks_deploy": false,
+        "blocks_tests": false,
+        "breaks_api": false,
+        "estimated_time": "1h45m",
+        "priority": 2,
+        "risk_level": "medium",
+        "dependencies": null
+      },
+      "related_gaps": null,
+      "tags": [
+        "error-handling",
+        "critical"
+      ],
+      "error_breakdown": {
+        "errcheck": 9,
+        "revive": 3
+      },
+      "top_files": [
+        "internal/seeds/manager_test.go (8)",
+        "pkg/registry/registry_additional_test.go (4)"
+      ]
+    }
+  ],
+  "quick_wins": null,
+  "blockers": null,
+  "technical_debt": null,
+  "recommended_tools": [
+    {
+      "tool_name": "staticcheck",
+      "install_command": "go install honnef.co/go/tools/cmd/staticcheck@latest",
+      "diagnose_command": "staticcheck ./...",
+      "fix_command": "# Manual - staticcheck nao tem auto-fix",
+      "config_required": false,
+      "config_template": "",
+      "documentation": "https://staticcheck.io/",
+      "alternative_tools": null
+    },
+    {
+      "tool_name": "gosec",
+      "install_command": "go install github.com/securego/gosec/v2/cmd/gosec@latest",
+      "diagnose_command": "gosec ./...",
+      "fix_command": "# Manual - corrija issues de seguranca",
+      "config_required": false,
+      "config_template": "",
+      "documentation": "https://github.com/securego/gosec",
+      "alternative_tools": null
+    },
+    {
+      "tool_name": "golangci-lint",
+      "install_command": "go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest",
+      "diagnose_command": "golangci-lint run",
+      "fix_command": "# NAO use --fix automaticamente, revise cada issue",
+      "config_required": true,
+      "config_template": ".golangci.yml com linters selecionados",
+      "documentation": "https://golangci-lint.run/",
+      "alternative_tools": null
+    }
+  ],
+  "next_steps": null,
+  "estimated_effort": "0m"
+}

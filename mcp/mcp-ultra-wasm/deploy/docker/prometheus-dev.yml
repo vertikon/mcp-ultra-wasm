@@ -1,0 +1,82 @@
+# Prometheus Configuration for MCP Ultra Development
+# Scrapes metrics from application and telemetry stack
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: 'development'
+    cluster: 'mcp-ultra-wasm-dev'
+
+rule_files:
+  # Add alerting rules here if needed
+  # - "alert_rules.yml"
+
+scrape_configs:
+  # MCP Ultra Application
+  - job_name: 'mcp-ultra-wasm-app'
+    static_configs:
+      - targets: ['host.docker.internal:9090']
+    metrics_path: /metrics
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    honor_labels: true
+    params:
+      format: ['prometheus']
+
+  # OpenTelemetry Collector
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:8889']
+    metrics_path: /metrics
+    scrape_interval: 15s
+
+  # Collector self-monitoring
+  - job_name: 'otel-collector-internal'
+    static_configs:
+      - targets: ['otel-collector:8888']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Node Exporter (system metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # Redis Exporter
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    metrics_path: /metrics
+    scrape_interval: 30s
+
+  # PostgreSQL Exporter (if running)
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: ['host.docker.internal:9187']
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+# Alertmanager configuration (optional for development)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#           - alertmanager:9093
+
+# Remote write configuration for external systems (optional)
+# remote_write:
+#   - url: "${REMOTE_PROMETHEUS_URL}"
+#     basic_auth:
+#       username: "${REMOTE_PROMETHEUS_USER}"
+#       password: "${REMOTE_PROMETHEUS_PASSWORD}"
