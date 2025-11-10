@@ -41,7 +41,7 @@ func NewTracingManager(config *TracingConfig, logger *zap.Logger) (*TracingManag
 	if config == nil {
 		config = &TracingConfig{
 			Enabled:             false,
-			ServiceName:         "web-wasm-server",
+			ServiceName:         "wasm-server",
 			ServiceVersion:      "1.0.0",
 			Environment:         "development",
 			SamplingRatio:       1.0,
@@ -74,7 +74,7 @@ func NewTracingManager(config *TracingConfig, logger *zap.Logger) (*TracingManag
 		propagation.Baggage{},
 	))
 
-	tracer := tp.Tracer("web-wasm-tracer")
+	tracer := tp.Tracer("wasm-tracer")
 
 	manager := &TracingManager{
 		tp:     tp,

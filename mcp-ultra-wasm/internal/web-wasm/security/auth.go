@@ -95,7 +95,7 @@ func NewAuthManager(config *AuthConfig, logger *zap.Logger, tokenStore TokenStor
 		config = &AuthConfig{
 			Enabled:       false,
 			SecretKey:     "default-secret-key-change-in-production",
-			Issuer:        "web-wasm-server",
+			Issuer:        "wasm-server",
 			TokenExpiry:   1 * time.Hour,
 			RefreshExpiry: 24 * time.Hour,
 			SkipAuthPaths: []string{
@@ -149,7 +149,7 @@ func (am *AuthManager) GenerateToken(user *User) (*TokenResponse, error) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    am.issuer,
 			Subject:   user.ID,
-			Audience:  []string{"web-wasm"},
+			Audience:  []string{"wasm"},
 			ExpiresAt: jwt.NewNumericDate(now.Add(am.config.TokenExpiry)),
 			NotBefore: jwt.NewNumericDate(now),
 			IssuedAt:  jwt.NewNumericDate(now),
@@ -195,7 +195,7 @@ func (am *AuthManager) GenerateRefreshToken(user *User) (*TokenResponse, error) 
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    am.issuer,
 			Subject:   user.ID,
-			Audience:  []string{"web-wasm-refresh"},
+			Audience:  []string{"wasm-refresh"},
 			ExpiresAt: jwt.NewNumericDate(now.Add(am.config.RefreshExpiry)),
 			NotBefore: jwt.NewNumericDate(now),
 			IssuedAt:  jwt.NewNumericDate(now),

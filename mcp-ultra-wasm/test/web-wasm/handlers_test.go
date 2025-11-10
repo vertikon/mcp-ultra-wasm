@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/internal/web-wasm/nats"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/internal/wasm/nats"
 )
 
 // MockPublisher é um mock para o NATS Publisher
@@ -93,7 +93,7 @@ func TestUIHandler_ServeIndex(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Contains(t, w.Body.String(), "<!DOCTYPE html>")
 	assert.Contains(t, w.Body.String(), "MCP Ultra WASM")
-	assert.Contains(t, w.Body.String(), "web-wasm-server")
+	assert.Contains(t, w.Body.String(), "wasm-server")
 }
 
 func TestUIHandler_ServeWASM(t *testing.T) {
@@ -407,7 +407,7 @@ func TestAPIHandler_GetHealth(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, "ok", response["status"])
-	assert.Equal(t, "web-wasm-api", response["service"])
+	assert.Equal(t, "wasm-api", response["service"])
 	assert.Equal(t, "1.0.0", response["version"])
 	assert.NotEmpty(t, response["timestamp"])
 }

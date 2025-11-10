@@ -106,7 +106,7 @@ type TaskEvent struct {
 
 type SystemEvent struct {
 	Type      string                 `json:"type"`   // "plugin_registered", "plugin_error", "sdk_status"
-	Source    string                 `json:"source"` // "web-wasm", "sdk", "plugin"
+	Source    string                 `json:"source"` // "wasm", "sdk", "plugin"
 	Timestamp time.Time              `json:"timestamp"`
 	Data      map[string]interface{} `json:"data,omitempty"`
 }

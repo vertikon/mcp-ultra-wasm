@@ -8,7 +8,7 @@ import (
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/internal/web-wasm/nats"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/internal/wasm/nats"
 )
 
 type APIHandler struct {
@@ -193,7 +193,7 @@ func (h *APIHandler) GetHealth(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":    "healthy",
 		"timestamp": time.Now().UTC(),
-		"service":   "web-wasm-api",
+		"service":   "wasm-api",
 		"version":   "1.0.0",
 	})
 }

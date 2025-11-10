@@ -22,15 +22,15 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags='-w -s -extldflags "-static"' \
     -a -installsuffix cgo \
-    -o web-wasm-server \
-    ./cmd/web-wasm-server
+    -o wasm-server \
+    ./cmd/wasm-server
 
 # Build do módulo WASM
 RUN mkdir -p /tmp/wasm-build
 WORKDIR /tmp/wasm-build
 
 # Copiar código WASM
-COPY --from=builder /app/web-wasm/wasm/ ./
+COPY --from=builder /app/wasm/wasm/ ./
 
 # Build do módulo WASM
 RUN GOOS=js GOARCH=wasm go build \
@@ -54,11 +54,11 @@ RUN addgroup -g 1001 -S webwasm && \
 WORKDIR /app
 
 # Copiar binário do servidor
-COPY --from=builder /app/web-wasm-server .
+COPY --from=builder /app/wasm-server .
 
 # Copiar arquivos estáticos
-COPY --from=builder /app/web-wasm/static ./static
-COPY --from=builder /app/web-wasm/templates ./templates
+COPY --from=builder /app/wasm/static ./static
+COPY --from=builder /app/wasm/templates ./templates
 
 # Copiar arquivos WASM
 RUN mkdir -p ./wasm
@@ -67,7 +67,7 @@ COPY --from=builder /tmp/wasm-build/wasm_exec.js ./wasm/
 
 # Copiar arquivos de configuração
 COPY --from=builder /app/api ./api
-COPY --from=builder /app/deploy/docker/web-wasm/config.yaml ./config.yaml
+COPY --from=builder /app/deploy/docker/wasm/config.yaml ./config.yaml
 
 # Criar diretórios necessários
 RUN mkdir -p logs data
@@ -91,4 +91,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
 # Comando de execução
-CMD ["./web-wasm-server"]
+CMD ["./wasm-server"]
+
+

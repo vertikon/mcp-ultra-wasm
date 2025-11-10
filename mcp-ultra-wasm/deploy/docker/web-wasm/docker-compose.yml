@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   # Web WASM Server
-  web-wasm-server:
+  wasm-server:
     build:
       context: ../../..
-      dockerfile: deploy/docker/web-wasm/Dockerfile
-    container_name: web-wasm-server
+      dockerfile: deploy/docker/wasm/Dockerfile
+    container_name: wasm-server
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -26,7 +26,7 @@ services:
       - ./logs:/app/logs
       - ./data:/app/data
     networks:
-      - web-wasm-network
+      - wasm-network
     depends_on:
       - nats
       - ultra-wasm-sdk
@@ -54,7 +54,7 @@ services:
     volumes:
       - nats-data:/data
     networks:
-      - web-wasm-network
+      - wasm-network
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8222/varz"]
       interval: 10s
@@ -80,7 +80,7 @@ services:
       - sdk-plugins:/app/plugins
       - sdk-data:/app/data
     networks:
-      - web-wasm-network
+      - wasm-network
     depends_on:
       - nats
     healthcheck:
@@ -105,7 +105,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
-      - web-wasm-network
+      - wasm-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U webwasm -d webwasm"]
       interval: 10s
@@ -130,7 +130,7 @@ services:
     volumes:
       - redis-data:/data
     networks:
-      - web-wasm-network
+      - wasm-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -150,7 +150,7 @@ services:
       - COLLECTOR_OTLP_ENABLED=true
       - SPAN_STORAGE_TYPE=memory
     networks:
-      - web-wasm-network
+      - wasm-network
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:16686"]
       interval: 30s
@@ -175,9 +175,9 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus-data:/prometheus
     networks:
-      - web-wasm-network
+      - wasm-network
     depends_on:
-      - web-wasm-server
+      - wasm-server
       - ultra-wasm-sdk
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
@@ -201,7 +201,7 @@ services:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     networks:
-      - web-wasm-network
+      - wasm-network
     depends_on:
       - prometheus
     healthcheck:
@@ -223,9 +223,9 @@ services:
       - ./ssl:/etc/nginx/ssl:ro
       - nginx-logs:/var/log/nginx
     networks:
-      - web-wasm-network
+      - wasm-network
     depends_on:
-      - web-wasm-server
+      - wasm-server
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
       interval: 30s
@@ -251,7 +251,7 @@ volumes:
     driver: local
 
 networks:
-  web-wasm-network:
+  wasm-network:
     driver: bridge
     ipam:
       config:

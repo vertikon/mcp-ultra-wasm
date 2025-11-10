@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-wasm-server
-  namespace: web-wasm
+  name: wasm-server
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     version: v1.0.0
 spec:
@@ -16,11 +16,11 @@ spec:
       maxSurge: 1
   selector:
     matchLabels:
-      app: web-wasm-server
+      app: wasm-server
   template:
     metadata:
       labels:
-        app: web-wasm-server
+        app: wasm-server
         component: mcp-ultra-wasm
         version: v1.0.0
       annotations:
@@ -29,7 +29,7 @@ spec:
         prometheus.io/path: "/metrics"
         sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: web-wasm-server
+      serviceAccountName: wasm-server
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
@@ -43,8 +43,8 @@ spec:
           add:
             - NET_BIND_SERVICE
       containers:
-      - name: web-wasm-server
-        image: web-wasm-server:latest
+      - name: wasm-server
+        image: wasm-server:latest
         imagePullPolicy: Always
         ports:
         - name: http
@@ -71,7 +71,7 @@ spec:
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              name: web-wasm-secrets
+              name: wasm-secrets
               key: jwt-secret
         - name: ENV
           value: "production"
@@ -178,7 +178,7 @@ spec:
                 Kube_URL            https://kubernetes.default.svc:443
                 Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
                 Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
-                Kube_Tag_Prefix     web-wasm.
+                Kube_Tag_Prefix     wasm.
                 Merge_Log           On
                 K8S-Logging.Parser  On
                 K8S-Logging.Exclude On
@@ -214,20 +214,20 @@ spec:
       volumes:
       - name: static-files
         configMap:
-          name: web-wasm-static-files
+          name: wasm-static-files
       - name: wasm-files
         configMap:
-          name: web-wasm-wasm-files
+          name: wasm-wasm-files
       - name: config-volume
         configMap:
-          name: web-wasm-config
+          name: wasm-config
       - name: tmp-volume
         emptyDir: {}
       - name: logs-volume
         emptyDir: {}
       - name: var-run-secrets-kubernetes
         secret:
-          secretName: web-wasm-server-token
+          secretName: wasm-server-token
       nodeSelector:
         kubernetes.io/os: linux
       affinity:
@@ -240,7 +240,7 @@ spec:
                 - key: app
                   operator: In
                   values:
-                  - web-wasm-server
+                  - wasm-server
               topologyKey: kubernetes.io/hostname
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -252,21 +252,21 @@ spec:
                 values:
                 - "true"
       tolerations:
-      - key: "web-wasm"
+      - key: "wasm"
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
-      - name: web-wasm-registry-secret
+      - name: wasm-registry-secret
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-wasm-service
-  namespace: web-wasm
+  name: wasm-service
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
   annotations:
     prometheus.io/scrape: "true"
@@ -284,21 +284,21 @@ spec:
     targetPort: metrics
     protocol: TCP
   selector:
-    app: web-wasm-server
+    app: wasm-server
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: web-wasm-server
-  namespace: web-wasm
+  name: wasm-server
+  namespace: wasm
   annotations:
-    iam.amazonaws.com/role: web-wasm-server-role
+    iam.amazonaws.com/role: wasm-server-role
 ---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: web-wasm-secrets
-  namespace: web-wasm
+  name: wasm-secrets
+  namespace: wasm
 type: Opaque
 data:
   jwt-secret: c3VwZXItc2VjcmV0LWp3dC1rZXktY2hhbmdlLWluLXByb2R1Y3Rpb24=  # base64 encoded "super-secret-jwt-key-change-in-production"
@@ -308,16 +308,16 @@ data:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: web-wasm-hpa
-  namespace: web-wasm
+  name: wasm-hpa
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: web-wasm-server
+    name: wasm-server
   minReplicas: 2
   maxReplicas: 10
   metrics:
@@ -365,13 +365,13 @@ spec:
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: web-wasm-pdb
-  namespace: web-wasm
+  name: wasm-pdb
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      app: web-wasm-server
+      app: wasm-server

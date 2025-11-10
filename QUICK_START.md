@@ -1,4 +1,4 @@
-# 🚀 Quick Start - Web-WASM Platform
+# 🚀 Quick Start - wasm Platform
 
 ## 3 comandos para rodar tudo
 
@@ -18,9 +18,9 @@ curl http://localhost:8080/health  # ✅ Pronto!
 ```
 mcp-ultra-wasm/
 ├── mcp/mcp-ultra-wasm/          # 🏗️ Servidor Go Principal
-│   ├── cmd/web-wasm-server/     # Entrypoint do servidor web-wasm
-│   ├── internal/web-wasm/       # Lógica de negócio
-│   ├── web-wasm/                # Frontend + WASM
+│   ├── cmd/wasm-server/     # Entrypoint do servidor wasm
+│   ├── internal/wasm/       # Lógica de negócio
+│   ├── wasm/                # Frontend + WASM
 │   └── deploy/                  # Docker + K8s configs
 ├── sdk/sdk-ultra-wasm/          # 🔌 SDK para integração
 └── templates/                   # 📋 Templates e blueprints
@@ -57,7 +57,7 @@ mcp-ultra-wasm/
 
 ## 🚀 Features Implementadas
 
-### ✅ Core Web-WASM Platform
+### ✅ Core wasm Platform
 - [x] **Servidor Go** com Gin framework
 - [x] **Módulo WASM** compilado de Go para JavaScript
 - [x] **Frontend completo** com HTML, CSS, JavaScript
@@ -103,10 +103,10 @@ cp .env.example .env
 go mod download
 
 # Compilar módulo WASM
-$env:GOOS="js"; $env:GOARCH="wasm"; go build -o ../web-wasm/wasm/main.wasm ../web-wasm/wasm/main.go
+$env:GOOS="js"; $env:GOARCH="wasm"; go build -o ../wasm/wasm/main.wasm ../wasm/wasm/main.go
 
 # Rodar servidor
-go run ./cmd/web-wasm-server
+go run ./cmd/wasm-server
 ```
 
 ### 3. Produção com Docker
@@ -174,6 +174,6 @@ Contribuições são bem-vindas! Veja:
 
 ---
 
-**🎉 Parabéns! Você tem uma plataforma Web-WASM completa rodando!**
+**🎉 Parabéns! Você tem uma plataforma wasm completa rodando!**
 
 Made with ❤️ by [Vertikon Labs](https://github.com/vertikon)

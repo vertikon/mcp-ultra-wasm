@@ -34,7 +34,7 @@ func NewSDKClient(config *Config, logger *zap.Logger) (*SDKClient, error) {
 			Retries:          3,
 			EnableCache:      true,
 			CacheSize:        1000,
-			DefaultNamespace: "web-wasm",
+			DefaultNamespace: "wasm",
 		}
 	}
 
@@ -80,18 +80,18 @@ func (s *SDKClient) Close() error {
 }
 
 func (s *SDKClient) initializePlugins() error {
-	// Registrar o web-wasm como plugin do SDK
+	// Registrar o wasm como plugin do SDK
 	webWasmPlugin := &WebWasmPlugin{
-		name:    "web-wasm",
+		name:    "wasm",
 		version: "1.0.0",
 		client:  s,
 	}
 
 	if err := s.client.RegisterPlugin(webWasmPlugin); err != nil {
-		return fmt.Errorf("erro ao registrar plugin web-wasm: %w", err)
+		return fmt.Errorf("erro ao registrar plugin wasm: %w", err)
 	}
 
-	s.plugins["web-wasm"] = webWasmPlugin
+	s.plugins["wasm"] = webWasmPlugin
 
 	// Carregar plugins disponíveis
 	availablePlugins, err := s.client.ListPlugins()
@@ -127,7 +127,7 @@ func (s *SDKClient) ExecuteProjectAnalysis(ctx context.Context, req *AnalysisReq
 			"timeout":       req.Timeout.Seconds(),
 		},
 		Context: map[string]string{
-			"source":    "web-wasm",
+			"source":    "wasm",
 			"task_id":   req.TaskID,
 			"namespace": s.config.DefaultNamespace,
 		},
@@ -180,7 +180,7 @@ func (s *SDKClient) GenerateCode(ctx context.Context, req *GenerationRequest) (*
 			"templates":      req.Templates,
 		},
 		Context: map[string]string{
-			"source":    "web-wasm",
+			"source":    "wasm",
 			"task_id":   req.TaskID,
 			"namespace": s.config.DefaultNamespace,
 		},
@@ -233,7 +233,7 @@ func (s *SDKClient) ValidateConfiguration(ctx context.Context, req *ValidationRe
 			"strict_mode": req.StrictMode,
 		},
 		Context: map[string]string{
-			"source":    "web-wasm",
+			"source":    "wasm",
 			"task_id":   req.TaskID,
 			"namespace": s.config.DefaultNamespace,
 		},

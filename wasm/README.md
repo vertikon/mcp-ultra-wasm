@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O componente **Web-WASM** fornece uma interface web moderna e interativa para a plataforma MCP Ultra WASM, permitindo que usuários executem tarefas WASM diretamente no navegador com performance nativa e sandboxing seguro.
+O componente **wasm** fornece uma interface web moderna e interativa para a plataforma MCP Ultra WASM, permitindo que usuários executem tarefas WASM diretamente no navegador com performance nativa e sandboxing seguro.
 
 ## 🚀 Funcionalidades
 
@@ -24,15 +24,15 @@ O componente **Web-WASM** fornece uma interface web moderna e interativa para a 
 ### Componentes Principais
 
 ```
-web-wasm/
-├── cmd/web-wasm-server/     # Servidor web Go
-├── internal/web-wasm/
+wasm/
+├── cmd/wasm-server/     # Servidor web Go
+├── internal/wasm/
 │   ├── handlers/            # Handlers HTTP
 │   ├── nats/               # Cliente NATS
 │   ├── sdk/                # Cliente SDK Ultra WASM
 │   ├── observability/     # Métricas, tracing, logging
 │   └── security/          # Autenticação, CORS, rate limiting
-├── web-wasm/
+├── wasm/
 │   ├── wasm/               # Código WASM compilado
 │   ├── static/             # Arquivos estáticos (CSS, JS)
 │   └── templates/          # Templates HTML
@@ -96,17 +96,17 @@ cd mcp-ultra-wasm/mcp/mcp-ultra-wasm
 ### 2. Build da Aplicação
 ```bash
 # Build do servidor
-go build -o bin/web-wasm-server ./cmd/web-wasm-server
+go build -o bin/wasm-server ./cmd/wasm-server
 
 # Build do módulo WASM
-GOOS=js GOARCH=wasm go build -o web-wasm/wasm/main.wasm ./web-wasm/wasm
-cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./web-wasm/wasm/
+GOOS=js GOARCH=wasm go build -o wasm/wasm/main.wasm ./wasm/wasm
+cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./wasm/wasm/
 ```
 
 ### 3. Execução Local
 ```bash
 # Iniciar o servidor
-./bin/web-wasm-server
+./bin/wasm-server
 
 # Ou com make
 make run
@@ -115,21 +115,21 @@ make run
 ### 4. Deploy com Docker
 ```bash
 # Build da imagem
-docker build -f deploy/docker/web-wasm/Dockerfile -t web-wasm-server .
+docker build -f deploy/docker/wasm/Dockerfile -t wasm-server .
 
 # Executar com Docker Compose
-cd deploy/docker/web-wasm
+cd deploy/docker/wasm
 docker-compose up -d
 ```
 
 ### 5. Deploy com Kubernetes
 ```bash
 # Aplicar manifests
-kubectl apply -f deploy/k8s/web-wasm/
+kubectl apply -f deploy/k8s/wasm/
 
 # Verificar status
-kubectl get pods -n web-wasm
-kubectl get services -n web-wasm
+kubectl get pods -n wasm
+kubectl get services -n wasm
 ```
 
 ## ⚙️ Configuração
@@ -147,7 +147,7 @@ kubectl get services -n web-wasm
 
 ### Arquivo de Configuração
 
-Veja `deploy/docker/web-wasm/config.yaml` para configuração detalhada.
+Veja `deploy/docker/wasm/config.yaml` para configuração detalhada.
 
 ## 🧪 Testes
 
@@ -192,13 +192,13 @@ O projeto segue a estrutura padrão Go:
 mcp-ultra-wasm/
 ├── cmd/                    # Pontos de entrada
 ├── internal/              # Código interno
-│   ├── web-wasm/        # Componente web-wasm
+│   ├── wasm/        # Componente wasm
 │   ├── handlers/        # Handlers HTTP
 │   ├── nats/           # Cliente NATS
 │   ├── sdk/            # Cliente SDK
 │   ├── observability/  # Observabilidade
 │   └── security/       # Segurança
-├── web-wasm/             # Frontend e WASM
+├── wasm/             # Frontend e WASM
 ├── test/                  # Testes
 ├── deploy/                # Configurações de deploy
 └── docs/                  # Documentação
@@ -206,7 +206,7 @@ mcp-ultra-wasm/
 
 ### Adicionando Novas Funcionalidades WASM
 
-1. **Criar nova função em `web-wasm/wasm/functions/`**
+1. **Criar nova função em `wasm/wasm/functions/`**
 ```go
 func NewFeature(this js.Value, args []js.Value) interface{} {
     callback := args[len(args)-1]
@@ -219,12 +219,12 @@ func NewFeature(this js.Value, args []js.Value) interface{} {
 }
 ```
 
-2. **Registrar função em `web-wasm/wasm/main.go`**
+2. **Registrar função em `wasm/wasm/main.go`**
 ```go
 js.Global().Set("newFeature", js.FuncOf(functions.NewFeature))
 ```
 
-3. **Atualizar frontend em `web-wasm/static/js/main.js`**
+3. **Atualizar frontend em `wasm/static/js/main.js`**
 ```javascript
 case 'new_feature':
     this.wasmModule.newFeature(config, callback);
@@ -235,7 +235,7 @@ case 'new_feature':
 
 ```bash
 # Usar Air para recarregar automaticamente
-air -c 'go build -o bin/web-wasm-server ./cmd/web-wasm-server && ./bin/web-wasm-server'
+air -c 'go build -o bin/wasm-server ./cmd/wasm-server && ./bin/wasm-server'
 
 # Ou com make
 make dev
@@ -323,7 +323,7 @@ Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICEN
 ## 📋 Changelog
 
 ### v1.0.0 (Atual)
-- Release inicial do Web-WASM
+- Release inicial do wasm
 - Interface web completa
 - Integração NATS e WebSocket
 - Suporte básico ao SDK Ultra WASM

@@ -100,7 +100,7 @@ func (r *RegistryManager) RegisterPlugin(plugin types.Plugin) error {
 
 	// Tentar configurar o plugin
 	if err := plugin.Configure(map[string]interface{}{
-		"registry":      "web-wasm",
+		"registry":      "wasm",
 		"registered_at": entry.RegisteredAt,
 	}); err != nil {
 		r.logger.Warn("Erro ao configurar plugin",
@@ -239,7 +239,7 @@ func (r *RegistryManager) ExecutePlugin(pluginName, method string, params map[st
 	if req.Context == nil {
 		req.Context = make(map[string]string)
 	}
-	req.Context["registry"] = "web-wasm"
+	req.Context["registry"] = "wasm"
 	req.Context["request_id"] = fmt.Sprintf("req-%d", time.Now().UnixNano())
 
 	// Executar plugin

@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/web-wasm/handlers"
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/web-wasm/nats"
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/web-wasm/observability"
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/web-wasm/security"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/wasm/handlers"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/wasm/nats"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/wasm/observability"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm-wasm/internal/wasm/security"
 	"go.uber.org/zap"
 )
 
@@ -23,8 +23,8 @@ var (
 	port       = flag.String("port", "8080", "Porta do servidor web")
 	natsURL    = flag.String("nats-url", "nats://localhost:4222", "URL do servidor NATS")
 	logLevel   = flag.String("log-level", "info", "Nível de log (debug, info, warn, error)")
-	staticPath = flag.String("static-path", "./web-wasm/static", "Caminho dos arquivos estáticos")
-	wasmPath   = flag.String("wasm-path", "./web-wasm/wasm", "Caminho dos arquivos WASM")
+	staticPath = flag.String("static-path", "./wasm/static", "Caminho dos arquivos estáticos")
+	wasmPath   = flag.String("wasm-path", "./wasm/wasm", "Caminho dos arquivos WASM")
 )
 
 func main() {
@@ -100,7 +100,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"status":    "ok",
 			"timestamp": time.Now().UTC(),
-			"service":   "web-wasm-server",
+			"service":   "wasm-server",
 			"version":   "1.0.0",
 		})
 	})
@@ -139,3 +139,5 @@ func main() {
 
 	logger.Info("Servidor desligado com sucesso")
 }
+
+

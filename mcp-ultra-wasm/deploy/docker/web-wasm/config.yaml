@@ -43,7 +43,7 @@ security:
   auth:
     enabled: false
     secret_key: "${JWT_SECRET}"
-    issuer: "web-wasm-server"
+    issuer: "wasm-server"
     token_expiry: "1h"
     refresh_expiry: "24h"
     enable_refresh: false
@@ -150,7 +150,7 @@ observability:
   
   tracing:
     enabled: false
-    service_name: "web-wasm-server"
+    service_name: "wasm-server"
     service_version: "1.0.0"
     environment: "production"
     jaeger_endpoint: ""

@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-wasm-ingress
-  namespace: web-wasm
+  name: wasm-ingress
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     ingress-type: external
   annotations:
@@ -34,7 +34,7 @@ metadata:
     # WebSocket support
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.org/websocket-services: "web-wasm-service"
+    nginx.org/websocket-services: "wasm-service"
     
     # Custom error pages
     nginx.ingress.kubernetes.io/custom-http-errors: "404,503"
@@ -57,7 +57,7 @@ metadata:
     
     # Authentication annotations (if needed)
     # nginx.ingress.kubernetes.io/auth-type: basic
-    # nginx.ingress.kubernetes.io/auth-secret: web-wasm-auth
+    # nginx.ingress.kubernetes.io/auth-secret: wasm-auth
     # nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
     
     # External monitoring
@@ -71,7 +71,7 @@ metadata:
     # Custom snippets for specific paths
     nginx.ingress.kubernetes.io/server-snippet: |
       location /ws {
-          proxy_pass http://web-wasm-service:8080;
+          proxy_pass http://wasm-service:8080;
           proxy_http_version 1.1;
           proxy_set_header Upgrade $http_upgrade;
           proxy_set_header Connection "upgrade";
@@ -109,59 +109,59 @@ metadata:
 spec:
   tls:
   - hosts:
-    - web-wasm.example.com
-    - api.web-wasm.example.com
-    secretName: web-wasm-tls
+    - wasm.example.com
+    - api.wasm.example.com
+    secretName: wasm-tls
   rules:
-  - host: web-wasm.example.com
+  - host: wasm.example.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: web-wasm-service
+            name: wasm-service
             port:
               number: 80
       - path: /ws
         pathType: Exact
         backend:
           service:
-            name: web-wasm-service
+            name: wasm-service
             port:
               number: 80
       - path: /static
         pathType: Prefix
         backend:
           service:
-            name: web-wasm-service
+            name: wasm-service
             port:
               number: 80
       - path: /wasm
         pathType: Prefix
         backend:
           service:
-            name: web-wasm-service
+            name: wasm-service
             port:
               number: 80
-  - host: api.web-wasm.example.com
+  - host: api.wasm.example.com
     http:
       paths:
       - path: /api
         pathType: Prefix
         backend:
           service:
-            name: web-wasm-service
+            name: wasm-service
             port:
               number: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-wasm-internal-ingress
-  namespace: web-wasm
+  name: wasm-internal-ingress
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     ingress-type: internal
   annotations:
@@ -177,22 +177,22 @@ metadata:
       more_set_headers "X-Internal-Service: true";
 spec:
   rules:
-  - host: web-wasm.internal
+  - host: wasm.internal
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: web-wasm-internal
+            name: wasm-internal
             port:
               number: 8080
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-wasm-grafana-ingress
-  namespace: web-wasm
+  name: wasm-grafana-ingress
+  namespace: wasm
   labels:
     app: grafana
     component: monitoring
@@ -208,10 +208,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - grafana.web-wasm.example.com
+    - grafana.wasm.example.com
     secretName: grafana-tls
   rules:
-  - host: grafana.web-wasm.example.com
+  - host: grafana.wasm.example.com
     http:
       paths:
       - path: /
@@ -225,8 +225,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-wasm-jaeger-ingress
-  namespace: web-wasm
+  name: wasm-jaeger-ingress
+  namespace: wasm
   labels:
     app: jaeger
     component: monitoring
@@ -241,10 +241,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - jaeger.web-wasm.example.com
+    - jaeger.wasm.example.com
     secretName: jaeger-tls
   rules:
-  - host: jaeger.web-wasm.example.com
+  - host: jaeger.wasm.example.com
     http:
       paths:
       - path: /
@@ -258,8 +258,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-wasm-prometheus-ingress
-  namespace: web-wasm
+  name: wasm-prometheus-ingress
+  namespace: wasm
   labels:
     app: prometheus
     component: monitoring
@@ -277,10 +277,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - prometheus.web-wasm.example.com
+    - prometheus.wasm.example.com
     secretName: prometheus-tls
   rules:
-  - host: prometheus.web-wasm.example.com
+  - host: prometheus.wasm.example.com
     http:
       paths:
       - path: /
@@ -295,26 +295,26 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: web-wasm-tls
-  namespace: web-wasm
+  name: wasm-tls
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 spec:
-  secretName: web-wasm-tls
+  secretName: wasm-tls
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - web-wasm.example.com
-  - api.web-wasm.example.com
+  - wasm.example.com
+  - api.wasm.example.com
 ---
 # Certificate for monitoring services
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: grafana-tls
-  namespace: web-wasm
+  namespace: wasm
   labels:
     app: grafana
     component: monitoring
@@ -324,13 +324,13 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - grafana.web-wasm.example.com
+  - grafana.wasm.example.com
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: jaeger-tls
-  namespace: web-wasm
+  namespace: wasm
   labels:
     app: jaeger
     component: monitoring
@@ -340,13 +340,13 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - jaeger.web-wasm.example.com
+  - jaeger.wasm.example.com
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: prometheus-tls
-  namespace: web-wasm
+  namespace: wasm
   labels:
     app: prometheus
     component: monitoring
@@ -356,14 +356,14 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - prometheus.web-wasm.example.com
+  - prometheus.wasm.example.com
 ---
 # Basic Auth secrets for monitoring services
 apiVersion: v1
 kind: Secret
 metadata:
   name: grafana-auth
-  namespace: web-wasm
+  namespace: wasm
   labels:
     app: grafana
     component: monitoring
@@ -375,7 +375,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: prometheus-auth
-  namespace: web-wasm
+  namespace: wasm
   labels:
     app: prometheus
     component: monitoring

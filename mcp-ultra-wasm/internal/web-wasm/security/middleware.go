@@ -270,7 +270,7 @@ func (sm *SecurityMiddleware) RefreshTokenHandler(c *gin.Context) {
 	}
 
 	// Verificar se é refresh token
-	if claims.Audience != nil && len(claims.Audience) > 0 && claims.Audience[0] != "web-wasm-refresh" {
+	if claims.Audience != nil && len(claims.Audience) > 0 && claims.Audience[0] != "wasm-refresh" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Not a refresh token"})
 		return
 	}

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-wasm-service
-  namespace: web-wasm
+  name: wasm-service
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     service-type: web
   annotations:
@@ -34,15 +34,15 @@ spec:
     targetPort: metrics
     protocol: TCP
   selector:
-    app: web-wasm-server
+    app: wasm-server
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-wasm-headless
-  namespace: web-wasm
+  name: wasm-headless
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     service-type: headless
 spec:
@@ -59,15 +59,15 @@ spec:
     targetPort: metrics
     protocol: TCP
   selector:
-    app: web-wasm-server
+    app: wasm-server
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-wasm-internal
-  namespace: web-wasm
+  name: wasm-internal
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     service-type: internal
   annotations:
@@ -85,22 +85,22 @@ spec:
     targetPort: metrics
     protocol: TCP
   selector:
-    app: web-wasm-server
+    app: wasm-server
 ---
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: web-wasm-external
-  namespace: web-wasm
+  name: wasm-external
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 subsets:
 - addresses:
   - ip: 192.168.1.100
-    hostname: web-wasm-external-1
+    hostname: wasm-external-1
   - ip: 192.168.1.101
-    hostname: web-wasm-external-2
+    hostname: wasm-external-2
   ports:
   - name: http
     port: 8080
@@ -112,16 +112,16 @@ subsets:
 apiVersion: v1
 kind: ServiceMonitor
 metadata:
-  name: web-wasm-monitor
-  namespace: web-wasm
+  name: wasm-monitor
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
     release: prometheus-operator
 spec:
   selector:
     matchLabels:
-      app: web-wasm-server
+      app: wasm-server
   endpoints:
   - port: metrics
     path: /metrics
@@ -141,8 +141,8 @@ spec:
 apiVersion: v1
 kind: ServiceMonitor
 metadata:
-  name: web-wasm-sdk-monitor
-  namespace: web-wasm
+  name: wasm-sdk-monitor
+  namespace: wasm
   labels:
     app: ultra-wasm-sdk
     component: mcp-ultra-wasm
@@ -162,7 +162,7 @@ apiVersion: v1
 kind: ServiceMonitor
 metadata:
   name: nats-monitor
-  namespace: web-wasm
+  namespace: wasm
   labels:
     app: nats
     component: mcp-ultra-wasm
@@ -181,15 +181,15 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: web-wasm-network-policy
-  namespace: web-wasm
+  name: wasm-network-policy
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 spec:
   podSelector:
     matchLabels:
-      app: web-wasm-server
+      app: wasm-server
   policyTypes:
   - Ingress
   - Egress
@@ -217,7 +217,7 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          name: web-wasm
+          name: wasm
     - namespaceSelector:
         matchLabels:
           name: kube-system
@@ -255,10 +255,10 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: web-wasm-static-files
-  namespace: web-wasm
+  name: wasm-static-files
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 data:
   index.html: |
@@ -289,10 +289,10 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: web-wasm-wasm-files
-  namespace: web-wasm
+  name: wasm-wasm-files
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 data:
   main.wasm: ""
@@ -316,10 +316,10 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: web-wasm-config
-  namespace: web-wasm
+  name: wasm-config
+  namespace: wasm
   labels:
-    app: web-wasm-server
+    app: wasm-server
     component: mcp-ultra-wasm
 data:
   config.yaml: |
@@ -357,7 +357,7 @@ data:
     security:
       auth:
         enabled: true
-        issuer: "web-wasm-server"
+        issuer: "wasm-server"
         token_expiry: "1h"
         skip_auth_paths:
           - "/health"
@@ -391,5 +391,5 @@ data:
         subsystem: "mcp"
       tracing:
         enabled: false
-        service_name: "web-wasm-server"
+        service_name: "wasm-server"
         service_version: "1.0.0"

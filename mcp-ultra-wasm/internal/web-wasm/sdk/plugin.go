@@ -29,7 +29,7 @@ type PluginMetrics struct {
 
 func NewWebWasmPlugin(client *SDKClient, logger *zap.Logger) *WebWasmPlugin {
 	return &WebWasmPlugin{
-		name:      "web-wasm",
+		name:      "wasm",
 		version:   "1.0.0",
 		client:    client,
 		logger:    logger,
@@ -64,7 +64,7 @@ func (p *WebWasmPlugin) GetCapabilities() []string {
 }
 
 func (p *WebWasmPlugin) GetHealth() types.HealthStatus {
-	// Verificar saúde do componente web-wasm
+	// Verificar saúde do componente wasm
 	if p.client == nil {
 		return types.HealthStatusUnhealthy
 	}
@@ -324,10 +324,10 @@ func (p *WebWasmPlugin) getVersionInfo() interface{} {
 // Helper functions
 
 func (p *WebWasmPlugin) generateTaskID() string {
-	return fmt.Sprintf("web-wasm-%d", time.Now().UnixNano())
+	return fmt.Sprintf("wasm-%d", time.Now().UnixNano())
 }
 
-// Registry para gerenciar plugins web-wasm
+// Registry para gerenciar plugins wasm
 
 type PluginRegistry struct {
 	plugins map[string]types.Plugin

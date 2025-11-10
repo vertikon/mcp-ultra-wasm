@@ -25,7 +25,7 @@ curl http://localhost:8080/health  # ✅ Pronto!
 
 - [Visão Geral](#-visão-geral)
 - [Características Principais](#-características-principais)
-- [Arquitetura Web-WASM](#-arquitetura-web-wasm)
+- [Arquitetura wasm](#-arquitetura-wasm)
 - [Stack Tecnológica](#-stack-tecnológica)
 - [Pré-requisitos](#-pré-requisitos)
 - [Instalação](#-instalação)
@@ -110,7 +110,7 @@ O **MCP-Ultra WASM** é uma plataforma completa que une:
 
 ---
 
-## 🏗️ Arquitetura Web-WASM
+## 🏗️ Arquitetura wasm
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -146,7 +146,7 @@ O **MCP-Ultra WASM** é uma plataforma completa que une:
                     └─────────────┘
 ```
 
-**Fluxo de Dados Web-WASM**:
+**Fluxo de Dados wasm**:
 1. **Browser** carrega módulo WASM compilado de Go
 2. **JavaScript** invoca funções WASM via JS interop
 3. **WASM** processa dados localmente (alta performance)
@@ -214,10 +214,10 @@ go mod download
 
 ```bash
 # Compilar Go para WebAssembly
-$env:GOOS="js"; $env:GOARCH="wasm"; go build -o ../web-wasm/wasm/main.wasm ../web-wasm/wasm/main.go
+$env:GOOS="js"; $env:GOARCH="wasm"; go build -o ../wasm/wasm/main.wasm ../wasm/wasm/main.go
 
 # Verificar se foi criado
-Test-Path "../web-wasm/wasm/main.wasm"  # Deve retornar True
+Test-Path "../wasm/wasm/main.wasm"  # Deve retornar True
 ```
 
 ### 4. Iniciar Serviços
@@ -227,7 +227,7 @@ Test-Path "../web-wasm/wasm/main.wasm"  # Deve retornar True
 docker-compose -f docker-compose.yml up -d
 
 # Ou via Go (desenvolvimento)
-go run ./cmd/web-wasm-server
+go run ./cmd/wasm-server
 ```
 
 ### 5. Verificar Instalação
@@ -237,7 +237,7 @@ go run ./cmd/web-wasm-server
 curl http://localhost:8080/health
 
 # Resposta esperada:
-# {"status":"ok","timestamp":"2025-01-15T10:30:00Z","service":"web-wasm-server","version":"1.0.0"}
+# {"status":"ok","timestamp":"2025-01-15T10:30:00Z","service":"wasm-server","version":"1.0.0"}
 
 # Acessar interface web
 open http://localhost:8080
@@ -382,8 +382,8 @@ GET  /ws                  # WebSocket endpoint
 ```
 mcp/mcp-ultra-wasm/
 ├── cmd/
-│   └── web-wasm-server/         # Servidor principal
-├── internal/web-wasm/
+│   └── wasm-server/         # Servidor principal
+├── internal/wasm/
 │   ├── handlers/                # HTTP & WebSocket handlers
 │   │   ├── api_handler.go      # API REST endpoints
 │   │   ├── websocket_handler.go # WebSocket real-time
@@ -403,7 +403,7 @@ mcp/mcp-ultra-wasm/
 │       ├── client.go           # MCP client
 │       ├── registry.go         # Plugin registry
 │       └── contracts.go        # Type definitions
-├── web-wasm/
+├── wasm/
 │   ├── wasm/                    # Módulo WebAssembly
 │   │   ├── main.go             # Go code para WASM
 │   │   ├── functions/          # Funções exportadas
@@ -416,19 +416,19 @@ mcp/mcp-ultra-wasm/
 │           ├── wasm-loader.js  # WASM loader
 │           └── websocket-client.js # WebSocket client
 ├── deploy/
-│   ├── docker/web-wasm/        # Docker configs
-│   └── k8s/web-wasm/           # Kubernetes manifests
-└── test/web-wasm/              # Testes
+│   ├── docker/wasm/        # Docker configs
+│   └── k8s/wasm/           # Kubernetes manifests
+└── test/wasm/              # Testes
 ```
 
 ### Comandos de Desenvolvimento
 
 ```bash
 # Compilar WASM
-$env:GOOS="js"; $env:GOARCH="wasm"; go build -o ../web-wasm/wasm/main.wasm ../web-wasm/wasm/main.go
+$env:GOOS="js"; $env:GOARCH="wasm"; go build -o ../wasm/wasm/main.wasm ../wasm/wasm/main.go
 
 # Rodar servidor em modo dev
-go run ./cmd/web-wasm-server -log-level=debug
+go run ./cmd/wasm-server -log-level=debug
 
 # Rodar testes
 go test ./...
@@ -440,7 +440,7 @@ gofmt -w .
 golangci-lint run
 
 # Build para produção
-go build -o bin/web-wasm-server ./cmd/web-wasm-server
+go build -o bin/wasm-server ./cmd/wasm-server
 ```
 
 ### Hot Reload no Desenvolvimento
@@ -460,7 +460,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ./cmd/web-wasm-server"
+  cmd = "go build -o ./tmp/main ./cmd/wasm-server"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
@@ -501,13 +501,13 @@ air
 
 ```bash
 # Testes unitários
-go test ./internal/web-wasm/handlers/...
+go test ./internal/wasm/handlers/...
 
 # Testes de integração
-go test ./test/web-wasm/...
+go test ./test/wasm/...
 
 # Testes WASM
-go test ./web-wasm/wasm/...
+go test ./wasm/wasm/...
 
 # Com cobertura
 go test ./... -coverprofile=coverage.out
@@ -552,7 +552,7 @@ func TestWebSocketConnection(t *testing.T) {
 
 ```bash
 # Build imagem
-docker build -f deploy/docker/web-wasm/Dockerfile -t mcp-ultra-wasm:latest .
+docker build -f deploy/docker/wasm/Dockerfile -t mcp-ultra-wasm:latest .
 
 # Rodar container
 docker run -p 8080:8080 \
@@ -570,7 +570,7 @@ docker-compose -f docker-compose.yml up -d
 docker-compose ps
 
 # Logs
-docker-compose logs -f web-wasm-server
+docker-compose logs -f wasm-server
 
 # Parar
 docker-compose down
@@ -580,13 +580,13 @@ docker-compose down
 
 ```bash
 # Deploy completo
-kubectl apply -f deploy/k8s/web-wasm/
+kubectl apply -f deploy/k8s/wasm/
 
 # Verificar deployment
-kubectl get pods -l app=web-wasm-server
+kubectl get pods -l app=wasm-server
 
 # Acessar serviço
-kubectl port-forward svc/web-wasm-service 8080:80
+kubectl port-forward svc/wasm-service 8080:80
 ```
 
 ### Variáveis de Ambiente Produção
@@ -704,7 +704,7 @@ Logs estruturados em formato JSON:
 {
   "level": "info",
   "timestamp": "2025-01-15T10:30:00Z",
-  "service": "web-wasm-server",
+  "service": "wasm-server",
   "trace_id": "abc123",
   "message": "WASM function executed",
   "function": "analyzeProject",

@@ -9,7 +9,7 @@
 [gosec] 2025/11/09 16:53:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\metrics
 [gosec] 2025/11/09 16:53:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\pkg\observability
 [gosec] 2025/11/09 16:53:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\ai\telemetry
-[gosec] 2025/11/09 16:53:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\web-wasm\observability
+[gosec] 2025/11/09 16:53:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\wasm\observability
 [gosec] 2025/11/09 16:53:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\domain
 [gosec] 2025/11/09 16:53:39 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\nats
 [gosec] 2025/11/09 16:53:39 Checking package: main
@@ -34,4 +34,4 @@
 [gosec] 2025/11/09 16:54:36 Checking file: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\ai\telemetry\metrics.go
 [gosec] 2025/11/09 16:54:36 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\tests\integration
 [gosec] 2025/11/09 16:54:37 Import directory: E:\vertikon\.endurance\templates\mcp-ultra-wasm\mcp\mcp-ultra-wasm\internal\config\secrets
-[gosec] 2025/11/09 16:54:39 parsing errors in pkg "observability": parsing line: strconv.Atoi: parsing "\\vertikon\\.endurance\\templates\\mcp-ultra-wasm\\mcp\\mcp-ultra-wasm\\internal\\web-wasm\\observability\\tracing.go": invalid syntax
+[gosec] 2025/11/09 16:54:39 parsing errors in pkg "observability": parsing line: strconv.Atoi: parsing "\\vertikon\\.endurance\\templates\\mcp-ultra-wasm\\mcp\\mcp-ultra-wasm\\internal\\wasm\\observability\\tracing.go": invalid syntax

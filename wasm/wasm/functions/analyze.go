@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"syscall/js"
 
-	"github.com/vertikon/mcp-ultra-wasm-wasm/mcp/mcp-ultra-wasm/web-wasm/wasm/internal"
+	"github.com/vertikon/mcp-ultra-wasm-wasm/wasm/wasm/internal"
 )
 
 // AnalyzeProject analisa um projeto Go e retorna métricas e insights
@@ -178,3 +178,4 @@ func Cleanup(this js.Value, args []js.Value) interface{} {
 		"message": "Recursos do módulo WASM liberados com sucesso",
 	}
 }
+

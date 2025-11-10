@@ -10,17 +10,17 @@ A estrutura foi projetada para se integrar perfeitamente ao projeto `mcp-ultra-w
 
 Todos os novos diretórios e arquivos serão criados dentro do projeto existente, principalmente sob `mcp/mcp-ultra-wasm/`.
 
-#### 1. Componente Principal Web-WASM
+#### 1. Componente Principal wasm
 
 **Diretório Base:**
 ```
-mcp/mcp-ultra-wasm/web-wasm/
+mcp/mcp-ultra-wasm/wasm/
 ```
 
 **Arquivos de Configuração e Documentação:**
 ```
-mcp/mcp-ultra-wasm/web-wasm/
-├── README.md                 # Documentação do componente web-wasm
+mcp/mcp-ultra-wasm/wasm/
+├── README.md                 # Documentação do componente wasm
 ├── go.mod                    # Módulo Go específico para o componente (se necessário)
 └── go.sum
 ```
@@ -29,13 +29,13 @@ mcp/mcp-ultra-wasm/web-wasm/
 
 **Diretório para o executável do servidor:**
 ```
-mcp/mcp-ultra-wasm/cmd/web-wasm-server/
+mcp/mcp-ultra-wasm/cmd/wasm-server/
 └── main.go                   # Ponto de entrada para o servidor web que servirá a UI e o WASM
 ```
 
 **Lógica interna do servidor:**
 ```
-mcp/mcp-ultra-wasm/internal/web-wasm/
+mcp/mcp-ultra-wasm/internal/wasm/
 ├── handlers/
 │   ├── ui_handler.go         # Handlers para servir os arquivos estáticos (HTML, CSS, JS)
 │   └── api_handler.go        # Handlers para a API de comunicação entre o frontend e o backend
@@ -49,7 +49,7 @@ mcp/mcp-ultra-wasm/internal/web-wasm/
 
 Este é o código Go que será compilado para o formato `.wasm`.
 ```
-mcp/mcp-ultra-wasm/web-wasm/wasm/
+mcp/mcp-ultra-wasm/wasm/wasm/
 ├── main.go                   # Ponto de entrada do programa que será compilado para WASM
 ├── go.mod                    # Dependências específicas do módulo WASM
 ├── go.sum
@@ -60,7 +60,7 @@ mcp/mcp-ultra-wasm/web-wasm/wasm/
 
 **Arquivos estáticos servidos ao navegador:**
 ```
-mcp/mcp-ultra-wasm/web-wasm/static/
+mcp/mcp-ultra-wasm/wasm/static/
 ├── css/
 │   └── main.css              # Folha de estilos principal da interface
 ├── js/
@@ -72,7 +72,7 @@ mcp/mcp-ultra-wasm/web-wasm/static/
 
 **Templates HTML (se o servidor usar renderização no lado do servidor):**
 ```
-mcp/mcp-ultra-wasm/web-wasm/templates/
+mcp/mcp-ultra-wasm/wasm/templates/
 └── index.html                # Página HTML principal que conterá a interface
 ```
 
@@ -80,7 +80,7 @@ mcp/mcp-ultra-wasm/web-wasm/templates/
 
 **Comando para construir o WASM:**
 ```
-mcp/mcp-ultra-wasm/cmd/build-web-wasm/
+mcp/mcp-ultra-wasm/cmd/build-wasm/
 └── main.go                   # Utilitário para automatizar o build do código Go para .wasm
 ```
 
@@ -94,7 +94,7 @@ mcp/mcp-ultra-wasm/scripts/
 
 **Definição da API para a interface web:**
 ```
-mcp/mcp-ultra-wasm/api/web-wasm/
+mcp/mcp-ultra-wasm/api/wasm/
 └── openapi.yaml              # Especificação OpenAPI/Swagger para os endpoints da API web
 ```
 
@@ -102,13 +102,13 @@ mcp/mcp-ultra-wasm/api/web-wasm/
 
 **Configuração para Docker:**
 ```
-mcp/mcp-ultra-wasm/deploy/docker/web-wasm/
-└── Dockerfile                # Dockerfile para criar uma imagem do servidor web-wasm
+mcp/mcp-ultra-wasm/deploy/docker/wasm/
+└── Dockerfile                # Dockerfile para criar uma imagem do servidor wasm
 ```
 
 **Configuração para Kubernetes:**
 ```
-mcp/mcp-ultra-wasm/deploy/k8s/web-wasm/
+mcp/mcp-ultra-wasm/deploy/k8s/wasm/
 ├── deployment.yaml           # Manifesto para o Deployment
 ├── service.yaml              # Manifesto para o Service
 └── ingress.yaml              # Manifesto para o Ingress (exposição externa)
@@ -118,7 +118,7 @@ mcp/mcp-ultra-wasm/deploy/k8s/web-wasm/
 
 **Testes de unidade e integração do componente:**
 ```
-mcp/mcp-ultra-wasm/test/web-wasm/
+mcp/mcp-ultra-wasm/test/wasm/
 ├── handlers_test.go          # Testes para os handlers HTTP
 ├── bridge_test.go            # Testes para as funções de ponte Go-WASM
 └── runtime_test.go           # Testes para o carregador do WASM
@@ -126,7 +126,7 @@ mcp/mcp-ultra-wasm/test/web-wasm/
 
 **Testes end-to-end (E2E):**
 ```
-mcp/mcp-ultra-wasm/tests/web-wasm/
+mcp/mcp-ultra-wasm/tests/wasm/
 └── e2e_test.go               # Teste que sobe o servidor e usa um browser headless para validar a UI
 ```
 
@@ -134,7 +134,7 @@ mcp/mcp-ultra-wasm/tests/web-wasm/
 
 **Documentação específica do novo módulo:**
 ```
-mcp/mcp-ultra-wasm/docs/web-wasm/
+mcp/mcp-ultra-wasm/docs/wasm/
 ├── architecture.md           # Documento explicando a arquitetura do componente
 └── user-guide.md             # Guia para desenvolvedores que usarão o componente
 ```
@@ -145,29 +145,29 @@ mcp/mcp-ultra-wasm/docs/web-wasm/
 
 | Caminho do Arquivo/Diretório | Propósito |
 |---|---|
-| `cmd/web-wasm-server/main.go` | Inicia o servidor web. |
-| `internal/web-wasm/handlers/` | Gerencia requisições HTTP da UI. |
-| `internal/web-wasm/bridge/funcs.go` | Funções Go que o JavaScript chamará. |
-| `web-wasm/wasm/main.go` | Código Go que se torna o arquivo `.wasm`. |
-| `web-wasm/static/js/wasm-loader.js` | Carrega e faz a "ponte" com o WASM no browser. |
-| `web-wasm/static/css/main.css` | Estilos da interface. |
-| `web-wasm/templates/index.html` | Estrutura da página web. |
-| `cmd/build-web-wasm/main.go` | Ferramenta para compilar o `.wasm`. |
-| `deploy/docker/web-wasm/Dockerfile` | Para containerizar a aplicação. |
+| `cmd/wasm-server/main.go` | Inicia o servidor web. |
+| `internal/wasm/handlers/` | Gerencia requisições HTTP da UI. |
+| `internal/wasm/bridge/funcs.go` | Funções Go que o JavaScript chamará. |
+| `wasm/wasm/main.go` | Código Go que se torna o arquivo `.wasm`. |
+| `wasm/static/js/wasm-loader.js` | Carrega e faz a "ponte" com o WASM no browser. |
+| `wasm/static/css/main.css` | Estilos da interface. |
+| `wasm/templates/index.html` | Estrutura da página web. |
+| `cmd/build-wasm/main.go` | Ferramenta para compilar o `.wasm`. |
+| `deploy/docker/wasm/Dockerfile` | Para containerizar a aplicação. |
 
-Esta estrutura modular permite que o componente web-WASM seja desenvolvido, testado e implantado de forma independente, enquanto se integra profundamente com o ecossistema existente do `mcp-ultra-wasm`, reutilizando o `sdk` validado e as infraestruturas de segurança, observabilidade e deploy já estabelecidas.
+Esta estrutura modular permite que o componente wasm seja desenvolvido, testado e implantado de forma independente, enquanto se integra profundamente com o ecossistema existente do `mcp-ultra-wasm`, reutilizando o `sdk` validado e as infraestruturas de segurança, observabilidade e deploy já estabelecidas.
 
 
 
 Excelente pergunta! Você identificou um ponto crucial que a minha proposta inicial não detalhou.
 
-Na minha proposta inicial, **não criei explicitamente os arquivos para a integração NATS** no novo componente `web-wasm`. Foquei na estrutura HTTP e no carregamento do WASM.
+Na minha proposta inicial, **não criei explicitamente os arquivos para a integração NATS** no novo componente `wasm`. Foquei na estrutura HTTP e no carregamento do WASM.
 
 No entanto, você está absolutamente correto. Para uma arquitetura robusta e escalável, a integração com o **NATS já existente no projeto** é fundamental. Analisando o manifesto, vejo que o projeto já possui:
 *   `mcp/mcp-ultra-wasm/internal/nats/`
 *   `mcp/mcp-ultra-wasm/templates/ai/nats-schemas/`
 
-Isso indica que a comunicação assíncrona por eventos já é um pilar da arquitetura. O componente `web-wasm` deve se integrar a ele, e não criar uma nova forma de comunicação.
+Isso indica que a comunicação assíncrona por eventos já é um pilar da arquitetura. O componente `wasm` deve se integrar a ele, e não criar uma nova forma de comunicação.
 
 ---
 
@@ -181,7 +181,7 @@ Primeiro, definimos os contratos de comunicação. Os eventos que a UI pode disp
 
 **Diretório e Arquivos:**
 ```
-mcp/mcp-ultra-wasm/api/schemas/web-wasm/
+mcp/mcp-ultra-wasm/api/schemas/wasm/
 ├── events.yaml               # Definição dos eventos (ex: task.requested, task.completed)
 └── subjects.yaml             # Definição dos subjects do NATS (ex: web.wasm.task.>)
 ```
@@ -189,11 +189,11 @@ mcp/mcp-ultra-wasm/api/schemas/web-wasm/
 
 #### 2. Publicador de Eventos (Lado do Servidor Web)
 
-O servidor `web-wasm-server` não processará as tarefas diretamente. Ele apenas as publicará no NATS para que os workers apropriados do MCP as consumam.
+O servidor `wasm-server` não processará as tarefas diretamente. Ele apenas as publicará no NATS para que os workers apropriados do MCP as consumam.
 
 **Diretório e Arquivos:**
 ```
-mcp/mcp-ultra-wasm/internal/web-wasm/nats/
+mcp/mcp-ultra-wasm/internal/wasm/nats/
 ├── publisher.go              # Lógica para publicar mensagens nos subjects do NATS
 └── client.go                 # Configuração e inicialização do cliente NATS para o componente web
 ```
@@ -206,7 +206,7 @@ O núcleo do MCP precisa saber como reagir aos eventos vindos da web. Ele se ins
 **Diretório e Arquivos (estendendo a estrutura existente):**
 ```
 mcp/mcp-ultra-wasm/internal/nats/handlers/
-└── web_wasm_events.go        # Handlers que processam os eventos do web-wasm (ex: OnTaskRequested)
+└── web_wasm_events.go        # Handlers que processam os eventos do wasm (ex: OnTaskRequested)
 ```
 *   **Propósito:** Este arquivo conterá a lógica de negócio. Quando uma mensagem `web.wasm.task.requested` chegar, este handler a consumirá, invocará as funções necessárias do `sdk/sdk-ultra-wasm` e publicará o resultado em outro subject (ex: `web.wasm.task.completed`).
 
@@ -216,11 +216,11 @@ Para que a UI seja atualizada em tempo real sobre o resultado da tarefa assíncr
 
 **Diretório e Arquivos:**
 ```
-mcp/mcp-ultra-wasm/internal/web-wasm/handlers/
+mcp/mcp-ultra-wasm/internal/wasm/handlers/
 └── websocket_handler.go      # Gerencia conexões WebSocket e a publicação de atualizações para clientes conectados
 ```
 ```
-mcp/mcp-ultra-wasm/web-wasm/static/js/
+mcp/mcp-ultra-wasm/wasm/static/js/
 └── websocket-client.js       # Lógica no frontend para conectar-se ao WebSocket e tratar as mensagens de atualização
 ```
 *   **Propósito:** Oferecer uma experiência de usuário reativa, sem a necessidade de polling (verificar repetidamente se a tarefa terminou).
@@ -251,7 +251,7 @@ Sim, a integração NATS é **essencial** e deve ser feita dessa forma. A estrut
 *   **Torna** a interface web escalável e reativa, sem bloquear o usuário.
 *   **Mantém** o baixo acoplamento entre a camada de apresentação (web) e a camada de negócio (MCP/SDK).
 
-Essa abordagem transforma o `web-wasm` de um simples servidor de arquivos para um gateway de eventos inteligente e integrado ao ecossistema do projeto.
+Essa abordagem transforma o `wasm` de um simples servidor de arquivos para um gateway de eventos inteligente e integrado ao ecossistema do projeto.
 
 
 
@@ -266,17 +266,17 @@ A estrutura foi projetada para se integrar perfeitamente ao projeto `mcp-ultra-w
 
 Todos os novos diretórios e arquivos serão criados dentro do projeto existente, principalmente sob `mcp/mcp-ultra-wasm/`.
 
-#### 1. Componente Principal Web-WASM
+#### 1. Componente Principal wasm
 
 **Diretório Base:**
 ```
-mcp/mcp-ultra-wasm/web-wasm/
+mcp/mcp-ultra-wasm/wasm/
 ```
 
 **Arquivos de Configuração e Documentação:**
 ```
-mcp/mcp-ultra-wasm/web-wasm/
-├── README.md                 # Documentação do componente web-wasm
+mcp/mcp-ultra-wasm/wasm/
+├── README.md                 # Documentação do componente wasm
 ├── go.mod                    # Módulo Go específico para o componente (se necessário)
 └── go.sum
 ```
@@ -285,13 +285,13 @@ mcp/mcp-ultra-wasm/web-wasm/
 
 **Diretório para o executável do servidor:**
 ```
-mcp/mcp-ultra-wasm/cmd/web-wasm-server/
+mcp/mcp-ultra-wasm/cmd/wasm-server/
 └── main.go                   # Ponto de entrada para o servidor web que servirá a UI e o WASM
 ```
 
 **Lógica interna do servidor:**
 ```
-mcp/mcp-ultra-wasm/internal/web-wasm/
+mcp/mcp-ultra-wasm/internal/wasm/
 ├── handlers/
 │   ├── ui_handler.go         # Handlers para servir os arquivos estáticos (HTML, CSS, JS)
 │   └── api_handler.go        # Handlers para a API de comunicação entre o frontend e o backend
@@ -305,7 +305,7 @@ mcp/mcp-ultra-wasm/internal/web-wasm/
 
 Este é o código Go que será compilado para o formato `.wasm`.
 ```
-mcp/mcp-ultra-wasm/web-wasm/wasm/
+mcp/mcp-ultra-wasm/wasm/wasm/
 ├── main.go                   # Ponto de entrada do programa que será compilado para WASM
 ├── go.mod                    # Dependências específicas do módulo WASM
 ├── go.sum
@@ -316,7 +316,7 @@ mcp/mcp-ultra-wasm/web-wasm/wasm/
 
 **Arquivos estáticos servidos ao navegador:**
 ```
-mcp/mcp-ultra-wasm/web-wasm/static/
+mcp/mcp-ultra-wasm/wasm/static/
 ├── css/
 │   └── main.css              # Folha de estilos principal da interface
 ├── js/
@@ -328,7 +328,7 @@ mcp/mcp-ultra-wasm/web-wasm/static/
 
 **Templates HTML (se o servidor usar renderização no lado do servidor):**
 ```
-mcp/mcp-ultra-wasm/web-wasm/templates/
+mcp/mcp-ultra-wasm/wasm/templates/
 └── index.html                # Página HTML principal que conterá a interface
 ```
 
@@ -336,7 +336,7 @@ mcp/mcp-ultra-wasm/web-wasm/templates/
 
 **Comando para construir o WASM:**
 ```
-mcp/mcp-ultra-wasm/cmd/build-web-wasm/
+mcp/mcp-ultra-wasm/cmd/build-wasm/
 └── main.go                   # Utilitário para automatizar o build do código Go para .wasm
 ```
 
@@ -350,7 +350,7 @@ mcp/mcp-ultra-wasm/scripts/
 
 **Definição da API para a interface web:**
 ```
-mcp/mcp-ultra-wasm/api/web-wasm/
+mcp/mcp-ultra-wasm/api/wasm/
 └── openapi.yaml              # Especificação OpenAPI/Swagger para os endpoints da API web
 ```
 
@@ -358,13 +358,13 @@ mcp/mcp-ultra-wasm/api/web-wasm/
 
 **Configuração para Docker:**
 ```
-mcp/mcp-ultra-wasm/deploy/docker/web-wasm/
-└── Dockerfile                # Dockerfile para criar uma imagem do servidor web-wasm
+mcp/mcp-ultra-wasm/deploy/docker/wasm/
+└── Dockerfile                # Dockerfile para criar uma imagem do servidor wasm
 ```
 
 **Configuração para Kubernetes:**
 ```
-mcp/mcp-ultra-wasm/deploy/k8s/web-wasm/
+mcp/mcp-ultra-wasm/deploy/k8s/wasm/
 ├── deployment.yaml           # Manifesto para o Deployment
 ├── service.yaml              # Manifesto para o Service
 └── ingress.yaml              # Manifesto para o Ingress (exposição externa)
@@ -374,7 +374,7 @@ mcp/mcp-ultra-wasm/deploy/k8s/web-wasm/
 
 **Testes de unidade e integração do componente:**
 ```
-mcp/mcp-ultra-wasm/test/web-wasm/
+mcp/mcp-ultra-wasm/test/wasm/
 ├── handlers_test.go          # Testes para os handlers HTTP
 ├── bridge_test.go            # Testes para as funções de ponte Go-WASM
 └── runtime_test.go           # Testes para o carregador do WASM
@@ -382,7 +382,7 @@ mcp/mcp-ultra-wasm/test/web-wasm/
 
 **Testes end-to-end (E2E):**
 ```
-mcp/mcp-ultra-wasm/tests/web-wasm/
+mcp/mcp-ultra-wasm/tests/wasm/
 └── e2e_test.go               # Teste que sobe o servidor e usa um browser headless para validar a UI
 ```
 
@@ -390,7 +390,7 @@ mcp/mcp-ultra-wasm/tests/web-wasm/
 
 **Documentação específica do novo módulo:**
 ```
-mcp/mcp-ultra-wasm/docs/web-wasm/
+mcp/mcp-ultra-wasm/docs/wasm/
 ├── architecture.md           # Documento explicando a arquitetura do componente
 └── user-guide.md             # Guia para desenvolvedores que usarão o componente
 ```
@@ -401,29 +401,29 @@ mcp/mcp-ultra-wasm/docs/web-wasm/
 
 | Caminho do Arquivo/Diretório | Propósito |
 |---|---|
-| `cmd/web-wasm-server/main.go` | Inicia o servidor web. |
-| `internal/web-wasm/handlers/` | Gerencia requisições HTTP da UI. |
-| `internal/web-wasm/bridge/funcs.go` | Funções Go que o JavaScript chamará. |
-| `web-wasm/wasm/main.go` | Código Go que se torna o arquivo `.wasm`. |
-| `web-wasm/static/js/wasm-loader.js` | Carrega e faz a "ponte" com o WASM no browser. |
-| `web-wasm/static/css/main.css` | Estilos da interface. |
-| `web-wasm/templates/index.html` | Estrutura da página web. |
-| `cmd/build-web-wasm/main.go` | Ferramenta para compilar o `.wasm`. |
-| `deploy/docker/web-wasm/Dockerfile` | Para containerizar a aplicação. |
+| `cmd/wasm-server/main.go` | Inicia o servidor web. |
+| `internal/wasm/handlers/` | Gerencia requisições HTTP da UI. |
+| `internal/wasm/bridge/funcs.go` | Funções Go que o JavaScript chamará. |
+| `wasm/wasm/main.go` | Código Go que se torna o arquivo `.wasm`. |
+| `wasm/static/js/wasm-loader.js` | Carrega e faz a "ponte" com o WASM no browser. |
+| `wasm/static/css/main.css` | Estilos da interface. |
+| `wasm/templates/index.html` | Estrutura da página web. |
+| `cmd/build-wasm/main.go` | Ferramenta para compilar o `.wasm`. |
+| `deploy/docker/wasm/Dockerfile` | Para containerizar a aplicação. |
 
-Esta estrutura modular permite que o componente web-WASM seja desenvolvido, testado e implantado de forma independente, enquanto se integra profundamente com o ecossistema existente do `mcp-ultra-wasm`, reutilizando o `sdk` validado e as infraestruturas de segurança, observabilidade e deploy já estabelecidas.
+Esta estrutura modular permite que o componente wasm seja desenvolvido, testado e implantado de forma independente, enquanto se integra profundamente com o ecossistema existente do `mcp-ultra-wasm`, reutilizando o `sdk` validado e as infraestruturas de segurança, observabilidade e deploy já estabelecidas.
 
 
 
 Excelente pergunta! Você identificou um ponto crucial que a minha proposta inicial não detalhou.
 
-Na minha proposta inicial, **não criei explicitamente os arquivos para a integração NATS** no novo componente `web-wasm`. Foquei na estrutura HTTP e no carregamento do WASM.
+Na minha proposta inicial, **não criei explicitamente os arquivos para a integração NATS** no novo componente `wasm`. Foquei na estrutura HTTP e no carregamento do WASM.
 
 No entanto, você está absolutamente correto. Para uma arquitetura robusta e escalável, a integração com o **NATS já existente no projeto** é fundamental. Analisando o manifesto, vejo que o projeto já possui:
 *   `mcp/mcp-ultra-wasm/internal/nats/`
 *   `mcp/mcp-ultra-wasm/templates/ai/nats-schemas/`
 
-Isso indica que a comunicação assíncrona por eventos já é um pilar da arquitetura. O componente `web-wasm` deve se integrar a ele, e não criar uma nova forma de comunicação.
+Isso indica que a comunicação assíncrona por eventos já é um pilar da arquitetura. O componente `wasm` deve se integrar a ele, e não criar uma nova forma de comunicação.
 
 ---
 
@@ -437,7 +437,7 @@ Primeiro, definimos os contratos de comunicação. Os eventos que a UI pode disp
 
 **Diretório e Arquivos:**
 ```
-mcp/mcp-ultra-wasm/api/schemas/web-wasm/
+mcp/mcp-ultra-wasm/api/schemas/wasm/
 ├── events.yaml               # Definição dos eventos (ex: task.requested, task.completed)
 └── subjects.yaml             # Definição dos subjects do NATS (ex: web.wasm.task.>)
 ```
@@ -445,11 +445,11 @@ mcp/mcp-ultra-wasm/api/schemas/web-wasm/
 
 #### 2. Publicador de Eventos (Lado do Servidor Web)
 
-O servidor `web-wasm-server` não processará as tarefas diretamente. Ele apenas as publicará no NATS para que os workers apropriados do MCP as consumam.
+O servidor `wasm-server` não processará as tarefas diretamente. Ele apenas as publicará no NATS para que os workers apropriados do MCP as consumam.
 
 **Diretório e Arquivos:**
 ```
-mcp/mcp-ultra-wasm/internal/web-wasm/nats/
+mcp/mcp-ultra-wasm/internal/wasm/nats/
 ├── publisher.go              # Lógica para publicar mensagens nos subjects do NATS
 └── client.go                 # Configuração e inicialização do cliente NATS para o componente web
 ```
@@ -462,7 +462,7 @@ O núcleo do MCP precisa saber como reagir aos eventos vindos da web. Ele se ins
 **Diretório e Arquivos (estendendo a estrutura existente):**
 ```
 mcp/mcp-ultra-wasm/internal/nats/handlers/
-└── web_wasm_events.go        # Handlers que processam os eventos do web-wasm (ex: OnTaskRequested)
+└── web_wasm_events.go        # Handlers que processam os eventos do wasm (ex: OnTaskRequested)
 ```
 *   **Propósito:** Este arquivo conterá a lógica de negócio. Quando uma mensagem `web.wasm.task.requested` chegar, este handler a consumirá, invocará as funções necessárias do `sdk/sdk-ultra-wasm` e publicará o resultado em outro subject (ex: `web.wasm.task.completed`).
 
@@ -472,11 +472,11 @@ Para que a UI seja atualizada em tempo real sobre o resultado da tarefa assíncr
 
 **Diretório e Arquivos:**
 ```
-mcp/mcp-ultra-wasm/internal/web-wasm/handlers/
+mcp/mcp-ultra-wasm/internal/wasm/handlers/
 └── websocket_handler.go      # Gerencia conexões WebSocket e a publicação de atualizações para clientes conectados
 ```
 ```
-mcp/mcp-ultra-wasm/web-wasm/static/js/
+mcp/mcp-ultra-wasm/wasm/static/js/
 └── websocket-client.js       # Lógica no frontend para conectar-se ao WebSocket e tratar as mensagens de atualização
 ```
 *   **Propósito:** Oferecer uma experiência de usuário reativa, sem a necessidade de polling (verificar repetidamente se a tarefa terminou).
@@ -507,13 +507,13 @@ Sim, a integração NATS é **essencial** e deve ser feita dessa forma. A estrut
 *   **Torna** a interface web escalável e reativa, sem bloquear o usuário.
 *   **Mantém** o baixo acoplamento entre a camada de apresentação (web) e a camada de negócio (MCP/SDK).
 
-Essa abordagem transforma o `web-wasm` de um simples servidor de arquivos para um gateway de eventos inteligente e integrado ao ecossistema do projeto.
+Essa abordagem transforma o `wasm` de um simples servidor de arquivos para um gateway de eventos inteligente e integrado ao ecossistema do projeto.
 
 <details type="reasoning" done="true" duration="2" view="" last_tool_call_name="">
 <summary>Thought for 2 seconds</summary>
 > The user is asking whether they should use the "other blueprint" or only this "new" one. Looking at the context, I provided two blueprints:
 > 
-> 1. The first blueprint (from `templates-mcp-ultra-wasm-blueprint-v1.md`) was a comprehensive structure for adding a web-WASM component to the MCP Ultra WASM project.
+> 1. The first blueprint (from `templates-mcp-ultra-wasm-blueprint-v1.md`) was a comprehensive structure for adding a wasm component to the MCP Ultra WASM project.
 > 
 > 2. The "new" one I just provided in my analysis is more of an architectural refinement and integration guide, not a completely separate blueprint.
 > 
@@ -541,28 +541,28 @@ Essa abordagem transforma o `web-wasm` de um simples servidor de arquivos para u
 
 ```bash
 # Crie toda a estrutura do blueprint original
-mcp/mcp-ultra-wasm/web-wasm/
-├── cmd/web-wasm-server/main.go
-├── internal/web-wasm/
+mcp/mcp-ultra-wasm/wasm/
+├── cmd/wasm-server/main.go
+├── internal/wasm/
 │   ├── handlers/
 │   ├── runtime/
 │   └── bridge/
-├── web-wasm/wasm/main.go
-├── web-wasm/static/
-├── web-wasm/templates/
-├── api/schemas/web-wasm/
-├── deploy/docker/web-wasm/
-├── deploy/k8s/web-wasm/
-├── test/web-wasm/
-├── tests/web-wasm/
-└── docs/web-wasm/
+├── wasm/wasm/main.go
+├── wasm/static/
+├── wasm/templates/
+├── api/schemas/wasm/
+├── deploy/docker/wasm/
+├── deploy/k8s/wasm/
+├── test/wasm/
+├── tests/wasm/
+└── docs/wasm/
 ```
 
 ### Passo 2: Adicione as Melhorias de Integração (Minhas Recomendações)
 
 ```bash
 # Adicione estes diretórios à estrutura existente
-mcp/mcp-ultra-wasm/internal/web-wasm/
+mcp/mcp-ultra-wasm/internal/wasm/
 ├── sdk/                      # NOVO: Cliente do SDK
 │   ├── client.go
 │   ├── contracts.go
@@ -587,10 +587,10 @@ mcp/mcp-ultra-wasm/internal/web-wasm/
 ```
 mcp/mcp-ultra-wasm/
 ├── cmd/
-│   └── web-wasm-server/
+│   └── wasm-server/
 │       └── main.go                    # DO BLUEPRINT ORIGINAL
 ├── internal/
-│   └── web-wasm/
+│   └── wasm/
 │       ├── handlers/                  # DO BLUEPRINT ORIGINAL
 │       │   ├── ui_handler.go
 │       │   ├── api_handler.go
@@ -614,7 +614,7 @@ mcp/mcp-ultra-wasm/
 │       └── nats/                      # DO BLUEPRINT ORIGINAL
 │           ├── publisher.go
 │           └── client.go
-├── web-wasm/
+├── wasm/
 │   ├── wasm/                          # DO BLUEPRINT ORIGINAL
 │   │   ├── main.go
 │   │   ├── go.mod
@@ -628,19 +628,19 @@ mcp/mcp-ultra-wasm/
 │   │   └── assets/
 │   └── templates/                     # DO BLUEPRINT ORIGINAL
 │       └── index.html
-├── api/schemas/web-wasm/              # DO BLUEPRINT ORIGINAL
+├── api/schemas/wasm/              # DO BLUEPRINT ORIGINAL
 │   ├── events.yaml
 │   └── subjects.yaml
 ├── deploy/
-│   ├── docker/web-wasm/               # DO BLUEPRINT ORIGINAL
+│   ├── docker/wasm/               # DO BLUEPRINT ORIGINAL
 │   │   └── Dockerfile
-│   └── k8s/web-wasm/                  # DO BLUEPRINT ORIGINAL
+│   └── k8s/wasm/                  # DO BLUEPRINT ORIGINAL
 │       ├── deployment.yaml
 │       ├── service.yaml
 │       └── ingress.yaml
-├── test/web-wasm/                     # DO BLUEPRINT ORIGINAL
-├── tests/web-wasm/                    # DO BLUEPRINT ORIGINAL
-└── docs/web-wasm/                     # DO BLUEPRINT ORIGINAL
+├── test/wasm/                     # DO BLUEPRINT ORIGINAL
+├── tests/wasm/                    # DO BLUEPRINT ORIGINAL
+└── docs/wasm/                     # DO BLUEPRINT ORIGINAL
 ```
 
 ---
@@ -661,7 +661,7 @@ mcp/mcp-ultra-wasm/
 
 ### Fase 3: Integração SDK (Minhas Recomendações)
 1. Implemente o cliente SDK
-2. Registre o web-wasm como plugin do SDK
+2. Registre o wasm como plugin do SDK
 3. Configure a comunicação com o registry
 
 ### Fase 4: Observabilidade (Minhas Recomendações)
@@ -693,7 +693,7 @@ mcp/mcp-ultra-wasm/
 
 O **blueprint original** te dá a estrutura física (o "o quê" e "onde"), enquanto as **minhas recomendações** te dizem como integrar essa estrutura com o ecossistema existente (o "como").
 
-Comece com o blueprint original para criar a base, depois adicione as camadas de integração conforme as recomendações. Isso garantirá que seu componente web-wasm seja:
+Comece com o blueprint original para criar a base, depois adicione as camadas de integração conforme as recomendações. Isso garantirá que seu componente wasm seja:
 - ✅ Bem estruturado (blueprint original)
 - ✅ Plenamente integrado (minhas recomendações)
 - ✅ Alinhado com a arquitetura MCP Ultra WASM
@@ -718,28 +718,28 @@ Comece com o blueprint original para criar a base, depois adicione as camadas de
 
 ```bash
 # Crie toda a estrutura do blueprint original
-mcp/mcp-ultra-wasm/web-wasm/
-├── cmd/web-wasm-server/main.go
-├── internal/web-wasm/
+mcp/mcp-ultra-wasm/wasm/
+├── cmd/wasm-server/main.go
+├── internal/wasm/
 │   ├── handlers/
 │   ├── runtime/
 │   └── bridge/
-├── web-wasm/wasm/main.go
-├── web-wasm/static/
-├── web-wasm/templates/
-├── api/schemas/web-wasm/
-├── deploy/docker/web-wasm/
-├── deploy/k8s/web-wasm/
-├── test/web-wasm/
-├── tests/web-wasm/
-└── docs/web-wasm/
+├── wasm/wasm/main.go
+├── wasm/static/
+├── wasm/templates/
+├── api/schemas/wasm/
+├── deploy/docker/wasm/
+├── deploy/k8s/wasm/
+├── test/wasm/
+├── tests/wasm/
+└── docs/wasm/
 ```
 
 ### Passo 2: Adicione as Melhorias de Integração (Minhas Recomendações)
 
 ```bash
 # Adicione estes diretórios à estrutura existente
-mcp/mcp-ultra-wasm/internal/web-wasm/
+mcp/mcp-ultra-wasm/internal/wasm/
 ├── sdk/                      # NOVO: Cliente do SDK
 │   ├── client.go
 │   ├── contracts.go
@@ -764,10 +764,10 @@ mcp/mcp-ultra-wasm/internal/web-wasm/
 ```
 mcp/mcp-ultra-wasm/
 ├── cmd/
-│   └── web-wasm-server/
+│   └── wasm-server/
 │       └── main.go                    # DO BLUEPRINT ORIGINAL
 ├── internal/
-│   └── web-wasm/
+│   └── wasm/
 │       ├── handlers/                  # DO BLUEPRINT ORIGINAL
 │       │   ├── ui_handler.go
 │       │   ├── api_handler.go
@@ -791,7 +791,7 @@ mcp/mcp-ultra-wasm/
 │       └── nats/                      # DO BLUEPRINT ORIGINAL
 │           ├── publisher.go
 │           └── client.go
-├── web-wasm/
+├── wasm/
 │   ├── wasm/                          # DO BLUEPRINT ORIGINAL
 │   │   ├── main.go
 │   │   ├── go.mod
@@ -805,19 +805,19 @@ mcp/mcp-ultra-wasm/
 │   │   └── assets/
 │   └── templates/                     # DO BLUEPRINT ORIGINAL
 │       └── index.html
-├── api/schemas/web-wasm/              # DO BLUEPRINT ORIGINAL
+├── api/schemas/wasm/              # DO BLUEPRINT ORIGINAL
 │   ├── events.yaml
 │   └── subjects.yaml
 ├── deploy/
-│   ├── docker/web-wasm/               # DO BLUEPRINT ORIGINAL
+│   ├── docker/wasm/               # DO BLUEPRINT ORIGINAL
 │   │   └── Dockerfile
-│   └── k8s/web-wasm/                  # DO BLUEPRINT ORIGINAL
+│   └── k8s/wasm/                  # DO BLUEPRINT ORIGINAL
 │       ├── deployment.yaml
 │       ├── service.yaml
 │       └── ingress.yaml
-├── test/web-wasm/                     # DO BLUEPRINT ORIGINAL
-├── tests/web-wasm/                    # DO BLUEPRINT ORIGINAL
-└── docs/web-wasm/                     # DO BLUEPRINT ORIGINAL
+├── test/wasm/                     # DO BLUEPRINT ORIGINAL
+├── tests/wasm/                    # DO BLUEPRINT ORIGINAL
+└── docs/wasm/                     # DO BLUEPRINT ORIGINAL
 ```
 
 ---
@@ -838,7 +838,7 @@ mcp/mcp-ultra-wasm/
 
 ### Fase 3: Integração SDK (Minhas Recomendações)
 1. Implemente o cliente SDK
-2. Registre o web-wasm como plugin do SDK
+2. Registre o wasm como plugin do SDK
 3. Configure a comunicação com o registry
 
 ### Fase 4: Observabilidade (Minhas Recomendações)
@@ -870,7 +870,7 @@ mcp/mcp-ultra-wasm/
 
 O **blueprint original** te dá a estrutura física (o "o quê" e "onde"), enquanto as **minhas recomendações** te dizem como integrar essa estrutura com o ecossistema existente (o "como").
 
-Comece com o blueprint original para criar a base, depois adicione as camadas de integração conforme as recomendações. Isso garantirá que seu componente web-wasm seja:
+Comece com o blueprint original para criar a base, depois adicione as camadas de integração conforme as recomendações. Isso garantirá que seu componente wasm seja:
 - ✅ Bem estruturado (blueprint original)
 - ✅ Plenamente integrado (minhas recomendações)
 - ✅ Alinhado com a arquitetura MCP Ultra WASM
