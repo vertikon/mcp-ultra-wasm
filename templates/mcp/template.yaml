@@ -1,0 +1,15 @@
+name: mcp
+display_name: MCP Ultra Seed
+description: Projeto MCP completo para serviços Ultra com suporte a WASM.
+version: "1.0.0"
+tags:
+  - go
+  - wasm
+  - backend
+variables:
+  - key: module_name
+    description: Nome do módulo Go principal (será usado em go.mod)
+    required: false
+defaults:
+  module_name: github.com/example/mcp-service
+

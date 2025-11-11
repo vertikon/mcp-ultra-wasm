@@ -1,0 +1,22 @@
+# Binaries
+/bin
+/dist
+
+# Git metadata
+.git
+.gitignore
+
+# Build artifacts
+coverage.out
+coverage
+
+# IDE and system files
+.idea
+.vscode
+*.swp
+*.swo
+*.DS_Store
+
+# Test outputs
+out/
+

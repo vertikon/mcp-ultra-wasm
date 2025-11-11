@@ -1,0 +1,14 @@
+name: mcp-wasm
+display_name: MCP Ultra WASM Seed
+description: Template de servidor WASM com assets estáticos e integrações MCP.
+version: "1.0.0"
+tags:
+  - go
+  - wasm
+variables:
+  - key: module_name
+    description: Nome do módulo Go do gateway WASM
+    required: false
+defaults:
+  module_name: github.com/example/mcp-wasm
+

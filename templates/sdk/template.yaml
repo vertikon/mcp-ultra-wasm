@@ -1,0 +1,14 @@
+name: sdk
+display_name: SDK Ultra Seed
+description: SDK para integração com MCP Ultra incluindo CLI de suporte.
+version: "1.0.0"
+tags:
+  - go
+  - sdk
+variables:
+  - key: module_name
+    description: Nome do módulo Go para o SDK
+    required: false
+defaults:
+  module_name: github.com/example/mcp-sdk
+
